@@ -1,0 +1,341 @@
+  ******************************************  
+  *           Fortran 77 Code              *  
+  *     Axially symmetric H.O. basis       *  
+  * Dirac-Hartree-Bogoliubov calculation   *  
+  *        with density-dependent          *  
+  * meson-exchange or point coupling force *  
+  *          and separable pairing         *  
+  * -------------------------------------- *  
+  *      Niksic, Paar, Vretenar, Ring      *  
+  *          31/ 7/2019/01:51:25           *
+  *       Ne  20  N =  10  Z =  10
+  *                DD-PC1    
+  ******************************************  
+  1.It. si =   0.000000  E/A =   0.000 R =   0.000 b =   0.000  mix = 0.50
+  2.It. si =  82.192028  E/A =  -7.090 R =   2.934 b =   0.662  mix = 0.50
+  3.It. si =  54.009559  E/A =  -7.203 R =   2.916 b =   0.631  mix = 0.50
+  4.It. si =  26.158853  E/A =  -7.240 R =   2.895 b =   0.596  mix = 0.50
+  5.It. si =   5.621714  E/A =  -7.253 R =   2.875 b =   0.560  mix = 0.50
+  6.It. si =   2.285331  E/A =  -7.254 R =   2.868 b =   0.538  mix = 0.50
+  7.It. si =   0.859683  E/A =  -7.253 R =   2.865 b =   0.528  mix = 0.50
+  8.It. si =   0.273761  E/A =  -7.253 R =   2.863 b =   0.524  mix = 0.50
+  9.It. si =   0.124142  E/A =  -7.253 R =   2.863 b =   0.523  mix = 0.50
+ 10.It. si =   0.086423  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 11.It. si =   0.024940  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 12.It. si =   0.008461  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 13.It. si =   0.004345  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 14.It. si =   0.003667  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 15.It. si =   0.002929  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
+ 16.It. si =   0.001484  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 17.It. si =   0.000815  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 18.It. si =   0.000651  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 19.It. si =   0.000392  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 20.It. si =   0.000529  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 21.It. si =   0.000049  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 22.It. si =   0.000102  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 23.It. si =   0.000011  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 24.It. si =   0.000007  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ 25.It. si =   0.000004  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
+ Ne  20: Iteration converged after  25 steps   si =      0.0000001352
+ ****** END ITER ************************************
+                                               
+                                               
+                                               
+  *******************************************  
+  *      Relativistic Quasiparticle RPA     *  
+  *           Simplex-y Basis               *  
+  *                                         *  
+  *   Finite Amplitude Method Calculation   *  
+  *         with Density-Dependent          *  
+  *          Point-Coupling Force           *  
+  *         and Separable Pairing           *  
+  * --------------------------------------- *  
+  *                                         *  
+  *           A.Bjelcic, T.Niksic           *  
+  *                                         *  
+  *******************************************  
+                                               
+Initializing FAM.
+ 
+START ITERATION ---------------------> omega =  5.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error = **********                             |
+  3.Iteration, error =    9.82653                             |
+  4.Iteration, error =    2.37474                             |
+  5.Iteration, error =    0.47628                             |
+  6.Iteration, error =    0.42097                             |
+  7.Iteration, error =    0.19651                             |
+  8.Iteration, error =    0.08370                             |
+  9.Iteration, error =    0.08078                             |
+ 10.Iteration, error =    0.07367                             |
+ 11.Iteration, error =    0.05456                             |
+ 12.Iteration, error =    0.03801                             |
+ 13.Iteration, error =    0.01247                             |
+ 14.Iteration, error =    0.00239                             |
+ 15.Iteration, error =    0.00133                             |
+ 16.Iteration, error =    0.00065                             |
+ 17.Iteration, error =    0.00018                             |
+ 18.Iteration, error =    0.00007                             |
+ 19.Iteration, error =    0.00004                             |
+ 20.Iteration, error =    0.00002                             |
+ITERATION CONVERGED AFTER  20 STEPS, FINAL error =  0.66189E-05
+ 
+ 
+START ITERATION ---------------------> omega = 10.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    0.30916                             |
+  3.Iteration, error =    0.32035                             |
+  4.Iteration, error =    0.35178                             |
+  5.Iteration, error =    0.21610                             |
+  6.Iteration, error =    0.24178                             |
+  7.Iteration, error =    0.21105                             |
+  8.Iteration, error =    0.17057                             |
+  9.Iteration, error =    0.15417                             |
+ 10.Iteration, error =    0.13557                             |
+ 11.Iteration, error =    0.05741                             |
+ 12.Iteration, error =    0.03834                             |
+ 13.Iteration, error =    0.02550                             |
+ 14.Iteration, error =    0.01420                             |
+ 15.Iteration, error =    0.00478                             |
+ 16.Iteration, error =    0.00306                             |
+ 17.Iteration, error =    0.00210                             |
+ 18.Iteration, error =    0.00141                             |
+ 19.Iteration, error =    0.00071                             |
+ 20.Iteration, error =    0.00038                             |
+ 21.Iteration, error =    0.00026                             |
+ 22.Iteration, error =    0.00015                             |
+ 23.Iteration, error =    0.00007                             |
+ 24.Iteration, error =    0.00002                             |
+ 25.Iteration, error =    0.00002                             |
+ITERATION CONVERGED AFTER  25 STEPS, FINAL error =  0.87875E-05
+ 
+ 
+START ITERATION ---------------------> omega = 15.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    0.93183                             |
+  3.Iteration, error =    0.94291                             |
+  4.Iteration, error =    1.01541                             |
+  5.Iteration, error =    0.98739                             |
+  6.Iteration, error =    1.09003                             |
+  7.Iteration, error =    1.15508                             |
+  8.Iteration, error =    1.20849                             |
+  9.Iteration, error =    1.08064                             |
+ 10.Iteration, error =    0.46776                             |
+ 11.Iteration, error =    0.40522                             |
+ 12.Iteration, error =    0.35362                             |
+ 13.Iteration, error =    0.37887                             |
+ 14.Iteration, error =    0.40289                             |
+ 15.Iteration, error =    0.31735                             |
+ 16.Iteration, error =    0.10734                             |
+ 17.Iteration, error =    0.03944                             |
+ 18.Iteration, error =    0.01703                             |
+ 19.Iteration, error =    0.00850                             |
+ 20.Iteration, error =    0.00436                             |
+ 21.Iteration, error =    0.00196                             |
+ 22.Iteration, error =    0.00107                             |
+ 23.Iteration, error =    0.00036                             |
+ 24.Iteration, error =    0.00015                             |
+ 25.Iteration, error =    0.00008                             |
+ 26.Iteration, error =    0.00005                             |
+ 27.Iteration, error =    0.00002                             |
+ITERATION CONVERGED AFTER  27 STEPS, FINAL error =  0.94494E-05
+ 
+ 
+START ITERATION ---------------------> omega = 20.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    1.22236                             |
+  3.Iteration, error =    1.19479                             |
+  4.Iteration, error =    1.54015                             |
+  5.Iteration, error =    1.56076                             |
+  6.Iteration, error =    1.37581                             |
+  7.Iteration, error =    1.44933                             |
+  8.Iteration, error =    0.68435                             |
+  9.Iteration, error =    0.26095                             |
+ 10.Iteration, error =    0.27428                             |
+ 11.Iteration, error =    0.31446                             |
+ 12.Iteration, error =    0.30940                             |
+ 13.Iteration, error =    0.24971                             |
+ 14.Iteration, error =    0.10974                             |
+ 15.Iteration, error =    0.05077                             |
+ 16.Iteration, error =    0.03912                             |
+ 17.Iteration, error =    0.02943                             |
+ 18.Iteration, error =    0.01378                             |
+ 19.Iteration, error =    0.00776                             |
+ 20.Iteration, error =    0.00520                             |
+ 21.Iteration, error =    0.00476                             |
+ 22.Iteration, error =    0.00446                             |
+ 23.Iteration, error =    0.00364                             |
+ 24.Iteration, error =    0.00308                             |
+ 25.Iteration, error =    0.00258                             |
+ 26.Iteration, error =    0.00145                             |
+ 27.Iteration, error =    0.00079                             |
+ 28.Iteration, error =    0.00056                             |
+ 29.Iteration, error =    0.00029                             |
+ 30.Iteration, error =    0.00024                             |
+ 31.Iteration, error =    0.00011                             |
+ 32.Iteration, error =    0.00007                             |
+ 33.Iteration, error =    0.00004                             |
+ 34.Iteration, error =    0.00003                             |
+ITERATION CONVERGED AFTER  34 STEPS, FINAL error =  0.78953E-05
+ 
+ 
+START ITERATION ---------------------> omega = 25.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    1.36649                             |
+  3.Iteration, error =    1.16294                             |
+  4.Iteration, error =    1.38292                             |
+  5.Iteration, error =    1.18223                             |
+  6.Iteration, error =    0.37182                             |
+  7.Iteration, error =    0.15535                             |
+  8.Iteration, error =    0.08686                             |
+  9.Iteration, error =    0.07445                             |
+ 10.Iteration, error =    0.06014                             |
+ 11.Iteration, error =    0.04518                             |
+ 12.Iteration, error =    0.02519                             |
+ 13.Iteration, error =    0.01896                             |
+ 14.Iteration, error =    0.01808                             |
+ 15.Iteration, error =    0.01599                             |
+ 16.Iteration, error =    0.00999                             |
+ 17.Iteration, error =    0.00488                             |
+ 18.Iteration, error =    0.00218                             |
+ 19.Iteration, error =    0.00166                             |
+ 20.Iteration, error =    0.00062                             |
+ 21.Iteration, error =    0.00033                             |
+ 22.Iteration, error =    0.00023                             |
+ 23.Iteration, error =    0.00019                             |
+ 24.Iteration, error =    0.00017                             |
+ 25.Iteration, error =    0.00012                             |
+ 26.Iteration, error =    0.00010                             |
+ 27.Iteration, error =    0.00004                             |
+ 28.Iteration, error =    0.00002                             |
+ 29.Iteration, error =    0.00002                             |
+ 30.Iteration, error =    0.00001                             |
+ITERATION CONVERGED AFTER  30 STEPS, FINAL error =  0.93146E-05
+ 
+ 
+START ITERATION ---------------------> omega = 30.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    0.83162                             |
+  3.Iteration, error =    0.76085                             |
+  4.Iteration, error =    0.54799                             |
+  5.Iteration, error =    0.22996                             |
+  6.Iteration, error =    0.11254                             |
+  7.Iteration, error =    0.06033                             |
+  8.Iteration, error =    0.03911                             |
+  9.Iteration, error =    0.01357                             |
+ 10.Iteration, error =    0.00692                             |
+ 11.Iteration, error =    0.00265                             |
+ 12.Iteration, error =    0.00084                             |
+ 13.Iteration, error =    0.00038                             |
+ 14.Iteration, error =    0.00029                             |
+ 15.Iteration, error =    0.00020                             |
+ 16.Iteration, error =    0.00013                             |
+ 17.Iteration, error =    0.00008                             |
+ 18.Iteration, error =    0.00006                             |
+ 19.Iteration, error =    0.00006                             |
+ 20.Iteration, error =    0.00006                             |
+ 21.Iteration, error =    0.00005                             |
+ 22.Iteration, error =    0.00003                             |
+ 23.Iteration, error =    0.00002                             |
+ 24.Iteration, error =    0.00001                             |
+ITERATION CONVERGED AFTER  24 STEPS, FINAL error =  0.79074E-05
+ 
+ 
+START ITERATION ---------------------> omega = 35.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    1.39264                             |
+  3.Iteration, error =    1.23381                             |
+  4.Iteration, error =    0.85698                             |
+  5.Iteration, error =    0.26511                             |
+  6.Iteration, error =    0.14386                             |
+  7.Iteration, error =    0.03852                             |
+  8.Iteration, error =    0.02726                             |
+  9.Iteration, error =    0.02385                             |
+ 10.Iteration, error =    0.02047                             |
+ 11.Iteration, error =    0.01674                             |
+ 12.Iteration, error =    0.01548                             |
+ 13.Iteration, error =    0.01547                             |
+ 14.Iteration, error =    0.01486                             |
+ 15.Iteration, error =    0.01065                             |
+ 16.Iteration, error =    0.00649                             |
+ 17.Iteration, error =    0.00468                             |
+ 18.Iteration, error =    0.00329                             |
+ 19.Iteration, error =    0.00237                             |
+ 20.Iteration, error =    0.00145                             |
+ 21.Iteration, error =    0.00086                             |
+ 22.Iteration, error =    0.00047                             |
+ 23.Iteration, error =    0.00034                             |
+ 24.Iteration, error =    0.00025                             |
+ 25.Iteration, error =    0.00021                             |
+ 26.Iteration, error =    0.00020                             |
+ 27.Iteration, error =    0.00017                             |
+ 28.Iteration, error =    0.00015                             |
+ 29.Iteration, error =    0.00013                             |
+ 30.Iteration, error =    0.00012                             |
+ 31.Iteration, error =    0.00010                             |
+ 32.Iteration, error =    0.00006                             |
+ 33.Iteration, error =    0.00005                             |
+ 34.Iteration, error =    0.00004                             |
+ 35.Iteration, error =    0.00004                             |
+ 36.Iteration, error =    0.00004                             |
+ 37.Iteration, error =    0.00004                             |
+ 38.Iteration, error =    0.00004                             |
+ 39.Iteration, error =    0.00004                             |
+ 40.Iteration, error =    0.00004                             |
+ 41.Iteration, error =    0.00004                             |
+ 42.Iteration, error =    0.00004                             |
+ 43.Iteration, error =    0.00004                             |
+ 44.Iteration, error =    0.00003                             |
+ 45.Iteration, error =    0.00003                             |
+ 46.Iteration, error =    0.00002                             |
+ 47.Iteration, error =    0.00002                             |
+ 48.Iteration, error =    0.00001                             |
+ITERATION CONVERGED AFTER  48 STEPS, FINAL error =  0.86802E-05
+ 
+ 
+START ITERATION ---------------------> omega = 40.000[MeV/hbar]
+  1.Iteration, error = **********                             |
+  2.Iteration, error =    1.87328                             |
+  3.Iteration, error =    1.73686                             |
+  4.Iteration, error =    1.34812                             |
+  5.Iteration, error =    1.05143                             |
+  6.Iteration, error =    0.37440                             |
+  7.Iteration, error =    0.20563                             |
+  8.Iteration, error =    0.18067                             |
+  9.Iteration, error =    0.19871                             |
+ 10.Iteration, error =    0.17724                             |
+ 11.Iteration, error =    0.12527                             |
+ 12.Iteration, error =    0.11274                             |
+ 13.Iteration, error =    0.08163                             |
+ 14.Iteration, error =    0.03495                             |
+ 15.Iteration, error =    0.02614                             |
+ 16.Iteration, error =    0.02072                             |
+ 17.Iteration, error =    0.01074                             |
+ 18.Iteration, error =    0.00833                             |
+ 19.Iteration, error =    0.00577                             |
+ 20.Iteration, error =    0.00470                             |
+ 21.Iteration, error =    0.00447                             |
+ 22.Iteration, error =    0.00380                             |
+ 23.Iteration, error =    0.00218                             |
+ 24.Iteration, error =    0.00103                             |
+ 25.Iteration, error =    0.00080                             |
+ 26.Iteration, error =    0.00061                             |
+ 27.Iteration, error =    0.00047                             |
+ 28.Iteration, error =    0.00036                             |
+ 29.Iteration, error =    0.00032                             |
+ 30.Iteration, error =    0.00030                             |
+ 31.Iteration, error =    0.00028                             |
+ 32.Iteration, error =    0.00027                             |
+ 33.Iteration, error =    0.00023                             |
+ 34.Iteration, error =    0.00018                             |
+ 35.Iteration, error =    0.00017                             |
+ 36.Iteration, error =    0.00017                             |
+ 37.Iteration, error =    0.00016                             |
+ 38.Iteration, error =    0.00011                             |
+ 39.Iteration, error =    0.00007                             |
+ 40.Iteration, error =    0.00004                             |
+ 41.Iteration, error =    0.00003                             |
+ 42.Iteration, error =    0.00002                             |
+ 43.Iteration, error =    0.00001                             |
+ITERATION CONVERGED AFTER  43 STEPS, FINAL error =  0.85667E-05
+

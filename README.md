@@ -1,2 +1,0 @@
-# DIRQFAM
-DIRQFAM

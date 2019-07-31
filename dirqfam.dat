@@ -1,0 +1,37 @@
+n0f      =   10  20                ! number of osc. shells (F and B)
+beta0    =    0.500                ! deformation of the h.o. basis
+betai    =    0.500                ! deformation of the initial W.S. pot
+inin     =    1    1               ! initialization
+Ne 20                              ! nucleus under consideration
+c-------------------------------------------------------------------
+Init.Gap =    1.000     1.000      ! Initial values for the Gaps
+c-------------------------------------------------------------------
+Force    =  DD-PC1                 ! Parameterset of the Lagrangian
+c-------------------------------------------------------------------
+icstr    =  0                      ! constraint calculation (0=no)
+betac    =  0.000                  ! expected beta value
+cquad    =  0.100                  ! spring constant
+
+
+
+=========================== QFAM INTERFACE ==========================
+Calculation type =   1     | 0 = Hartree response                   |
+                           | 1 = Fully self-consistent response     |
+                           | 2 = Calculation for given energy       |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+Include Coulomb  =   1     | 0 = NO, 1 = YES (Both GS and QFAM)     |
+Include pairing  =   1     | 0 = NO, 1 = YES (Both GS and QFAM)     |
+NGH              =  48     | Gauss-Hermite  nodes in z>0 direction  |
+NGL              =  48     | Gauss-Laguerre nodes in r   direction  |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+J multipolarity  =   2     | 0 <= J <= 3                            |
+K multipolarity  =   1     | 0 <= K <= J                            |
+Isospin          =   0     | 0 == Isoscalar, 1 == Isovector         |
+Gamma smear      =   1.000 | [MeV]                                  |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+Omega start      =   5.000 | [MeV/hbar] Energy range parameters,    |
+Omega end        =  40.000 | [MeV/hbar] relevant if calc. type      |
+Delta omega      =   5.000 | [MeV/hbar] is set to 0 or 1            |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+Omega print      =  20.000 | [MeV/hbar] Relevant if calc. type is 2 |
+=========================== QFAM INTERFACE ==========================
