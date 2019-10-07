@@ -25,7 +25,7 @@ c======================================================================c
 
 
 
-      CHARACTER fg*1;
+      CHARACTER fg;
 
 
 
@@ -48,9 +48,8 @@ c======================================================================c
 
       N_blocks = 2*n0f + 3;
 
-      if( N_blocks.ne.NBX .or. N_total.ne.NTX ) then
-          stop 'Error: N_blocks =/= NBX or N_total =/= NTX!';
-      endif
+      call assert( N_blocks.eq.NBX , 'N_blocks =/= NBX' );
+      call assert( N_total .eq.NTX , 'N_total =/= NTX'  );
 
 
 
@@ -59,44 +58,40 @@ c======================================================================c
 
 c-----Construction of simplex-y quantum numbers
       do ib = 1 , nb
+
           kap = kb(ib);
           nf  = id(ib,1);
           ng  = id(ib,2);
-
           i0f = ia(ib,1);
           i0g = ia(ib,2);
 
 
-          il = 1;
+          il = 0;
           do i = i0f + 1 , i0f + nf
+              il = il + 1;
+
               mx = 2*( iabs(kap) - ml(i) ) - 1;
               nz_spx(il,ib) = nz(i);
               nr_spx(il,ib) = nr(i);
               ml_spx(il,ib) = ml(i) * mx;
               fg_spx(il,ib) = 'f';
-
-              il = il + 1;
           enddo
           do i = i0g + 1 , i0g + ng
+              il = il + 1;
+
               mx = 2*( iabs(kap) - ml(i) ) - 1;
               nz_spx(il,ib) = nz(i);
               nr_spx(il,ib) = nr(i);
               ml_spx(il,ib) = ml(i) * mx;
               fg_spx(il,ib) = 'g';
-
-              il = il + 1;
           enddo
 
-          id_spx(ib) = il-1;
-          if( id_spx(ib) .gt. NBSX ) then
-              stop 'Error: NBSX (Block Size Max) too small!';
-          endif
+          id_spx(ib) = il;
+          call assert( id_spx(ib).le.NBSX , 'NBSX too small' );
 
       enddo
 
-      if( nb .ne. N_blocks ) then
-          stop 'Error: nb =/= N_blocks!'
-      endif
+      call assert( nb.eq.N_blocks , 'nb =/= N_blocks' );
 
 
 
@@ -132,9 +127,9 @@ c-----Calculation of nf_size and ng_size
 
 
 
-c-----Sort basis with respect to nz parity
-c-----This sort makes U, V matrices appear with pure real/imag blocks
-c-----The code doesn't use this info at all and it is not necessary
+c-----Sort basis blocks with respect to nz parity
+c-----This sort makes U,V matrices appear with pure real/imag blocks
+c-----Current code doesn't use this info at all and it is not necessary
       do ib = 1 , N_blocks
 
           do i = 1 , nf_size(ib)
@@ -246,9 +241,9 @@ c-----Test wheather the basis has correctly been constructed
                   nrr = nr_spx(i,ib);
                   mll = ml_spx(i,ib);
 
-                  if( i .ne. index_of_vector(fg,nzz,nrr,mll,ib) ) then
-                      stop 'Error: Wrong basis construction!';
-                  endif
+                  ii = index_of_vector( fg , nzz , nrr , mll , ib );
+
+                  call assert( i.eq.ii , 'index_of_vector() problem' );
 
               enddo
           enddo

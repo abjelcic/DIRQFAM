@@ -21,10 +21,10 @@ c======================================================================c
       CHARACTER*25 text2;
       CHARACTER*21 text3;
 
-      tol      = 1.D-5;  ! Broyden error tolerance
+      tol      = 1.D-5;  ! Self-consistency tolerance
       iter     = 0;      ! Index of current iteration
       iter_max = 999;    ! Maximum number of iterations
-      error    = 1.D+10; ! Error in current iteration
+      error    = 1.D+99; ! Error in current iteration
 
       text1    = 'ITERATION INTERRUPTED AFTER';
       text2    = 'ITERATION CONVERGED AFTER';
@@ -56,12 +56,12 @@ c======================================================================c
       ! Initializing first Broyden vector
       call fam_broyden( .false. , .true. );
 
-c-----Main FAM iteration for fixed frequency
+c-----Main QFAM iteration for fixed energy
       do iter = 1 , iter_max
 
-          write(6,'(i3,a,1f10.5,2a)') iter, '.Iteration, error = ',
-     &                                error,'                    ',
-     &                                      '         |';
+          write(6,'(i3,a,1f10.5,2a)') iter , '.Iteration, error = ',
+     &                                error, '                    ',
+     &                                       '         |';
           call flush(6);
 
 

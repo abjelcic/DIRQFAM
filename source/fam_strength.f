@@ -8,8 +8,6 @@ c======================================================================c
       include 'dirqfam.par'
       LOGICAL lpr;
 
-      common /mathco/ zero, one, two, half, third, pi;
-
       CHARACTER fg_spx;
       common /simplex/ N_total         , N_blocks        ,
      &                 ia_spx(NBX)     , id_spx(NBX)     ,
@@ -28,6 +26,7 @@ c======================================================================c
 
 
       COMPLEX*16 trace;
+      pi = 3.14159265358979324D0;
 
 
 
@@ -45,8 +44,8 @@ c======================================================================c
 c-----Calculates S(f,omega) = -1/pi * Im[Tr[hermconj(f)*drho(omega)]]
       trace = COMPLEX( 0.D0 , 0.D0 );
 
-      do i = 1 , N_total
-          do j = 1 , N_total
+      do j = 1 , N_total
+          do i = 1 , N_total
               trace = trace + DCONJG(f1_JK(i,j,it))*drho_1(i,j,it)
      &                      + DCONJG(f2_JK(i,j,it))*drho_2(i,j,it);
           enddo

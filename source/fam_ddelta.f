@@ -69,7 +69,7 @@ c-----Selection rules test
       do it = 1 , 2
           do ib2 = 1 , N_blocks
               do ib1 = 1 , N_blocks
-                  if( dkappa_nnz(ib1,ib2) ) then
+                  if( dkappa_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   i0 = ia_spx(ib1);
                   j0 = ia_spx(ib2);
@@ -81,7 +81,7 @@ c-----Selection rules test
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
 
-                          ! We work in only Delta_ff approximation
+                          ! We work in Delta_ff only approximation
                           if( fg1.ne.'f' .or. fg2.ne.'f') CYCLE;
 
 
@@ -105,7 +105,6 @@ c-----Selection rules test
                   enddo
 
 
-                  endif
               enddo
           enddo
       enddo
@@ -167,8 +166,8 @@ c-----Calculation of P_pl and P_mi
                      if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
 
 
-                     ii = ia_spx(ib1) + i - 1;
-                     jj = ia_spx(ib2) + j - 1;
+                     ii = i-1+ia_spx(ib1);
+                     jj = j-1+ia_spx(ib2);
                      z1 = dkappa_pl( ii , jj , it );
                      z2 = dkappa_mi( ii , jj , it );
 
@@ -230,8 +229,8 @@ c-----Calculation of dDelta_pl and dDelta_mi
 
                      if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
 
-                     ii = ia_spx(ib1) + i - 1;
-                     jj = ia_spx(ib2) + j - 1;
+                     ii = i-1+ia_spx(ib1);
+                     jj = j-1+ia_spx(ib2);
 
                      do Nr = 0 , nr1+nr2+(abs(ml1)+abs(ml2)-K)/2
                         do Nz = 0 , nz1+nz2
@@ -263,9 +262,8 @@ c-----Calculation of dDelta_pl and dDelta_mi
 
 c-----Calculation of full dDelta_pl and dDelta_mi
       fac = - G_pairing;
-      if( K_multipole .ne. 0 ) then
-          fac = 0.5D0 * fac;
-      endif
+      if( K_multipole .ne. 0 ) fac = 0.5D0 * fac;
+
       do it = 1 , 2
           do i = 1 , N_total
               do j = 1 , i

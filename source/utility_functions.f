@@ -1,6 +1,28 @@
 c======================================================================c
 
-      INTEGER function index_of_vector( fg , nz , nr , ml , ib )
+      subroutine assert( statement , error_message )
+
+c======================================================================c
+
+      LOGICAL statement;
+      CHARACTER( LEN = * ) error_message;
+
+      if( statement .eqv. .false. ) then
+          write(6,'(3a)') 'Error: ', error_message, '!';
+          stop;
+      endif
+
+      return;
+      end;
+
+
+
+
+
+
+c======================================================================c
+
+      INTEGER*4 function index_of_vector( fg , nz , nr , ml , ib )
 
 c======================================================================c
 
@@ -13,10 +35,8 @@ c======================================================================c
      &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
-
       CHARACTER fg;
-      INTEGER nz, nr, ml, ib;
-      INTEGER i;
+      INTEGER*4 nz, nr, ml, ib, i;
       LOGICAL bool;
 
       bool = .false.;
@@ -32,13 +52,7 @@ c======================================================================c
 
       enddo
 
-
-
-
-      if( bool .eqv. .false. ) then
-          stop 'Error: Function index_of_vector() wrong!';
-      endif
-
+      call assert( bool .eqv. .true. , 'index_of_vector() wrong' );
 
       index_of_vector = i;
 
@@ -52,32 +66,25 @@ c======================================================================c
 
 c======================================================================c
 
-      REAL*8 function phi_nz( nz , z )
+      REAL*8 function phi_nz( nz , b , z )
 
 c======================================================================c
 c----------------------------------------------------------------------c
 c                                                                      c
-c  phi_nz(nz,z) =   1/sqrt(b0*bz*sqrt(pi)*2^nz*nz!)                    c
-c                 * H_nz(z/(b0*bz))                                    c
-c                 * exp( -1/2 * (z/(b0*bz))^2 )                        c
+c  phi_nz(nz,b,z) =   1/sqrt(b) * 1/sqrt(sqrt(pi)*2^nz*nz!)            c
+c                   * H_nz(z/b) * exp( -1/2 * (z/b)^2 )                c
 c----------------------------------------------------------------------c
-
 
       implicit REAL*8 (a-h,o-z)
 
-      common /mathco/ zero, one, two, half, third, pi;
-      common /defbas/ beta0, q, bp, bz;
-      common /baspar/ hom, hb0, b0;
-
-      REAL*8 z;
       INTEGER*4 nz;
+      REAL*8 b, z;
+      pi = 3.14159265358979324D0;
 
-      if( nz .lt. 0 ) then
-          stop 'Error: nz < 0 in phi_nz()!';
-      endif
+      call assert( nz.ge.0 , 'nz < 0 in phi_nz()' );
 
-      x = z/(b0*bz);
-      phi_0 = 1.D0 / DSQRT(b0*bz*DSQRT(pi)) * DEXP( -0.5D0 * x*x );
+      x = z/b;
+      phi_0 = 1.D0 / DSQRT(b*DSQRT(pi)) * DEXP( -0.5D0 * x*x );
       phi_1 = x * DSQRT(2.D0) * phi_0;
 
       if( nz .eq. 0 ) then
@@ -105,37 +112,30 @@ c----------------------------------------------------------------------c
 
 c======================================================================c
 
-      REAL*8 function d_phi_nz( nz , z )
+      REAL*8 function d_phi_nz( nz , b , z )
 
 c======================================================================c
 c----------------------------------------------------------------------c
 c                                                                      c
-c  d_phi_nz(nz,z) = d( phi_nz(nz,z) )/dz                               c
+c  d_phi_nz(nz,b,z) = d( phi_nz(nz,b,z) )/dz                           c
 c                                                                      c
 c----------------------------------------------------------------------c
 
       implicit REAL*8 (a-h,o-z)
 
-      common /mathco/ zero, one, two, half, third, pi;
-      common /defbas/ beta0, q, bp, bz;
-      common /baspar/ hom, hb0, b0;
-
-
-      REAL*8 z;
       INTEGER*4 nz;
+      REAL*8 b, z;
 
-      if( nz .lt. 0 ) then
-          stop 'Error: nz < 0 in d_phi_nz()!';
-      endif
+      call assert( nz.ge.0 , 'nz < 0 in phi_nz()' );
 
-      x = z/(b0*bz);
+      x = z/b;
       if( nz .eq. 0 ) then
-          d_phi_nz = -x/(b0*bz) * phi_nz(nz,z);
+          d_phi_nz = -x/b * phi_nz(nz,b,z);
           return;
       endif
 
-      d_phi_nz = -x*phi_nz(nz,z) + DSQRT(DBLE(2*nz))*phi_nz(nz-1,z);
-      d_phi_nz = d_phi_nz / (b0*bz);
+      d_phi_nz = - (x/b) * phi_nz(nz,b,z)
+     &           + DSQRT(DBLE(2*nz))/b * phi_nz(nz-1,b,z);
 
       return;
       end;
@@ -147,42 +147,32 @@ c----------------------------------------------------------------------c
 
 c======================================================================c
 
-      REAL*8 function phi_nr_ml( nr , ml , r )
+      REAL*8 function phi_nr_ml( nr , ml , b , r )
 
 c======================================================================c
 c----------------------------------------------------------------------c
 c                                                                      c
-c  phi_nr_ml(nr,ml,r) =   sqrt(2)/(b0*bp) * sqrt(nr!/(nr+|ml|)!)       c
-c                       * (r/(b0*bp))^|ml|                             c
-c                       * L_{nr}^|ml|( (r/(b0*bp))^2 )                 c
-c                       * exp( -1/2 * (r/(b0*bp))^2 )                  c
+c  phi_nr_ml(nr,ml,b,r) =   1/b * sqrt( 2*nr! / (nr+|ml|)! )           c
+c                         * (r/b)^|ml| * L_{nr}^|ml|( (r/b)^2 )        c
+c                         *  exp( -1/2 * (r/b)^2 )                     c
 c----------------------------------------------------------------------c
 
       implicit REAL*8 (a-h,o-z)
 
-      parameter (IGFV = 100)
+      parameter( IGFV = 100 )
       common /gfvfak/ fak(0:IGFV);
-      common /defbas/ beta0, q, bp, bz;
-      common /baspar/ hom, hb0, b0;
 
-      REAL*8 r;
-      INTEGER*4 nr;
-      INTEGER*4 ml;
+      INTEGER*4 nr, ml;
+      REAL*8 b, r;
 
-      if( nr .lt. 0 ) then
-          stop 'Error: nr < 0 in phi_nr_ml()!';
-      endif
-      if( r .le. 0.D0 ) then
-          stop 'Error: r <= 0 in phi_nr_ml()!';
-      endif
-      if( abs(ml) .gt. IGFV ) then
-          stop 'Error: |ml| too large in phi_nr_ml()!'
-      endif
+      call assert( nr.ge.0         , 'nr < 0 in phi_nr_ml()'         );
+      call assert( r.gt.0.D0       , 'r <=0 in phi_nr_ml()'          );
+      call assert( abs(ml).le.IGFV , '|ml| too large in phi_nr_ml()' );
 
       ml = abs(ml);
-      eta = r*r/(b0*bp*b0*bp);
+      eta = r*r/(b*b);
 
-      phi_0_ml = DSQRT(2.D0) / ( b0*bp* DSQRT(fak(ml)) ) *
+      phi_0_ml = DSQRT(2.D0) / ( b* DSQRT(fak(ml)) ) *
      &           DEXP( -0.5D0* ( eta - DBLE(ml)*DLOG(eta) ) );
       phi_1_ml =  phi_0_ml * ( -eta + DBLE(ml+1) ) / DSQRT(DBLE(ml+1));
 
@@ -199,8 +189,6 @@ c----------------------------------------------------------------------c
           phi_0_ml = tmp;
       enddo
 
-
-
       phi_nr_ml = phi_1_ml;
 
       return;
@@ -213,48 +201,37 @@ c----------------------------------------------------------------------c
 
 c======================================================================c
 
-      REAL*8 function d_phi_nr_ml( nr , ml , r )
+      REAL*8 function d_phi_nr_ml( nr , ml , b , r )
 
 c======================================================================c
 c----------------------------------------------------------------------c
 c                                                                      c
-c  d_phi_nr_ml(nr,ml,z) = d( phi_nr_ml(nr,ml,r) )/dr                   c
+c  d_phi_nr_ml(nr,ml,b,z) = d( phi_nr_ml(nr,ml,b,r) )/dr               c
 c                                                                      c
 c----------------------------------------------------------------------c
 
       implicit REAL*8 (a-h,o-z)
 
-      common /defbas/ beta0, q, bp, bz;
-      common /baspar/ hom, hb0, b0;
+      INTEGER*4 nr, ml;
+      REAL*8 b, r;
 
-      REAL*8 r;
-      INTEGER*4 nr;
-      INTEGER*4 ml;
-
-      if( nr .lt. 0 ) then
-          stop 'Error: nr < 0 in d_phi_nr_ml()!';
-      endif
-      if( r .le. 0.D0 ) then
-          stop 'Error: r <= 0 in d_phi_nr_ml()!';
-      endif
-
+      call assert( nr.ge.0   , 'nr < 0 in d_phi_nr_ml()' );
+      call assert( r.gt.0.D0 , 'r <= 0 in d_phi_nr_ml()' );
 
       ml = abs(ml);
-      eta = r*r/(b0*bp*b0*bp);
+      eta = r*r/(b*b);
 
       if( nr .eq. 0 ) then
-          d_phi_nr_ml = ( DBLE(ml) - eta )/( DSQRT(eta) * b0*bp ) *
-     &                  phi_nr_ml(0,ml,r);
+          d_phi_nr_ml = ( DBLE(ml) - eta )/( DSQRT(eta) * b ) *
+     &                  phi_nr_ml(0,ml,b,r);
           return;
       endif
 
       fac1 = ( DBLE(2*nr+ml) - eta ) / DSQRT(eta);
-      fac1 = fac1/(b0*bp);
       fac2 = - 2.D0 * DSQRT( DBLE( nr*(nr+ml) ) / eta );
-      fac2 = fac2/(b0*bp);
-      d_phi_nr_ml = fac1 * phi_nr_ml(nr,ml,r) +
-     &              fac2 * phi_nr_ml(nr-1,ml,r);
 
+      d_phi_nr_ml = + fac1/b * phi_nr_ml(nr  ,ml,b,r)
+     &              + fac2/b * phi_nr_ml(nr-1,ml,b,r);
 
       return;
       end;
@@ -330,7 +307,7 @@ c----------------------------------------------------------------------c
       if( a .eq. 1.D0 ) then
           select case( K )
               case( 0 )
-                  I_K = 1.D0;        
+                  I_K = 1.D0;
               case( 1 )
                   I_K = -1.D0/3.D0;
               case( 2 )
@@ -340,7 +317,7 @@ c----------------------------------------------------------------------c
               case default
                   stop 'Error: K > 3 in I_K()!';
           end select
-          
+
           return;
       endif
 
@@ -348,7 +325,7 @@ c----------------------------------------------------------------------c
       if( a .gt. 0.2D0 ) then
 
           call CElliptic( epsi , a , Kc , Ec , n );
-          
+
           select case( K )
             case( 0 )
               fac1 = 0.D0;
@@ -372,9 +349,9 @@ c----------------------------------------------------------------------c
 
           I_K = fac3 * ( fac1*Kc + fac2*Ec );
           return;
-          
+
       else
-          
+
           I_K = 0.D0;
           x   = 1.D0;
           select case( K )
@@ -399,9 +376,9 @@ c----------------------------------------------------------------------c
                       x = x*a;
                   enddo
               case default
-                  stop 'Error: K > 3 in I_K()!';  
+                  stop 'Error: K > 3 in I_K()!';
           end select
-          
+
           return;
 
       endif
@@ -440,6 +417,7 @@ c======================================================================c
       TalmiMoshinsky_1d = 0.D0;
 
 
+
       if( nz1.lt.0 .or. nz2.lt.0 .or. NZZ.lt.0 .or. nz.lt.0 ) then
           return;
       endif
@@ -447,6 +425,10 @@ c======================================================================c
           return;
       endif
 
+      call assert( nz1.le.IGFV , 'IGFV too small' );
+      call assert( nz2.le.IGFV , 'IGFV too small' );
+      call assert( NZZ.le.IGFV , 'IGFV too small' );
+      call assert(  nz.le.IGFV , 'IGFV too small' );
 
       fac = wf(nz1)*wf(nz2)*wfi(NZZ)*wfi(nz);
       fac = fac / DSQRT(2.D0**(DBLE( nz1+nz2 )));
@@ -459,8 +441,7 @@ c======================================================================c
           acc = acc + iv(p)*bin1*bin2;
       enddo
 
-
-      TalmiMoshinsky_1d = fac*acc;
+      TalmiMoshinsky_1d = fac * acc;
 
       return;
       end;
@@ -524,21 +505,21 @@ c======================================================================c
 
 
 
+      call assert( nr1+nr2+NRR+nr.le.IGFV , 'IGFV too small' );
+      call assert( nr1+abs(ml1)  .le.IGFV , 'IGFV too small' );
+      call assert( nr2+abs(ml2)  .le.IGFV , 'IGFV too small' );
+      call assert( NRR+abs(MLL)  .le.IGFV , 'IGFV too small' );
+      call assert(  nr+abs(ml)   .le.IGFV , 'IGFV too small' );
 
       fac = iv(NRR+nr+nr1+nr2);
       fac = fac / DSQRT( 2.D0**(DBLE( 2*NRR+abs(MLL)+2*nr+abs(ml) )) );
       fac = fac * wf(nr1)*wf(nr1+abs(ml1))*wf(nr2)*wf(nr2+abs(ml2));
       fac = fac * wfi(NRR)*wfi(NRR+abs(MLL))*wfi(nr)*wfi(nr+abs(ml));
 
-
       sgn_ml  = 0;
       sgn_MLL = 0;
-      if( ml  .ne. 0 ) then
-          sgn_ml  = isign(1,ml);
-      endif
-      if( MLL .ne. 0 ) then
-          sgn_MLL = isign(1,MLL);
-      endif
+      if( ml  .ne. 0 ) sgn_ml  = isign(1,ml );
+      if( MLL .ne. 0 ) sgn_MLL = isign(1,MLL);
 
       cond1 = (2*nr1+abs(ml1)) - (2*nr2+abs(ml2)) + abs(MLL) + abs(ml);
       cond2 = ml1;
@@ -561,14 +542,11 @@ c======================================================================c
               do t  = 0 , abs(ml)
               do TT = 0 , abs(MLL)
 
-                  if( 2*(p+PP-q-QQ+t+TT) .ne. cond1 ) then
-                      CYCLE;
-                  endif
-                  if( r+RR-s-SS+sgn_ml*t+sgn_MLL*TT .ne. cond2 ) then
-                      CYCLE;
-                  endif
+                  if( 2*(p+PP) - 2*(q+QQ) + 2*(t+TT) .ne. cond1 ) CYCLE;
+                  if( r+RR-s-SS+sgn_ml*t+sgn_MLL*TT  .ne. cond2 ) CYCLE;
 
-                  bin1 = fak(abs(ml))*fi(t)*fi(abs(ml)-t);
+
+                  bin1 = fak(abs(ml) )*fi(t) *fi(abs(ml) -t );
                   bin2 = fak(abs(MLL))*fi(TT)*fi(abs(MLL)-TT);
 
                   acc = acc + iv(t+r+s)*mult1*mult2*bin1*bin2;
@@ -584,8 +562,7 @@ c======================================================================c
       enddo
       enddo
 
-
-      TalmiMoshinsky_2d = fac*acc;
+      TalmiMoshinsky_2d = fac * acc;
 
       return;
       end;
@@ -626,13 +603,13 @@ c======================================================================c
 
       n = 0;
   100 n = n + 1;
-      if( n .gt. MAXN ) then
-          stop 'Error: Arrays too small in CElliptic()!';
-      endif
+      call assert( n.le.MAXN , 'Arrays too small in CElliptic()' );
       A(n) = ( A(n-1) + B(n-1) ) / 2.D0;
       B(n) = DSQRT( A(n-1) * B(n-1) );
       if( DABS( A(n) - B(n) ) > epsi ) GOTO 100;
 
+
+      call assert( n.lt.30 , 'Possible overflow in CElliptic()' );
 
       e1 = pi/2.D0/A(n);
       e2 = 2.D0;

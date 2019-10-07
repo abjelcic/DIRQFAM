@@ -14,6 +14,7 @@ OBJ =                        \
 ./source/init_multipole.f    \
 ./source/init_spurious.f     \
 ./source/init_coulomb.f      \
+./source/init_gs.f           \
 ./source/init_pairing.f      \
 ./source/start_fam.f         \
 ./source/iter_fam.f          \

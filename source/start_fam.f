@@ -13,6 +13,9 @@ c======================================================================c
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
+      INTEGER*4 tape_strength, tape_rhov;
+      common /out_tapes/ tape_strength, tape_rhov;
+
       COMPLEX*16 dh_1, dh_2;
       common /delta_h/ dh_1( NTX , NTX , 2 ),
      &                 dh_2( NTX , NTX , 2 );
@@ -34,39 +37,39 @@ c======================================================================c
 
 
 
-c-----Printing strength.out
-      open( 100 , file   = './output/QFAM_output/strength.out' ,
-     &            status = 'unknown' );
+c-----Printing strength.out header
+      open( tape_strength , file   = './output/QFAM_output/strength.out'
+     &                    , status = 'unknown' );
 
-      write(100,'(2a)',advance='no') 'S(f,omega) = -1/pi * ',
-     &                               'Im[Tr[hermconj(f)*drho(omega)]] ';
+      write( tape_strength , '(a)' , advance = 'no' )
+     &      'S(f,omega) = -1/pi * Im[Tr[hermconj(f)*drho(omega)]] ';
 
       select case( J_multipole )
           case( 0 )
-              write(100,*) '[fm^4/MeV]';
+              write(tape_strength,*) '[fm^4/MeV]';
           case( 1 )
               select case( ISO )
                   case( 0 )
-                      write(100,*) '[fm^2/MeV]';
+                      write(tape_strength,*) '[fm^2/MeV]';
                   case( 1 )
-                      write(100,*) '[e^2fm^2/MeV]';
+                      write(tape_strength,*) '[e^2fm^2/MeV]';
                   case default
                       stop 'Error: Wrong ISO!';
               end select
           case( 2 )
-              write(100,*) '[fm^4/MeV]';
+              write(tape_strength,*) '[fm^4/MeV]';
           case( 3 )
-              write(100,*) '[fm^6/MeV]';
+              write(tape_strength,*) '[fm^6/MeV]';
           case default
               stop 'Error: J_multipole > 3 not implemented!';
       end select
 
-      call print_header( 100 );
+      call print_header( tape_strength );
 
-      write(100,*) '';
-      write(100,'(a,a)') 'omega[MeV/hbar]        ',
-     &                   '             S(f,omega)';
-      write(100,*) '';
+      write(tape_strength,*) '';
+      write(tape_strength,'(a,a)') 'omega[MeV/hbar]        ',
+     &                             '             S(f,omega)';
+      write(tape_strength,*) '';
 
 
       if( i_calculation_type .eq. 0 ) then
@@ -79,12 +82,15 @@ c-----Printing strength.out
           write(6,*) '';
       endif
 
+      call flush(tape_strength);
+      call flush(6);
 
 
 
 
 
-c-----Hartree response, frequency sweep
+
+c-----Hartree response, energy sweep
       if( i_calculation_type .eq. 0 ) then
 
           ! Hartree response is defined as a response
@@ -104,11 +110,10 @@ c-----Hartree response, frequency sweep
               Sn = fam_strength( .false. , 1 );
               Sp = fam_strength( .false. , 2 );
 
-              write(  6,'(1f15.5,1f31.10)') omega , Sp+Sn;
-              call flush(6);
-
-              write(100,'(1f15.5,1f31.10)') omega , Sp+Sn;
-              call flush(100);
+              write(            6,'(1f15.5,1f31.10)') omega , Sp+Sn;
+              write(tape_strength,'(1f15.5,1f31.10)') omega , Sp+Sn;
+              call flush(            6);
+              call flush(tape_strength);
 
               omega = omega + delta_omega;
           enddo
@@ -120,20 +125,20 @@ c-----Hartree response, frequency sweep
 
 
 
-c-----Fully self-consistent response, frequency sweep
+c-----Fully self-consistent response, energy sweep
       if( i_calculation_type .eq. 1 ) then
 
-          ! Initial guess of self-consistent Broyden
-          ! vector for initial frequency is zero.
+          ! Initial guess for self-consistent solution
+          ! vector for initial sweep energy is zero.
           ! Otherwise, we use self-consistent solution
-          ! of previous frequency as initial guess
-          ! for the following frequency
+          ! of previous energy as initial guess
+          ! for the following energy
           dh_1      = COMPLEX( 0.D0 , 0.D0 );
           dh_2      = COMPLEX( 0.D0 , 0.D0 );
           dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
           dDelta_mi = COMPLEX( 0.D0 , 0.D0 );
 
-          ! One can easily parallelize this frequency
+          ! One can easily parallelize this energy
           ! loop for systematic, large scale calculations
           omega = omega_start;
           do while( omega .le. omega_end + 1.D-4 )
@@ -143,8 +148,8 @@ c-----Fully self-consistent response, frequency sweep
               Sn = fam_strength( .false. , 1 );
               Sp = fam_strength( .false. , 2 );
 
-              write(100,'(1f15.5,1f31.10)') omega , Sp+Sn;
-              call flush(100);
+              write(tape_strength,'(1f15.5,1f31.10)') omega , Sp+Sn;
+              call flush(tape_strength);
 
               omega = omega + delta_omega;
           enddo
@@ -156,23 +161,22 @@ c-----Fully self-consistent response, frequency sweep
 
 
 
-c-----Calculation for given frequency, printing vector density
+c-----Calculation for given energy, printing vector density
       if( i_calculation_type .eq. 2 ) then
-
-          omega = omega_print;
 
           dh_1      = COMPLEX( 0.D0 , 0.D0 );
           dh_2      = COMPLEX( 0.D0 , 0.D0 );
           dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
           dDelta_mi = COMPLEX( 0.D0 , 0.D0 );
 
+          omega = omega_print;
           call iter_fam( .false. );
 
           Sn = fam_strength( .false. , 1 );
           Sp = fam_strength( .false. , 2 );
 
-          write(100,'(1f15.5,1f31.10)') omega , Sp+Sn;
-          call flush(100);
+          write(tape_strength,'(1f15.5,1f31.10)') omega , Sp+Sn;
+          call flush(tape_strength);
 
           !Printing time dependent vector density
           call print_dens( .false. );
@@ -184,7 +188,7 @@ c-----Calculation for given frequency, printing vector density
 
 
 
-      close(100);
+      close(tape_strength);
 
 
 

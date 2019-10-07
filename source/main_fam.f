@@ -21,12 +21,12 @@ c======================================================================c
       endif
 
 
-      if( MOD(n0f,2) .ne. 0 ) then
-          stop 'Error: n0f has to be even number!';
-      endif
-      if( parname .ne. 'DD-PC1' ) then
-          stop 'Error: FAM implemented only for DD-PC1!';
-      endif
+      call assert( MOD(n0f,2).eq.0 , 'n0f has to be even number' );
+      call assert( NGH.ge.30  , 'NGH has to be at least 30' );
+      call assert( NGL.ge.30  , 'NGL has to be at least 30' );
+      call assert( NGH.lt.100 , 'NGH has to be less than 100' );
+      call assert( NGL.lt.100 , 'NGL has to be less than 100' );
+      call assert( parname.eq.'DD-PC1' , 'Only DD-PC1 supports QFAM' );
 
 
       write(6,'(a)') '                                               ';
@@ -70,10 +70,10 @@ c-----Consistency check of transformation to simplex-y basis
           enddo
       endif
 
-c-----Initializes FAM submodule
+c-----Initializes QFAM submodule
       call init_fam( .false. );
 
-c-----Executes FAM submodule
+c-----Executes QFAM submodule
       call start_fam( .false. );
 
 

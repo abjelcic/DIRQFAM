@@ -25,8 +25,8 @@ c======================================================================c
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
       COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
-      common /v_energy/ E_fam_v( NBSX , NBX , 2 );
+      common /v_matrix/       v( NBSX , NBSX , NBX , 2 );
+      common /v_energy/ E_fam_v( NBSX , NBX  ,       2 );
 
 
 
@@ -61,9 +61,7 @@ c---------Particles (positive E in Fermi sea)
           klp = ka(ib,it);
           do k = 1 , nf
 
-
               klp = klp + 1;
-
               E_fam_v(jj,ib,it) = equ(klp,it);
 
               do n = nh+1 , nh+nh
@@ -73,7 +71,6 @@ c---------Particles (positive E in Fermi sea)
                   else
                       fg = 'g';
                   endif
-
 
 
                   nzz = nz( i0f + n-nh );
@@ -87,15 +84,12 @@ c---------Particles (positive E in Fermi sea)
                   if( mx.eq.+1 .and. fg.eq.'g' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
-
                   if( mx.eq.-1 .and. fg.eq.'f' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
 
                   ii = index_of_vector( fg , nzz , nrr , mx*mll , ib );
-
                   v(ii,jj,ib,it) = z;
-
 
               enddo
 
@@ -107,9 +101,7 @@ c---------Antiparticles (negative E in Dirac sea)
           kla = ka(ib,it+2);
           do k = 1 , ng
 
-
               kla = kla + 1;
-
               E_fam_v(jj,ib,it) = equ(kla,it+2);
 
               do n = nh+1 , nh+nh
@@ -119,7 +111,6 @@ c---------Antiparticles (negative E in Dirac sea)
                   else
                       fg = 'g';
                   endif
-
 
 
                   nzz = nz( i0f + n-nh );
@@ -133,24 +124,19 @@ c---------Antiparticles (negative E in Dirac sea)
                   if( mx.eq.+1 .and. fg.eq.'g' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
-
                   if( mx.eq.-1 .and. fg.eq.'f' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
 
                   ii = index_of_vector( fg , nzz , nrr , mx*mll , ib );
-
                   v(ii,jj,ib,it) = z;
-
 
               enddo
 
               jj = jj + 1;
           enddo
 
-          if( jj-1 .ne. id_spx(ib) ) then
-              stop 'Error: v matrix wrong!';
-          endif
+          call assert( jj-1 .eq. id_spx(ib) , 'v matrix construction' );
 
       enddo
 
@@ -286,9 +272,7 @@ c---------Particles (positive E in Fermi sea)
           klp = ka(ib,it);
           do k = 1 , nf
 
-
               klp = klp + 1;
-
               E_fam_u(jj,ib,it) = equ(klp,it);
 
               do n = 1 , nh
@@ -300,27 +284,23 @@ c---------Particles (positive E in Fermi sea)
                   endif
 
 
-
                   nzz = nz( i0f + n );
                   nrr = nr( i0f + n );
                   mll = ml( i0f + n );
                   mx  = 2*( iabs(kap) - mll ) - 1;
 
-                  z = COMPLEX( fguv(n,klp,it) , 0.D0 );
+                  z = COMPLEX( +fguv(n,klp,it) , 0.D0 );
 
 
                   if( mx.eq.+1 .and. fg.eq.'g' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
-
                   if( mx.eq.-1 .and. fg.eq.'f' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
 
                   ii = index_of_vector( fg , nzz , nrr , mx*mll , ib );
-
                   u(ii,jj,ib,it) = z;
-
 
               enddo
 
@@ -332,9 +312,7 @@ c---------Antiparticles (negative E in Dirac sea)
           kla = ka(ib,it+2);
           do k = 1 , ng
 
-
               kla = kla + 1;
-
               E_fam_u(jj,ib,it) = equ(kla,it+2);
 
               do n = 1 , nh
@@ -346,36 +324,31 @@ c---------Antiparticles (negative E in Dirac sea)
                   endif
 
 
-
                   nzz = nz( i0f + n );
                   nrr = nr( i0f + n );
                   mll = ml( i0f + n );
                   mx  = 2*( iabs(kap) - mll ) - 1;
 
-                  z = COMPLEX( fguv(n,kla,it+2) , 0.D0 );
+                  z = COMPLEX( +fguv(n,kla,it+2) , 0.D0 );
 
 
                   if( mx.eq.+1 .and. fg.eq.'g' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
-
                   if( mx.eq.-1 .and. fg.eq.'f' ) then
                       z = z * COMPLEX( 0.D0 , 1.D0 );
                   endif
 
                   ii = index_of_vector( fg , nzz , nrr , mx*mll , ib );
-
                   u(ii,jj,ib,it) = z;
-
 
               enddo
 
               jj = jj + 1;
           enddo
 
-          if( jj-1 .ne. id_spx(ib) ) then
-              stop 'Error: u matrix wrong!';
-          endif
+          call assert( jj-1 .eq. id_spx(ib) , 'u matrix construction' );
+
       enddo
 
 

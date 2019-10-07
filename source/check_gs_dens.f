@@ -28,16 +28,9 @@ c======================================================================c
 
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 density_matrix( NBSX , NBSX , NBX , 2 );
-      REAL*8 max_error;
+      COMPLEX*16 dens_mat( NBSX , NBSX , NBX , 2 );
       REAL*8 RHO_v(MG,2);
       REAL*8 RHO_s(MG,2);
-
-
-
-      ihl(ih,il) = 1+ih + il*(NGH+1);
-      RHO_v = 0.D0;
-      RHO_s = 0.D0;
 
 
 
@@ -61,7 +54,7 @@ c-----Calculation of density matrix
      &                    v(1,1,ib,it)              , NBSX       ,
      &                    v(1,1,ib,it)              , NBSX       ,
      &                    COMPLEX( 0.D0 , 0.D0 )    ,
-     &                    density_matrix(1,1,ib,it) , NBSX         );
+     &                    dens_mat(1,1,ib,it)       , NBSX         );
           enddo
       enddo
 
@@ -71,22 +64,25 @@ c-----Calculation of density matrix
 
 
 c-----Calculation of Ground-State densities
+      RHO_v = 0.D0;
+      RHO_s = 0.D0;
       do it = 1 , 2
           do il = 0 , NGL
               do ih = 0 , NGH
-                  ii = ihl(ih,il);
+                  ii = 1+ih + il*(NGH+1);
+
                   do ib = 1 , N_blocks
                       do i = 1 , id_spx(ib)
-                          fg1 = fg_spx(i,ib);
-                          nz1 = nz_spx(i,ib);
-                          nr1 = nr_spx(i,ib);
-                          ml1 = ml_spx(i,ib);
+                          fg1   = fg_spx(i,ib);
+                          nz1   = nz_spx(i,ib);
+                          nr1   = nr_spx(i,ib);
+                          ml1   = ml_spx(i,ib);
                           qhql1 = qh(nz1,ih) * ql(nr1,abs(ml1),il);
                           do j = 1 , id_spx(ib)
-                              fg2 = fg_spx(j,ib);
-                              nz2 = nz_spx(j,ib);
-                              nr2 = nr_spx(j,ib);
-                              ml2 = ml_spx(j,ib);
+                              fg2   = fg_spx(j,ib);
+                              nz2   = nz_spx(j,ib);
+                              nr2   = nr_spx(j,ib);
+                              ml2   = ml_spx(j,ib);
                               qhql2 = qh(nz2,ih) * ql(nr2,abs(ml2),il);
 
 
@@ -94,16 +90,16 @@ c-----Calculation of Ground-State densities
 
 
                               if( fg1.eq.'f' .and. fg2.eq.'f' ) then
-                                  x = DREAL(density_matrix(i,j,ib,it));
-                                  x = x * 2.D0*qhql1*qhql2;
+                                  x = 2.D0 * DREAL(dens_mat(i,j,ib,it))
+     &                                     * qhql1*qhql2;
 
                                   RHO_v(ii,it) = RHO_v(ii,it) + x
                                   RHO_s(ii,it) = RHO_s(ii,it) + x
                               endif
 
                               if( fg1.eq.'g' .and. fg2.eq.'g' ) then
-                                  x = DREAL(density_matrix(i,j,ib,it));
-                                  x = x * 2.D0*qhql1*qhql2;
+                                  x = 2.D0 * DREAL(dens_mat(i,j,ib,it))
+     &                                     * qhql1*qhql2;
 
                                   RHO_v(ii,it) = RHO_v(ii,it) + x
                                   RHO_s(ii,it) = RHO_s(ii,it) - x
@@ -124,98 +120,100 @@ c-----Calculation of Ground-State densities
 
 
 
-c-----Prints densities
-      if( lpr ) then
-
-          write(6,*) '';
-          write(6,*) 'Comparison of the isoscalar-vector densities';
-          write(6,*) '';
-
-          write(6,*) '         Coordinate [fm]          ',
-     &               '        rho_new   ',
-     &               '        rho_old   ',
-     &               '        |error|  ',
-     &               '     rel.error';
-
-          write(6,*) '';
-
-          do il = 0 , NGL
-              do ih = 0 , NGH
-                  rho_new   = RHO_v(ihl(ih,il),1) + RHO_v(ihl(ih,il),2);
-                  rho_old   = ro(ihl(ih,il),2);
-                  abs_error = DABS( rho_new - rho_old );
-                  rel_error = abs_error / DABS(rho_old);
-
-                  write(6,100)   '( r(', il, ') =', rb(il), ',  ',
-     &                           '  z(', ih, ') =', zb(ih), ' )  ',
-     &                           rho_new,
-     &                           rho_old,
-     &                           abs_error,
-     &                           rel_error;
-
-              enddo
-          enddo
-
-
-          write(6,*) '';
-          write(6,*) 'Comparison of the isoscalar-scalar densities';
-          write(6,*) '';
-
-          write(6,*) '         Coordinate [fm]          ',
-     &               '        rho_new   ',
-     &               '        rho_old   ',
-     &               '        |error|  ',
-     &               '     rel.error';
-
-          write(6,*) '';
-
-          do il = 0 , NGL
-              do ih = 0 , NGH
-                  rho_new   = RHO_s(ihl(ih,il),1) + RHO_s(ihl(ih,il),2);
-                  rho_old   = ro(ihl(ih,il),1);
-                  abs_error = DABS( rho_new - rho_old );
-                  rel_error = abs_error / DABS(rho_old);
-
-                  write(6,100)   '( r(', il, ') =', rb(il), ',  ',
-     &                           '  z(', ih, ') =', zb(ih), ' )  ',
-     &                           rho_new,
-     &                           rho_old,
-     &                           abs_error,
-     &                           rel_error;
-
-              enddo
-          enddo
-
-      endif
-
-
-
-
-
-
 c-----Compares densities
-      max_error = -1.D0;
+      err1 = 0.D0; eucl1 = 0.D0;
+      err2 = 0.D0; eucl2 = 0.D0;
       do il = 0 , NGL
           do ih = 0 , NGH
+              ii = 1+ih + il*(NGH+1);
 
-              rho_new   = RHO_v(ihl(ih,il),1) + RHO_v(ihl(ih,il),2);
-              rho_old   = ro(ihl(ih,il),2);
-              rel_error = DABS(rho_new-rho_old)/DABS(rho_old);
-              max_error = MAX( max_error , rel_error );
+              rho_new   = RHO_v(ii,1) + RHO_v(ii,2);
+              rho_old   = ro(ii,2);
+              err1  = err1  + ( rho_new - rho_old )**2.D0;
+              eucl1 = eucl1 + (           rho_old )**2.D0;
 
-              rho_new   = RHO_s(ihl(ih,il),1) + RHO_s(ihl(ih,il),2);
-              rho_old   = ro(ihl(ih,il),1);
-              rel_error = DABS(rho_new-rho_old)/DABS(rho_old);
-              max_error = MAX( max_error , rel_error );
+              rho_new   = RHO_s(ii,1) + RHO_s(ii,2);
+              rho_old   = ro(ii,1);
+              err2  = err2  + ( rho_new - rho_old )**2.D0;
+              eucl2 = eucl2 + (           rho_old )**2.D0;
 
           enddo
       enddo
-      if( max_error .gt. 1.D-5 ) then
-          write(6,*) 'max_error = ', max_error;
-          stop 'Error: Ground-State densities wrong!';
-      endif
+      err1  = DSQRT(err1);
+      err2  = DSQRT(err2);
+      eucl1 = DSQRT(eucl1);
+      eucl2 = DSQRT(eucl2);
+      call assert( err1/eucl1 .lt. 1.D-8 , 'GS densities problem' );
+      call assert( err2/eucl2 .lt. 1.D-8 , 'GS densities problem' );
+
+
+
+
+
+
+c-----Prints densities
       if( lpr ) then
-          write(6,*) 'max_error = ', max_error;
+
+          write(6,*) 'Comparison of the isoscalar-vector densities';
+          write(6,*) '';
+          write(6,*) '         Coordinate [fm]          ',
+     &               '        rho_new   ',
+     &               '        rho_old   ',
+     &               '        |error|  ',
+     &               '     rel.error';
+
+          write(6,*) '';
+
+          do il = 0 , NGL
+              do ih = 0 , NGH
+                  ii = 1+ih + il*(NGH+1);
+
+                  rho_new   = RHO_v(ii,1) + RHO_v(ii,2);
+                  rho_old   = ro(ii,2);
+                  abs_error = DABS( rho_new - rho_old );
+                  rel_error = abs_error / DABS(rho_old);
+
+                  write(6,100)   '( r(', il, ') =', rb(il), ',  ',
+     &                           '  z(', ih, ') =', zb(ih), ' )  ',
+     &                           rho_new,
+     &                           rho_old,
+     &                           abs_error,
+     &                           rel_error;
+
+              enddo
+          enddo
+
+
+          write(6,*) 'Comparison of the isoscalar-scalar densities';
+          write(6,*) '';
+          write(6,*) '         Coordinate [fm]          ',
+     &               '        rho_new   ',
+     &               '        rho_old   ',
+     &               '        |error|  ',
+     &               '     rel.error';
+
+          write(6,*) '';
+
+          do il = 0 , NGL
+              do ih = 0 , NGH
+                  ii = 1+ih + il*(NGH+1);
+
+                  rho_new   = RHO_s(ii,1) + RHO_s(ii,2);
+                  rho_old   = ro(ii,1);
+                  abs_error = DABS( rho_new - rho_old );
+                  rel_error = abs_error / DABS(rho_old);
+
+                  write(6,100)   '( r(', il, ') =', rb(il), ',  ',
+     &                           '  z(', ih, ') =', zb(ih), ' )  ',
+     &                           rho_new,
+     &                           rho_old,
+     &                           abs_error,
+     &                           rel_error;
+
+              enddo
+          enddo
+
+
       endif
 
 
@@ -229,6 +227,7 @@ c-----Compares densities
      &        1f18.13,
      &        1e15.5,
      &        1e15.5            );
+
 
       if(lpr) then
       write(6,*) '';

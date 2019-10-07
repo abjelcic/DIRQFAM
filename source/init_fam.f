@@ -13,6 +13,9 @@ c======================================================================c
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
+      INTEGER*4 tape_strength, tape_rhov;
+      common /out_tapes/ tape_strength, tape_rhov;
+
       CHARACTER fg_spx;
       common /simplex/ N_total         , N_blocks        ,
      &                 ia_spx(NBX)     , id_spx(NBX)     ,
@@ -52,7 +55,7 @@ c======================================================================c
       write(6,*) '';
       endif
 
-      write(6,'(a)') 'Initializing FAM.';
+      write(6,'(a)') 'Initializing QFAM submodule.';
       call flush(6);
 
 
@@ -60,7 +63,7 @@ c======================================================================c
 
 
 
-c-----Reading FAM parameters
+c-----Reading QFAM parameters
       infam = 123;
       open( infam , file = 'dirqfam.dat' , status = 'old' );
       read(infam,*);
@@ -80,18 +83,18 @@ c-----Reading FAM parameters
       read(infam,*);
       read(infam,*);
       read(infam,*);
-      read(infam,'(18x,i9)') i_calculation_type;
+      read(infam,'(18x,i9)')    i_calculation_type;
       read(infam,*);
       read(infam,*);
       read(infam,*);
-      read(infam,'(18x,i9)') i_coulomb;
-      read(infam,'(18x,i9)') i_pairing;
+      read(infam,'(18x,i9)')    i_coulomb;
+      read(infam,'(18x,i9)')    i_pairing;
       read(infam,*);
       read(infam,*);
       read(infam,*);
-      read(infam,'(18x,i9)') J_multipole;
-      read(infam,'(18x,i9)') K_multipole;
-      read(infam,'(18x,i9)') ISO;
+      read(infam,'(18x,i9)')    J_multipole;
+      read(infam,'(18x,i9)')    K_multipole;
+      read(infam,'(18x,i9)')    ISO;
       read(infam,'(18x,1f9.3)') gamma_smear;
       read(infam,*);
       read(infam,'(18x,1f9.3)') omega_start;
@@ -101,7 +104,8 @@ c-----Reading FAM parameters
       read(infam,'(18x,1f9.3)') omega_print;
       close(infam);
 
-
+      tape_strength = 100;
+      tape_rhov     = 110;
 
 
 
@@ -135,21 +139,19 @@ c-----TMR separable pairing parameters
 
 
 
-c-----Calculation of FAM energies
+c-----Calculation of QFAM energies
       do it = 1 , 2
           ie = 1;
           do ib = 1 , N_blocks
               do i = 1 , id_spx(ib)
-                  if( E_fam_v(i,ib,it) .ne. E_fam_u(i,ib,it) ) then
-                      stop 'Error: E_fam_v and E_fam_u wrong!';
-                  endif
+                  call assert(  E_fam_v(i,ib,it).eq.E_fam_u(i,ib,it) ,
+     &                         'E_fam_v =/= E_fam_u'                  );
+
                   E_fam(ie,it) = E_fam_v(i,ib,it);
                   ie = ie + 1;
               enddo
           enddo
-          if( ie-1 .ne. N_total ) then
-               stop 'Error: ie-1 =/= N_total!';
-          endif
+          call assert( ie-1 .eq. N_total , 'ie-1 =/= N_total' );
       enddo
 
 
@@ -202,7 +204,7 @@ c-----Calculation of nnz_blocks
 
 
 
-c-----Calculation of basis wave-functions
+c-----Calculation of quadrature weights+nodes and basis functions
       call init_basis( .false. );
 
 
@@ -226,8 +228,16 @@ c-----Calculation of Rcm and Pcm operators
 
 
 
-c-----Preparation of Coulomb (Green's function)
+c-----Preparation of Coulomb (weighted Green's function)
       call init_coulomb( .false. );
+
+
+
+
+
+
+c-----Calculation of ground state densities and meson fields
+      call init_gs( .false. );
 
 
 

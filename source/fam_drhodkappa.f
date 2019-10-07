@@ -341,8 +341,8 @@ c-----Elimination of spurious Nambu-Goldstone mode
                   enddo
               enddo
           enddo
-          lamR = lamR / ( RcmPcm_commutator(1) + RcmPcm_commutator(2) );
-          lamP = lamP / ( RcmPcm_commutator(1) + RcmPcm_commutator(2) );
+          lamR = lamR / ( RcmPcm_commutator(1)+RcmPcm_commutator(2) );
+          lamP = lamP / ( RcmPcm_commutator(1)+RcmPcm_commutator(2) );
 
 
           do it = 1 , 2

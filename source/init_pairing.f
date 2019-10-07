@@ -8,7 +8,6 @@ c======================================================================c
       include 'dirqfam.par'
       LOGICAL lpr;
 
-      common /mathco/ zero, one, two, half, third, pi;
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
       common /gfviv / iv ( -IGFV : IGFV ); ! iv(n)  = (-1)^n
@@ -33,9 +32,9 @@ c======================================================================c
 
 
 
-      parameter( NZMAX = N0FX );
+      parameter( NZMAX = N0FX   );
       parameter( NRMAX = N0FX/2 );
-      parameter( MLMAX = N0FX );
+      parameter( MLMAX = N0FX   );
 
       REAL*8 Vz( 0:NZMAX , 0:NZMAX , 0:2*NZMAX );
       REAL*8 Vr( 0:NRMAX , -MLMAX:MLMAX ,
@@ -43,6 +42,7 @@ c======================================================================c
      &           0:(2*NRMAX+MLMAX)       );
 
       CHARACTER fg1, fg2;
+      pi = 3.14159265358979324D0;
 
 
 
@@ -70,8 +70,11 @@ c======================================================================c
               do NZZ = 0 , nz1+nz2
                   if( mod(nz1+nz2,2) .ne. mod(NZZ,2) ) CYCLE;
 
-                  nz = nz1+nz2-NZZ;
+                  nz      = nz1+nz2-NZZ;
                   nz_half = nz/2;
+
+                  call assert( nz     .le.IGFV , 'IGFV too small' );
+                  call assert( nz_half.le.IGFV , 'IGFV too small' );
 
                   x = TalmiMoshinsky_1d( nz1 , nz2 , NZZ , nz );
                   x = x * wf(nz)*fi(nz_half)/DSQRT(2.D0**DBLE(nz));
@@ -102,13 +105,17 @@ c======================================================================c
                   do ml2 = -MLMAX , MLMAX
                       if( 2*nr2+abs(ml2) .gt. N0FX ) CYCLE;
 
+                      !See Appendix (E.4)
                       if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
+
 
                       lmt = nr1+nr2+(abs(ml1)+abs(ml2)-abs(ml1-ml2))/2;
                       do NRR = 0 , lmt
 
                           nr = nr1 + nr2 - NRR +
      &                        (abs(ml1)+abs(ml2)-abs(ml1-ml2))/2;
+
+                          call assert( nr.le.IGFV , 'IGFV too small' );
 
                           x = TalmiMoshinsky_2d( nr1 , +ml1     ,
      &                                           nr2 , -ml2     ,
@@ -120,7 +127,7 @@ c======================================================================c
                               x = x * ( - b0*b0*bp*bp + a2 )**DBLE(nr);
                               x = x * iv(nr);
                           endif
-                          x = x / ( ( a2 + b0*b0*bp*bp )**DBLE(nr+1) );
+                          x = x / ( a2 + b0*b0*bp*bp )**DBLE(nr+1);
 
                           Vr( nr1 , ml1 , nr2 , ml2 , NRR ) = x;
 
@@ -140,7 +147,6 @@ c======================================================================c
       fac = fac / ( (2*pi)**0.75D0 );
 
       il = 0;
-      K  = K_multipole;
       do ib1 = 1 , N_blocks
          i0 = 1;
          i1 = id_spx(ib1);
@@ -166,7 +172,7 @@ c======================================================================c
 
                   if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
 
-                  do Nr = 0 , nr1+nr2+(abs(ml1)+abs(ml2)-K)/2
+                  do Nr = 0 , nr1+nr2+(abs(ml1)+abs(ml2)-abs(ml1-ml2))/2
                      do Nz = 0 , nz1+nz2
                         if( mod(Nz,2) .ne. mod(nz1+nz2,2) ) CYCLE;
 
@@ -182,9 +188,7 @@ c======================================================================c
 
          enddo
       enddo
-      if( il .ne. NWMAX ) then
-          stop 'Error: il =/= WSIZE !';
-      endif
+      call assert( il.eq.NWMAX , 'il =/= NWMAX' );
 
 
 

@@ -126,10 +126,7 @@ c-----Initialization
             enddo
          enddo
 
-
-         if( il .ne. nn ) then
-             stop 'Error: il =/= nn!';
-         endif
+         call assert( il.eq.nn , 'il =/= nn in fam_broyden()' );
 
          return;
 
@@ -215,21 +212,19 @@ c-----Inserting the new vector in Broyden mixing procedure
 
 
 
-c-----Calculation of the relative difference of
-c-----two consecutive Broyden vectors
-      if( il .ne. nn ) then
-          stop 'Error: il =/= nn!';
-      endif
+c-----Calculation of the relative difference
+c-----between two consecutive Broyden vectors
+      call assert( il.eq.nn , 'il =/= nn in fam_broyden()' );
       s1 = 0.D0;
       s2 = 0.D0;
       do i = 1 , nn
-         s1 = s1 + vin(i)*vin(i);
-         s2 = s2 + vou(i)*vou(i);
+         s1 = s1 + vin(i)**2.D0;
+         s2 = s2 + vou(i)**2.D0;
       enddo
       if( s1 .ne. 0.D0 ) then
           error = DSQRT(s2/s1);
       else
-          error = 1.D+10;
+          error = 1.D+99;
       endif
 
 

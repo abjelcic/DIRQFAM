@@ -44,12 +44,12 @@ c======================================================================c
       endif
 
       do il = 1 , NGL
-          do ih = -NGH , NGH
+          do ih = -NGH , +NGH
               if( ih .eq. 0 ) CYCLE;
 
               z = COMPLEX( 0.D0 , 0.D0 );
               do il1 = 1 , NGL
-                  do ih1 = -NGH , NGH
+                  do ih1 = -NGH , +NGH
                       if( ih1 .eq. 0 ) CYCLE;
                       z = z + G(ih1,il1,ih,il) * ldrho_v(ih1,il1,2);
                   enddo

@@ -20,10 +20,7 @@ c======================================================================c
      &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
-      common /basis/ qhql ( -NGH:NGH , 1:NGL , NTX ),
-     &               qh1ql( -NGH:NGH , 1:NGL , NTX ),
-     &               qhql1( -NGH:NGH , 1:NGL , NTX ),
-     &               wqhql(    1:NGH , 1:NGL , NTX );
+      common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
 
       COMPLEX*16 dVpS, dVmS, dSig_z, dSig_r, dSig_p;
       common /fam_pot/ dVpS  ( -NGH:NGH , 1:NGL , 2 ),
@@ -64,16 +61,16 @@ c======================================================================c
 
 
 
-c-----Initializing odd/even parts of induced potentials
+c-----Initializing odd/even parts of the induced potentials
       do it = 1 , 2
         do il = 1 , NGL
           do ih = 1 , NGH
 
-            dVpS_odd(ih,il,it)   = dVpS(ih,il,it)   - dVps(-ih,il,it);
-            dVpS_evn(ih,il,it)   = dVpS(ih,il,it)   + dVps(-ih,il,it);
+              dVpS_odd(ih,il,it) =   dVpS(ih,il,it) -   dVps(-ih,il,it);
+              dVpS_evn(ih,il,it) =   dVpS(ih,il,it) +   dVps(-ih,il,it);
 
-            dVmS_odd(ih,il,it)   = dVmS(ih,il,it)   - dVms(-ih,il,it);
-            dVmS_evn(ih,il,it)   = dVmS(ih,il,it)   + dVms(-ih,il,it);
+              dVmS_odd(ih,il,it) =   dVmS(ih,il,it) -   dVms(-ih,il,it);
+              dVmS_evn(ih,il,it) =   dVmS(ih,il,it) +   dVms(-ih,il,it);
 
             dSig_z_odd(ih,il,it) = dSig_z(ih,il,it) - dSig_z(-ih,il,it);
             dSig_z_evn(ih,il,it) = dSig_z(ih,il,it) + dSig_z(-ih,il,it);
@@ -93,7 +90,7 @@ c-----Initializing odd/even parts of induced potentials
 
 
 
-c-----Calculation of dh_1 matrix
+c-----Calculation of the upper triangle of dh_1 matrix
       dh_1 = COMPLEX( 0.D0 , 0.D0 );
       K    = K_multipole;
       do it = 1 , 2
@@ -128,24 +125,21 @@ c-----Calculation of dh_1 matrix
                         do il = 1 , NGL
                             do ih = 1 , NGH
                                 z = z + dVpS_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                             enddo
                         enddo
                     else
                         do il = 1 , NGL
                             do ih = 1 , NGH
                                 z = z + dVpS_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                             enddo
                         enddo
                     endif
 
-                    if( K .ne. 0 ) then
-                        z = 0.5D0 * z;
-                    endif
+                    if( K .ne. 0 ) z = 0.5D0 * z;
 
                     dh_1(i,j,it) = z;
-                    dh_1(j,i,it) = z;
 
                 endif
 
@@ -159,24 +153,21 @@ c-----Calculation of dh_1 matrix
                         do il = 1 , NGL
                             do ih = 1 , NGH
                                 z = z + dVmS_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                             enddo
                         enddo
                     else
                         do il = 1 , NGL
                             do ih = 1 , NGH
                                 z = z + dVmS_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                             enddo
                         enddo
                     endif
 
-                    if( K .ne. 0 ) then
-                        z = 0.5D0 * z;
-                    endif
+                    if( K .ne. 0 ) z = 0.5D0 * z;
 
                     dh_1(i,j,it) = z;
-                    dh_1(j,i,it) = z;
 
                 endif
 
@@ -192,14 +183,14 @@ c-----Calculation of dh_1 matrix
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_r_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_r_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -211,7 +202,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_evn(ih,il,it)
      &                                    - dSig_p_evn(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
@@ -219,7 +210,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_odd(ih,il,it)
      &                                    - dSig_p_odd(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -231,7 +222,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_evn(ih,il,it)
      &                                    + dSig_p_evn(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
@@ -239,7 +230,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_odd(ih,il,it)
      &                                    + dSig_p_odd(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -247,12 +238,9 @@ c-----Calculation of dh_1 matrix
 
 
                         z = z * COMPLEX( 0.D0 , 1.D0 );
-                        if( K .ne. 0 ) then
-                            z = 0.5D0 * z;
-                        endif
+                        if( K .ne. 0 ) z = 0.5D0 * z;
 
                         dh_1(i,j,it) = + z;
-                        dh_1(j,i,it) = - z;
 
                     endif
 
@@ -263,24 +251,21 @@ c-----Calculation of dh_1 matrix
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_z_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                         else
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_z_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                         endif
 
-                        if( K .ne. 0 ) then
-                            z = 0.5D0 * z;
-                        endif
+                        if( K .ne. 0 ) z = 0.5D0 * z;
 
                         dh_1(i,j,it) = - z;
-                        dh_1(j,i,it) = - z;
 
                     endif
 
@@ -298,14 +283,14 @@ c-----Calculation of dh_1 matrix
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_r_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_r_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -317,7 +302,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_evn(ih,il,it)
      &                                    - dSig_p_evn(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
@@ -325,7 +310,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_odd(ih,il,it)
      &                                    - dSig_p_odd(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -337,7 +322,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_evn(ih,il,it)
      &                                    + dSig_p_evn(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           else
@@ -345,7 +330,7 @@ c-----Calculation of dh_1 matrix
                               do ih = 1 , NGH
                                 z = z + ( + dSig_r_odd(ih,il,it)
      &                                    + dSig_p_odd(ih,il,it) )
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                           endif
@@ -353,12 +338,9 @@ c-----Calculation of dh_1 matrix
 
 
                         z = z * COMPLEX( 0.D0 , 1.D0 );
-                        if( K .ne. 0 ) then
-                            z = 0.5D0 * z;
-                        endif
+                        if( K .ne. 0 ) z = 0.5D0 * z;
 
                         dh_1(i,j,it) = - z;
-                        dh_1(j,i,it) = + z;
 
                     endif
 
@@ -369,24 +351,21 @@ c-----Calculation of dh_1 matrix
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_z_evn(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                         else
                             do il = 1 , NGL
                               do ih = 1 , NGH
                                 z = z + dSig_z_odd(ih,il,it)
-     &                                * wqhql(ih,il,i)*wqhql(ih,il,j);
+     &                                * wPhi(ih,il,i)*wPhi(ih,il,j);
                               enddo
                             enddo
                         endif
 
-                        if( K .ne. 0 ) then
-                            z = 0.5D0 * z;
-                        endif
+                        if( K .ne. 0 ) z = 0.5D0 * z;
 
                         dh_1(i,j,it) = - z;
-                        dh_1(j,i,it) = - z;
 
                     endif
 
@@ -398,6 +377,44 @@ c-----Calculation of dh_1 matrix
 
           enddo
         enddo
+      enddo
+
+
+
+
+
+
+c-----Construction of full dh_1 matrix
+      do it = 1 , 2
+         do ib2 = 1 , N_blocks
+            do ib1 = ib2 , N_blocks
+
+               j0 = ia_spx(ib2);
+               j1 = ia_spx(ib2)+id_spx(ib2)-1;
+               do j = j0 , j1
+                  fg2 = fg_spx(j-ia_spx(ib2)+1,ib2);
+                  ml2 = ml_spx(j-ia_spx(ib2)+1,ib2);
+
+                  i0 = ia_spx(ib1);
+                  i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                  if( ib1 .eq. ib2 ) i0 = j+1;
+                  do i = i0 , i1
+                     fg1 = fg_spx(i-ia_spx(ib1)+1,ib1);
+                     ml1 = ml_spx(i-ia_spx(ib1)+1,ib1);
+
+                     if( abs(ml1-ml2).eq.K_multipole ) then
+                         dh_1(i,j,it) = + dh_1(j,i,it);
+                     elseif( abs(ml1+ml2+1).eq.K_multipole .and.
+     &                       fg1.ne.fg2                ) then
+                         dh_1(i,j,it) = - dh_1(j,i,it);
+                     endif
+
+                  enddo
+
+               enddo
+
+            enddo
+         enddo
       enddo
 
 

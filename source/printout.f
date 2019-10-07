@@ -8,19 +8,22 @@ c======================================================================c
       include 'dirqfam.par'
       LOGICAL lpr;
 
-      common /gaussh/ xh(0:NGH), wh(0:NGH), zb(0:NGH);
-      common /gaussl/ xl(0:NGL), wl(0:NGL), sxl(0:NGL), rb(0:NGL);
-      common /dens/ ro(MG,4), dro(MG,4);
+      INTEGER*4 tape_strength, tape_rhov;
+      common /out_tapes/ tape_strength, tape_rhov;
+
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
+
+      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
+     &                 rhos_GS( -NGH:NGH , 1:NGL     );
 
       common /fam/ omega_start, omega_end, delta_omega, omega_print,
      &             omega, gamma_smear,
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
-      COMPLEX*16 drho_v;
-      COMPLEX*16 drho_s;
-      COMPLEX*16 ldrho_v;
-      COMPLEX*16 ldrho_s;
+      COMPLEX*16 drho_v, drho_s, ldrho_v, ldrho_s;
       common /ind_dens/ drho_v ( -NGH:NGH , 1:NGL , 2 ),
      &                  drho_s ( -NGH:NGH , 1:NGL     ),
      &                  ldrho_v( -NGH:NGH , 1:NGL , 2 ),
@@ -39,49 +42,47 @@ c======================================================================c
 
 
 
-      open( 300 , file = './output/QFAM_output/rhov.out' ,
-     &      status = 'unknown' );
+      open( tape_rhov , file   = './output/QFAM_output/rhov.out' ,
+     &                  status = 'unknown'                        );
 
-      write(300,'(a,a)') 'rho_v(r,z,phi,t) = rho0_v(r,z) + 2*eta*',
-     &                   'Re[ exp(-i*omega*t) * drho_v(r,z,phi) ]';
+      write(tape_rhov,'(a,a)')'rho_v(r,z,phi,t) = rho0_v(r,z) + 2*eta*',
+     &                        'Re[ exp(-i*omega*t) * drho_v(r,z,phi) ]';
 
-      write(300,'(a,a,i1,a)')
-     &          'drho_v(r,z,phi) = drho_v(r,z)',
-     &          ' * cos(',K_multipole,'*phi)  ';
+      write(tape_rhov,'(a,a,i1,a)')
+     &                'drho_v(r,z,phi) = drho_v(r,z)',
+     &                ' * cos(',K_multipole,'*phi)  ';
 
-      call print_header( 300 );
+      call print_header( tape_rhov );
 
-      write(300,'(a,1f7.3,a)') 'omega = ', omega,
-     &                         ' [MeV/hbar]';
-
-
+      write(tape_rhov,'(a,1f7.3,a)') 'omega = ', omega,
+     &                               ' [MeV/hbar]';
 
 
-      write(300,*) '';
-      write(300,*) '';
-      write(300,'(4x,a,6x,a,7x,a,11x,a)')
-     &                  'r[fm]',
-     &                  'z[fm]',
-     &                  'rho0_v[fm^-3]',
-     &                  'drho_v(r,z)[fm^-3]';
-      write(300,*) '';
+
+
+      write(tape_rhov,*) '';
+      write(tape_rhov,*) '';
+      write(tape_rhov,'(4x,a,6x,a,7x,a,11x,a)')'r[fm]',
+     &                                         'z[fm]',
+     &                                         'rho0_v[fm^-3]',
+     &                                         'drho_v(r,z)[fm^-3]';
+      write(tape_rhov,*) '';
 
       do il = 1 , NGL
-          do ih = -NGH , NGH
+          do ih = -NGH , +NGH
               if( ih .eq. 0 ) CYCLE;
 
-              write(300,'(f10.5,f12.5,E18.7E3,E17.7E3,a,E16.7E3,a)')
-     &                  rb(il), DBLE(isign(1,ih))*zb(abs(ih)),
-     &                  ro( 1+abs(ih) + il*(NGH+1) , 2 ),
-     &                  DREAL( drho_v(ih,il,1)+drho_v(ih,il,2) ),
-     &                  '  +',
-     &                  DIMAG( drho_v(ih,il,1)+drho_v(ih,il,2) ),
-     &                  ' i';
+            write(tape_rhov,'(f10.5,f12.5,E18.7E3,E17.7E3,a,E16.7E3,a)')
+     &      rb_fam(il), DBLE(isign(1,ih))*zb_fam(abs(ih)),
+     &      rhov_GS(ih,il,1)+rhov_GS(ih,il,2),
+     &      DREAL( drho_v(ih,il,1)+drho_v(ih,il,2) ),
+     &      '  +',
+     &      DIMAG( drho_v(ih,il,1)+drho_v(ih,il,2) ),
+     &      ' i';
           enddo
       enddo
 
-
-      close(300);
+      close(tape_rhov);
 
 
 
@@ -110,7 +111,7 @@ c======================================================================c
 
       implicit REAL*8 (a-h,o-z)
       include 'dirqfam.par'
-      INTEGER tape;
+      INTEGER*4 tape;
 
       CHARACTER parname*10;
       common /partyp/ parname;
