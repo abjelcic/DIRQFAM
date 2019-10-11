@@ -229,6 +229,19 @@ c-----Setting KTRUNC and NCOORD
 
 
 
+c-----Setting NMESMAX shells and number of nz+2*nr+K <= NMESMAX pairs
+      NMESMAX = min(NGH,NGL);
+      N = NMESMAX - K_multipole;
+      if( N .le. 0 ) then
+          stop 'Error: NMESMAX too small in prep.f!';
+      endif
+      NHSIZE  = ( (N+1)*(N+3) + 1 - MOD(N,2) )/4;
+
+
+
+
+
+
 c-----Calculating NTX, KX, MVX, MVTX
       NTX = (n0f+2)*(n0f+3)*(2*n0f+5)/6;
       KX  = (n0f+2)*(n0f+3)*(n0f+4)/6;
@@ -371,9 +384,11 @@ c-----Generating dirqfam.par file
       write(tape,'(6x,a)') 'parameter( J_MAX      =        3 )';
       write(tape,'(6x,a,i9,a)') 'parameter( NFAM_BROYD =',broyd_n,' )';
       write(tape,'(6x,a,i9,a)') 'parameter( MFAM_BROYD =',broyd_m,' )';
-      write(tape,'(6x,a,i9,a)') 'parameter( NWMAX      =',NWMAX,' )';
-      write(tape,'(6x,a,i9,a)') 'parameter( KTRUNC     =',KTRUNC,' )';
-      write(tape,'(6x,a,i9,a)') 'parameter( NCOORD     =',NCOORD,' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( NWMAX      =',NWMAX,  ' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( KTRUNC     =',KTRUNC, ' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( NCOORD     =',NCOORD, ' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( NMESMAX    =',NMESMAX,' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( NHSIZE     =',NHSIZE ,' )';
       write(tape,'(6x,a,i9,a)') 'parameter( JCHECK     =',
      &                           J_multipole,' )';
       write(tape,'(6x,a,i9,a)') 'parameter( KCHECK     =',

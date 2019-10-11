@@ -10,6 +10,8 @@ c======================================================================c
 
       CHARACTER parname*10;
       common /partyp/ parname;
+      CHARACTER*2 nucnam;
+      common /nucnuc/ amas, nneu, npro, nmas, nucnam;
       common /basnnn/ n0f, n0b;
 
 
@@ -21,31 +23,34 @@ c======================================================================c
       endif
 
 
-      call assert( MOD(n0f,2).eq.0 , 'n0f has to be even number' );
-      call assert( NGH.ge.30  , 'NGH has to be at least 30' );
-      call assert( NGL.ge.30  , 'NGL has to be at least 30' );
-      call assert( NGH.lt.100 , 'NGH has to be less than 100' );
-      call assert( NGL.lt.100 , 'NGL has to be less than 100' );
-      call assert( parname.eq.'DD-PC1' , 'Only DD-PC1 supports QFAM' );
+      call assert( MOD(nneu,2).eq.0 , 'only even-even nuclei allowed' );
+      call assert( MOD(npro,2).eq.0 , 'only even-even nuclei allowed' );
+      call assert( MOD(n0f,2).eq.0  , 'n0f has to be even number'     );
+      call assert( NGH.ge.30        , 'NGH has to be at least 30'     );
+      call assert( NGL.ge.30        , 'NGL has to be at least 30'     );
+      call assert( NGH.lt.100       , 'NGH has to be less than 100'   );
+      call assert( NGL.lt.100       , 'NGL has to be less than 100'   );
+      call assert( parname.eq.'DD-PC1' .or. parname.eq.'DD-ME2' ,
+     &             'only DD-PC1 and DD-ME2 functionals supported'     );
 
 
-      write(6,'(a)') '                                               ';
-      write(6,'(a)') '                                               ';
-      write(6,'(a)') '                                               ';
-      write(6,'(a)') '  *******************************************  ';
-      write(6,'(a)') '  *      Relativistic Quasiparticle RPA     *  ';
-      write(6,'(a)') '  *           Simplex-y Basis               *  ';
-      write(6,'(a)') '  *                                         *  ';
-      write(6,'(a)') '  *   Finite Amplitude Method Calculation   *  ';
-      write(6,'(a)') '  *         with Density-Dependent          *  ';
-      write(6,'(a)') '  *          Point-Coupling Force           *  ';
-      write(6,'(a)') '  *         and Separable Pairing           *  ';
-      write(6,'(a)') '  * --------------------------------------- *  ';
-      write(6,'(a)') '  *                                         *  ';
-      write(6,'(a)') '  *           A.Bjelcic, T.Niksic           *  ';
-      write(6,'(a)') '  *                                         *  ';
-      write(6,'(a)') '  *******************************************  ';
-      write(6,'(a)') '                                               ';
+      write(6,'(a)') '                                                ';
+      write(6,'(a)') '                                                ';
+      write(6,'(a)') '                                                ';
+      write(6,'(a)') '  ********************************************  ';
+      write(6,'(a)') '  *       Relativistic Quasiparticle RPA     *  ';
+      write(6,'(a)') '  *            Simplex-y Basis               *  ';
+      write(6,'(a)') '  *                                          *  ';
+      write(6,'(a)') '  *   Finite Amplitude Method Calculation    *  ';
+      write(6,'(a)') '  *          with Density-Dependent          *  ';
+      write(6,'(a)') '  *  Meson-Exchange or Point-Coupling Force  *  ';
+      write(6,'(a)') '  *          and Separable Pairing           *  ';
+      write(6,'(a)') '  * ---------------------------------------- *  ';
+      write(6,'(a)') '  *                                          *  ';
+      write(6,'(a)') '  *            A.Bjelcic, T.Niksic           *  ';
+      write(6,'(a)') '  *                                          *  ';
+      write(6,'(a)') '  ********************************************  ';
+      write(6,'(a)') '                                                ';
       call flush(6);
 
 

@@ -23,11 +23,17 @@ c======================================================================c
      &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
-      common /DDPC1/  a_s , b_s , c_s , d_s ,
-     &                a_v , b_v , c_v , d_v ,
-     &                a_tv, b_tv, c_tv, d_tv,
-     &                del_s,
-     &                rho_sat;
+      REAL*8 m_sig, m_ome, m_rho;
+      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
+     &                      a_v , b_v , c_v , d_v ,
+     &                      a_tv, b_tv, c_tv, d_tv,
+     &                      del_s,
+     &
+     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
+     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
+     &                      a_rho,                      g0_rho, m_rho,
+     &
+     &                      rho_sat;
 
       common /TMR_param/ G_pairing, a_pairing;
 
@@ -110,6 +116,8 @@ c-----Reading QFAM parameters
 
 
 
+
+
 c-----DD-PC1 parameters
       a_s     = - 10.0462D0; ![fm^2]
       b_s     = -  9.1504D0; ![fm^2]
@@ -130,9 +138,32 @@ c-----DD-PC1 parameters
 
       rho_sat = +  0.1520D0; ![fm^-3]
 
+c-----DD-ME2 parameters
+      a_sig   = +   1.388148180042941D0; ![       ]
+      b_sig   = +   1.094300000000000D0; ![       ]
+      c_sig   = +   1.705700000000000D0; ![       ]
+      d_sig   = +   0.442066950716287D0; ![       ]
+
+      a_ome   = +   1.389291065981963D0; ![       ]
+      b_ome   = +   0.923974841420762D0; ![       ]
+      c_ome   = +   1.462000000000000D0; ![       ]
+      d_ome   = +   0.477491545490170D0; ![       ]
+
+      a_rho   = +   0.564700000000000D0; ![       ]
+
+      g0_sig  = +  10.539600000000000D0; ![       ]
+      g0_ome  = +  13.018900000000000D0; ![       ]
+      g0_rho  = +   3.683600000000000D0; ![       ]
+
+      m_sig   = + 550.123800000000000D0; ![MeV/c^2]
+      m_ome   = + 783.000000000000000D0; ![MeV/c^2]
+      m_rho   = + 763.000000000000000D0; ![MeV/c^2]
+
+      rho_sat = +   0.152000000000090D0; ![ fm^-3 ]
+
 c-----TMR separable pairing parameters
-      G_pairing = 728.D0;        ![MeV/fm^3]
-      a_pairing = 0.644204936D0; ![fm]
+      G_pairing = + 728.000000000D0; ![MeV/fm^3]
+      a_pairing = +   0.644204936D0; ![   fm   ]
 
 
 
@@ -212,6 +243,14 @@ c-----Calculation of quadrature weights+nodes and basis functions
 
 
 
+c-----Calculation of ground state densities and meson fields
+      call init_gs( .false. );
+
+
+
+
+
+
 c-----Calculation of multipole excitation operator
       call init_multipole( .false. );
 
@@ -228,6 +267,14 @@ c-----Calculation of Rcm and Pcm operators
 
 
 
+c-----Preparation of mesons
+      call init_mesons( .false. );
+
+
+
+
+
+
 c-----Preparation of Coulomb (weighted Green's function)
       call init_coulomb( .false. );
 
@@ -236,15 +283,7 @@ c-----Preparation of Coulomb (weighted Green's function)
 
 
 
-c-----Calculation of ground state densities and meson fields
-      call init_gs( .false. );
-
-
-
-
-
-
-c-----Calculation of W coefficients
+c-----Preparation of pairing (W coefficients)
       call init_pairing( .false. );
 
 

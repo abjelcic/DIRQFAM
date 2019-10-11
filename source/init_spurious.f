@@ -51,8 +51,8 @@ c======================================================================c
 
       REAL*8 xgh(2*NGH), wgh(2*NGH), zb(NGH), wz(NGH);
       REAL*8 xgl(1*NGL), wgl(1*NGL), rb(NGL), wr(NGL);
-      REAL*8 pz( -NGH:NGH , NTX ), dpz( -NGH:NGH , NTX ),
-     &       pr(    1:NGL , NTX ), dpr(    1:NGL , NTX );
+      REAL*8 pz( -NGH:NGH , NTX ), dpz( -NGH:NGH , NTX );
+      REAL*8 pr(    1:NGL , NTX ), dpr(    1:NGL , NTX );
 
 
 
@@ -162,8 +162,7 @@ c-----Calculation of cm_nnz
                       if( K_multipole .eq. 0 ) then
                           if( fg1 .ne. fg2 ) CYCLE;
                           if( nr1 .ne. nr2 ) CYCLE;
-                          if( ml1 .ne. ml2 ) CYCLE;
-
+                          if( abs(ml1-ml2) .ne. 0 ) CYCLE;
                           cm_nnz( ib1 , ib2 ) = .true.;
                       endif
 
@@ -171,7 +170,6 @@ c-----Calculation of cm_nnz
                           if( fg1 .ne. fg2 ) CYCLE;
                           if( nz1 .ne. nz2 ) CYCLE;
                           if( abs(ml1-ml2) .ne. 1 ) CYCLE;
-
                           cm_nnz( ib1 , ib2 ) = .true.;
                       endif
 

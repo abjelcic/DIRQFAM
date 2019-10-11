@@ -23,13 +23,15 @@ c======================================================================c
      &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
+     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
 
-      common /rank/ k_PHI, k_dzPHI, k_drPHI;
+      common /rank/ k_PHI, k_PHIK, k_dzPHI, k_drPHI;
       common /PHI/ PHI_U    (    NTX , KTRUNC ),
      &             PHI_SVt  ( KTRUNC , NCOORD ),
+     &             PHIK_U   (    NTX , KTRUNC ),
+     &             PHIK_SVt ( KTRUNC , NCOORD ),
      &             dzPHI_U  (    NTX , KTRUNC ),
      &             dzPHI_SVt( KTRUNC , NCOORD ),
      &             drPHI_U  (    NTX , KTRUNC ),
@@ -310,12 +312,12 @@ c-----Calculation of dj_r
               enddo
           enddo
 
-          call diagUVtAUV(  N_total , NCOORD ,   k_PHI , N_blocks ,
-     &                           Ar ,    NTX ,      Ai ,      NTX ,
-     &                       dh_nnz ,    NBX ,
-     &                       ia_spx , id_spx ,
-     &                        PHI_U ,    NTX , PHI_SVt ,   KTRUNC , D ,
-     &                         AUX1 ,    NTX ,    AUX2 ,   KTRUNC     );
+          call diagUVtAUV( N_total , NCOORD ,   k_PHIK , N_blocks ,
+     &                          Ar ,    NTX ,       Ai ,      NTX ,
+     &                      dh_nnz ,    NBX ,
+     &                      ia_spx , id_spx ,
+     &                      PHIK_U ,    NTX , PHIK_SVt ,   KTRUNC , D ,
+     &                        AUX1 ,    NTX ,     AUX2 ,   KTRUNC     );
 
           ihl = 0;
           do il = 1 , NGL
@@ -373,12 +375,12 @@ c-----Calculation of dj_p
               enddo
           enddo
 
-          call diagUVtAUV(  N_total , NCOORD ,   k_PHI , N_blocks ,
-     &                           Ar ,    NTX ,      Ai ,      NTX ,
-     &                       dh_nnz ,    NBX ,
-     &                       ia_spx , id_spx ,
-     &                        PHI_U ,    NTX , PHI_SVt ,   KTRUNC , D ,
-     &                         AUX1 ,    NTX ,    AUX2 ,   KTRUNC     );
+          call diagUVtAUV( N_total , NCOORD ,   k_PHIK , N_blocks ,
+     &                          Ar ,    NTX ,       Ai ,      NTX ,
+     &                      dh_nnz ,    NBX ,
+     &                      ia_spx , id_spx ,
+     &                      PHIK_U ,    NTX , PHIK_SVt ,   KTRUNC , D ,
+     &                        AUX1 ,    NTX ,     AUX2 ,   KTRUNC     );
 
           ihl = 0;
           do il = 1 , NGL
@@ -434,12 +436,12 @@ c-----Calculation of dj_z
               enddo
           enddo
 
-          call diagUVtAUV(  N_total , NCOORD ,   k_PHI , N_blocks ,
-     &                           Ar ,    NTX ,      Ai ,      NTX ,
-     &                       dh_nnz ,    NBX ,
-     &                       ia_spx , id_spx ,
-     &                        PHI_U ,    NTX , PHI_SVt ,   KTRUNC , D ,
-     &                         AUX1 ,    NTX ,    AUX2 ,   KTRUNC     );
+          call diagUVtAUV( N_total , NCOORD ,   k_PHIK , N_blocks ,
+     &                          Ar ,    NTX ,       Ai ,      NTX ,
+     &                      dh_nnz ,    NBX ,
+     &                      ia_spx , id_spx ,
+     &                      PHIK_U ,    NTX , PHIK_SVt ,   KTRUNC , D ,
+     &                        AUX1 ,    NTX ,     AUX2 ,   KTRUNC     );
 
           ihl = 0;
           do il = 1 , NGL

@@ -8,6 +8,8 @@ c======================================================================c
       include 'dirqfam.par'
       LOGICAL lpr;
 
+      CHARACTER parname*10;
+      common /partyp/ parname;
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
 
@@ -23,20 +25,22 @@ c======================================================================c
      &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
      &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
+     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
 
-      common /basis/  phi_z( -NGH:NGH , NTX ),
-     &               dphi_z( -NGH:NGH , NTX ),
-     &                phi_r(    1:NGL , NTX ),
-     &               dphi_r(    1:NGL , NTX );
+      common /basis/ phi_z( -NGH:NGH , NTX ),  phi_zK( -NGH:NGH , NTX ),
+     &              dphi_z( -NGH:NGH , NTX ), dphi_zK( -NGH:NGH , NTX ),
+     &               phi_r(    1:NGL , NTX ),  phi_rK(    1:NGL , NTX ),
+     &              dphi_r(    1:NGL , NTX ), dphi_rK(    1:NGL , NTX );
 
       common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
 
-      common /rank/ k_PHI, k_dzPHI, k_drPHI;
+      common /rank/ k_PHI, k_PHIK, k_dzPHI, k_drPHI;
       common /PHI/ PHI_U    (    NTX , KTRUNC ),
      &             PHI_SVt  ( KTRUNC , NCOORD ),
+     &             PHIK_U   (    NTX , KTRUNC ),
+     &             PHIK_SVt ( KTRUNC , NCOORD ),
      &             dzPHI_U  (    NTX , KTRUNC ),
      &             dzPHI_SVt( KTRUNC , NCOORD ),
      &             drPHI_U  (    NTX , KTRUNC ),
@@ -48,6 +52,7 @@ c======================================================================c
       REAL*8 xgl(1*NGL), wgl(1*NGL);
 
       REAL*8 PHI  ( NTX , NCOORD );
+      REAL*8 PHIK ( NTX , NCOORD );
       REAL*8 dzPHI( NTX , NCOORD );
       REAL*8 drPHI( NTX , NCOORD );
 
@@ -65,25 +70,40 @@ c======================================================================c
 
 
 c-----Calculation of quadrature mesh and weights
-      alpha = DBLE(0);
+      alpha = 0.D0;
       call gauher( xgh , wgh , 2*NGH );
       call gaulag( xgl , wgl , 1*NGL , alpha );
-
       do ih = 1 , NGH
-          zb_fam(ih) = b0*bz * xgh( 1 + NGH-ih );
-          wz(ih) = wgh(1+NGH-ih) * DEXP( xgh(1+NGH-ih)**2.D0 );
+          zb_fam(ih) = b0*bz * xgh(1+NGH-ih);
       enddo
-
       do il = 1 , NGL
-          rb_fam(il) = b0*bp * DSQRT( xgl(il) );
-          wr(il) = wgl(il) * DEXP( xgl(il) )
-     &                     / xgl(il)**alpha;
+          rb_fam(il) = b0*bp * DSQRT(xgl(il));
       enddo
-
       do il = 1 , NGL
           do ih = 1 , NGH
               if( ih .eq. 0 ) CYCLE;
-              wzwr(ih,il) = (0.5D0*b0*b0*b0*bp*bp*bz) * wz(ih) * wr(il);
+              wzwr(ih,il) = (0.5D0*b0*b0*b0*bp*bp*bz)
+     &                    *  wgh(1+NGH-ih) * DEXP( xgh(1+NGH-ih)**2.D0 )
+     &                    *  wgl(il) * DEXP(xgl(il)) / xgl(il)**alpha;
+          enddo
+      enddo
+
+      alpha = DBLE(K_multipole);
+      if( parname .eq. 'DD-PC1' ) alpha = 0.D0;
+      call gauher( xgh , wgh , 2*NGH );
+      call gaulag( xgl , wgl , 1*NGL , alpha );
+      do ih = 1 , NGH
+          zb_famK(ih) = b0*bz * xgh(1+NGH-ih);
+      enddo
+      do il = 1 , NGL
+          rb_famK(il) = b0*bp * DSQRT(xgl(il));
+      enddo
+      do il = 1 , NGL
+          do ih = 1 , NGH
+              if( ih .eq. 0 ) CYCLE;
+              wzwrK(ih,il) = (0.5D0*b0*b0*b0*bp*bp*bz)
+     &                     * wgh(1+NGH-ih) * DEXP( xgh(1+NGH-ih)**2.D0 )
+     &                     * wgl(il) * DEXP(xgl(il)) / xgl(il)**alpha;
           enddo
       enddo
 
@@ -99,10 +119,13 @@ c-----Calculation of phi_z
               do ih = -NGH , +NGH
                   if( ih .eq. 0 ) CYCLE;
 
-                  z  = DBLE(isign(1,ih)) * zb_fam(abs(ih));
                   ii = i-1+ia_spx(ib);
 
+                  z = DBLE(isign(1,ih)) * zb_fam(abs(ih));
                   phi_z(ih,ii) = phi_nz(nz,b0*bz,z);
+
+                  z = DBLE(isign(1,ih)) * zb_famK(abs(ih));
+                  phi_zK(ih,ii) = phi_nz(nz,b0*bz,z);
 
               enddo
           enddo
@@ -120,10 +143,13 @@ c-----Calculation of phi_r
               ml = ml_spx(i,ib);
               do il = 1 , NGL
 
-                  r  = rb_fam(il);
                   ii = i-1+ia_spx(ib);
 
+                  r = rb_fam(il);
                   phi_r(il,ii) = phi_nr_ml(nr,abs(ml),b0*bp,r);
+
+                  r = rb_famK(il);
+                  phi_rK(il,ii) = phi_nr_ml(nr,abs(ml),b0*bp,r);
 
               enddo
           enddo
@@ -141,10 +167,13 @@ c-----Calculation of dphi_z
               do ih = -NGH , +NGH
                   if( ih .eq. 0 ) CYCLE;
 
-                  z  = DBLE(isign(1,ih)) * zb_fam(abs(ih));
                   ii = i-1+ia_spx(ib);
 
+                  z = DBLE(isign(1,ih)) * zb_fam(abs(ih));
                   dphi_z(ih,ii) = d_phi_nz(nz,b0*bz,z);
+
+                  z = DBLE(isign(1,ih)) * zb_famK(abs(ih));
+                  dphi_zK(ih,ii) = d_phi_nz(nz,b0*bz,z);
 
               enddo
           enddo
@@ -162,10 +191,13 @@ c-----Calculation of dphi_r
               ml = ml_spx(i,ib);
               do il = 1 , NGL
 
-                  r  = rb_fam(il);
                   ii = i-1+ia_spx(ib);
 
+                  r = rb_fam(il);
                   dphi_r(il,ii) = d_phi_nr_ml(nr,abs(ml),b0*bp,r);
+
+                  r = rb_famK(il);
+                  dphi_rK(il,ii) = d_phi_nr_ml(nr,abs(ml),b0*bp,r);
 
               enddo
           enddo
@@ -180,6 +212,8 @@ c-----Calculation of wPhi
       do i = 1 , N_total
           do il = 1 , NGL
               do ih = 1 , NGH
+
+                  call assert(wzwr(ih,il).ge.0.D0,'negative weights');
 
                   wPhi(ih,il,i) =   DSQRT(wzwr(ih,il))
      &                            * phi_z(ih,i)
@@ -207,12 +241,37 @@ c-----Calculation of PHI_U, PHI_SVt
               enddo
           enddo
       enddo
-      call lowrank_approx(  N_total ,  NCOORD  ,
+      call lowrank_approx(  N_total , NCOORD ,
+     &                      1.D-12  ,
+     &                      KTRUNC  , k_PHI  ,
+     &                      PHI     , NTX    ,
+     &                      PHI_U   , NTX    ,
+     &                      PHI_SVt , KTRUNC   );
+
+
+
+
+
+
+c-----Calculation of PHIK_U, PHIK_SVt
+      do i = 1 , N_total
+          ihl = 0;
+          do il = 1 , NGL
+              do ih = -NGH , +NGH
+                  if( ih .eq. 0 ) CYCLE;
+
+                  ihl = ihl+1;
+                  PHIK(i,ihl) = phi_zK(ih,i)*phi_rK(il,i);
+
+              enddo
+          enddo
+      enddo
+      call lowrank_approx(  N_total , NCOORD ,
      &                       1.D-12 ,
-     &                       KTRUNC ,    k_PHI ,
-     &                          PHI ,      NTX ,
-     &                        PHI_U ,      NTX ,
-     &                      PHI_SVt ,    KTRUNC  );
+     &                       KTRUNC , k_PHIK ,
+     &                         PHIK , NTX    ,
+     &                       PHIK_U , NTX    ,
+     &                     PHIK_SVt , KTRUNC   );
 
 
 
@@ -232,12 +291,12 @@ c-----Calculation of dzPHI_U, dzPHI_SVt
               enddo
           enddo
       enddo
-      call lowrank_approx(  N_total ,  NCOORD  ,
-     &                       1.D-12 ,
-     &                       KTRUNC ,  k_dzPHI ,
-     &                        dzPHI ,      NTX ,
-     &                      dzPHI_U ,      NTX ,
-     &                    dzPHI_SVt ,    KTRUNC  );
+      call lowrank_approx(  N_total   , NCOORD  ,
+     &                      1.D-12    ,
+     &                      KTRUNC    , k_dzPHI ,
+     &                      dzPHI     , NTX     ,
+     &                      dzPHI_U   , NTX     ,
+     &                      dzPHI_SVt , KTRUNC    );
 
 
 
@@ -257,12 +316,12 @@ c-----Calculation of drPHI_U, drPHI_SVt
               enddo
           enddo
       enddo
-      call lowrank_approx(  N_total ,  NCOORD  ,
-     &                       1.D-12 ,
-     &                       KTRUNC ,  k_drPHI ,
-     &                        drPHI ,      NTX ,
-     &                      drPHI_U ,      NTX ,
-     &                    drPHI_SVt ,    KTRUNC  );
+      call lowrank_approx(  N_total   , NCOORD  ,
+     &                      1.D-12    ,
+     &                      KTRUNC    , k_drPHI ,
+     &                      drPHI     , NTX     ,
+     &                      drPHI_U   , NTX     ,
+     &                      drPHI_SVt , KTRUNC    );
 
 
 
