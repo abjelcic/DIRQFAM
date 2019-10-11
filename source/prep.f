@@ -141,7 +141,7 @@ c-----In fact, this is the dimension of the omega^pi = 1/2^+ block.
 
 
 c-----Calculating length of the Broyden vector
-      broyd_m = 20;
+      broyd_m = 40;
       broyd_n = 0;
       ! dh_1 matrix
       do i = 1 , nf+ng
