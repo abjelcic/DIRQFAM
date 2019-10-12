@@ -327,7 +327,8 @@ c-----Calculation of ymn = -( f02mn + h02mn )/( Em + En + hw + igamma )
 
 
 c-----Elimination of spurious Nambu-Goldstone mode
-      if( J_multipole .eq. 1 ) then
+      if( J_multipole.eq.1 .or. J_multipole.eq.3 ) then
+      if( K_multipole.eq.0 .or. K_multipole.eq.1 ) then
 
           lamR = COMPLEX( 0.D0 , 0.D0 );
           lamP = COMPLEX( 0.D0 , 0.D0 );
@@ -355,7 +356,8 @@ c-----Elimination of spurious Nambu-Goldstone mode
                   enddo
               enddo
           enddo
-
+      
+      endif
       endif
 
 
