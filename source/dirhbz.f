@@ -5761,7 +5761,9 @@ c
       common /deldel/ de(NHHX,NB2X)
       common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
      &                fgcan(NHX,KX,4),ibkcan(KX,4)
-      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(2)
+c=======================================================================c-----!abjelcic
+      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
+c=======================================================================c-----!abjelcic
       common /mathco/ zero,one,two,half,third,pi
       common /fermi / ala(2),tz(2)
       common /optopt/ itx,icm,icou,ipc,inl,idd
@@ -6055,7 +6057,9 @@ c
       common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
       common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
      &                fgcan(NHX,KX,4),ibkcan(KX,4)
-      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(2)
+c=======================================================================c-----!abjelcic
+      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
+c=======================================================================c-----!abjelcic
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 
 c

@@ -32,14 +32,13 @@ c======================================================================c
      &
      &                      rho_sat;
 
-      common /basis/ phi_z( -NGH:NGH , NTX ),  phi_zK( -NGH:NGH , NTX ),
-     &              dphi_z( -NGH:NGH , NTX ), dphi_zK( -NGH:NGH , NTX ),
-     &               phi_r(    1:NGL , NTX ),  phi_rK(    1:NGL , NTX ),
-     &              dphi_r(    1:NGL , NTX ), dphi_rK(    1:NGL , NTX );
+      common /basis/ phi_z( -NGH:NGH , NTX ),
+     &              dphi_z( -NGH:NGH , NTX ),
+     &               phi_r(    1:NGL , NTX ),
+     &              dphi_r(    1:NGL , NTX );
 
-      common /gs_dens/ rhov_GS ( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS ( -NGH:NGH , 1:NGL     ),
-     &                 rhovK_GS( -NGH:NGH , 1:NGL , 2 );
+      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
+     &                 rhos_GS( -NGH:NGH , 1:NGL     );
 
       common /gs_mesons/ sig_GS( -NGH:NGH , 1:NGL ),
      &                   ome_GS( -NGH:NGH , 1:NGL ),
@@ -56,7 +55,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) ''
-      write(6,*) '****** BEGIN init_gs() ******************************';
+      write(6,*) '****** BEGIN init_gs() *****************************';
       write(6,*) '';
       endif
 
@@ -129,46 +128,6 @@ c-----Calculation of Ground-State densities
 
 
 
-c-----Calculation of Ground-State densities on K-mesh
-      rhovK_GS = 0.D0;
-      do it = 1 , 2
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-
-                  do ib = 1 , N_blocks
-                      do i = 1 , id_spx(ib)
-                          fg1 = fg_spx(i,ib);
-                          ml1 = ml_spx(i,ib);
-                          ii  = i-1+ia_spx(ib);
-
-                          do j = 1 , id_spx(ib)
-                              fg2 = fg_spx(j,ib);
-                              ml2 = ml_spx(j,ib);
-                              jj  = j-1+ia_spx(ib);
-
-                              if( fg1.ne.fg2 ) CYCLE;
-                              if( ml1.ne.ml2 ) CYCLE;
-
-                              rhovK_GS(ih,il,it) = rhovK_GS(ih,il,it) +
-     &                            2.D0 * DREAL(dens_mat(i,j,ib,it))
-     &                                 * phi_zK(ih,ii) * phi_zK(ih,jj)
-     &                                 * phi_rK(il,ii) * phi_rK(il,jj)
-     &                                 / (2.D0*pi);
-
-                          enddo
-                      enddo
-                  enddo
-
-              enddo
-          enddo
-      enddo
-
-
-
-
-
-
 c-----Setting Ground-State meson fields
       do il = 1 , NGL
           do ih = -NGH , +NGH
@@ -190,7 +149,7 @@ c-----Setting Ground-State meson fields
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_gs() ********************************';
+      write(6,*) '****** END init_gs() *******************************';
       write(6,*) '';
       endif
 

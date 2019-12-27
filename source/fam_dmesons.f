@@ -60,7 +60,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN fam_dmesons() **************************';
+      write(6,*) '****** BEGIN fam_dmesons() *************************';
       write(6,*) '';
       endif
 
@@ -268,7 +268,7 @@ c-----Calculating drho_z
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END fam_dmesons() ****************************';
+      write(6,*) '****** END fam_dmesons() ***************************';
       write(6,*) '';
       endif
 
@@ -302,10 +302,10 @@ c======================================================================c
       implicit REAL*8 (a-h,o-z)
       include 'dirqfam.par'
 
-      common /mesmat/ Qsig( NHSIZE , NCOORD ), QKsig( NHSIZE , NCOORD ),
-     &                Qome( NHSIZE , NCOORD ), QKome( NHSIZE , NCOORD ),
-     &                Qrho( NHSIZE , NCOORD ), QKrho( NHSIZE , NCOORD ),
-     &                   P( NHSIZE , NCOORD );
+      common /mesmat/ Qsig( NHMAX , NCOORD ), QKsig( NHMAX , NCOORD ),
+     &                Qome( NHMAX , NCOORD ), QKome( NHMAX , NCOORD ),
+     &                Qrho( NHMAX , NCOORD ), QKrho( NHMAX , NCOORD ),
+     &                   P( NHMAX , NCOORD );
 
       CHARACTER( LEN = * ) meson;
       COMPLEX*16 src( -NGH:NGH , 1:NGL );
@@ -314,7 +314,7 @@ c======================================================================c
 
 
       REAL*8    s( NCOORD );
-      REAL*8   Qs( NHSIZE );
+      REAL*8   Qs( NHMAX );
       REAL*8 PtQs( NCOORD );
 
 

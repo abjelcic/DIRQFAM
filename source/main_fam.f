@@ -4,7 +4,7 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8 (a-h,o-z);
+      implicit REAL*8 (a-h,o-z)
       include 'dirqfam.par'
       LOGICAL lpr;
 
@@ -18,7 +18,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN main_fam() *****************************';
+      write(6,*) '****** BEGIN main_fam() ****************************';
       write(6,*) '';
       endif
 
@@ -26,6 +26,7 @@ c======================================================================c
       call assert( MOD(nneu,2).eq.0 , 'only even-even nuclei allowed' );
       call assert( MOD(npro,2).eq.0 , 'only even-even nuclei allowed' );
       call assert( MOD(n0f,2).eq.0  , 'n0f has to be even number'     );
+      call assert( MOD(n0b,2).eq.0  , 'n0b has to be even number'     );
       call assert( NGH.ge.30        , 'NGH has to be at least 30'     );
       call assert( NGL.ge.30        , 'NGL has to be at least 30'     );
       call assert( NGH.lt.100       , 'NGH has to be less than 100'   );
@@ -58,7 +59,7 @@ c======================================================================c
 
 
 
-c-----Constructs simplex-y basis quantum numbers
+c-----Constructs the simplex-y basis quantum numbers
       call base_simplex( .false. );
 
 c-----Constructs U and V matrices in simplex-y basis
@@ -88,7 +89,7 @@ c-----Executes QFAM submodule
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END main_fam() *******************************';
+      write(6,*) '****** END main_fam() ******************************';
       write(6,*) '';
       endif
 

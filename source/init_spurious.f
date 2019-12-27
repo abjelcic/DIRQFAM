@@ -31,9 +31,16 @@ c======================================================================c
       COMPLEX*16 u;
       common /u_matrix/ u( NBSX , NBSX , NBX , 2 );
 
-      COMPLEX*16 r20, p20,
-     &           RcmPcm_commutator,
-     &           lamR, lamP;
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
+
+      common /basis/ phi_z( -NGH:NGH , NTX ),
+     &              dphi_z( -NGH:NGH , NTX ),
+     &               phi_r(    1:NGL , NTX ),
+     &              dphi_r(    1:NGL , NTX );
+
+      COMPLEX*16 r20, p20, RcmPcm_commutator, lamR, lamP;
       common /spurious/ r20( NTX , NTX , 2 ),
      &                  p20( NTX , NTX , 2 ),
      &                  RcmPcm_commutator(2),
@@ -49,16 +56,11 @@ c======================================================================c
       LOGICAL cm_nnz( NTX , NTX );
       COMPLEX*16 trace;
 
-      REAL*8 xgh(2*NGH), wgh(2*NGH), zb(NGH), wz(NGH);
-      REAL*8 xgl(1*NGL), wgl(1*NGL), rb(NGL), wr(NGL);
-      REAL*8 pz( -NGH:NGH , NTX ), dpz( -NGH:NGH , NTX );
-      REAL*8 pr(    1:NGL , NTX ), dpr(    1:NGL , NTX );
-
 
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_spurious() ************************';
+      write(6,*) '****** BEGIN init_spurious() ***********************';
       write(6,*) '';
       endif
 
@@ -72,10 +74,10 @@ c     Pcm = 1/i * d/dz for K=0, and Pcm = 1/i * d/dx for K=1.  c
 c--------------------------------------------------------------c
 
 
-      if( K_multipole.ne.0 .and. K_multipole.ne.1 ) then
+      if( J_multipole.ne.1 .and. J_multipole.ne.3 ) then
           return;
       endif
-      if( J_multipole.ne.1 .and. J_multipole.ne.3 ) then
+      if( K_multipole.ne.0 .and. K_multipole.ne.1 ) then
           return;
       endif
 
@@ -86,53 +88,6 @@ c--------------------------------------------------------------c
       cm_nnz = .false.;
       r20    = COMPLEX( 0.D0 , 0.D0 );
       p20    = COMPLEX( 0.D0 , 0.D0 );
-
-
-
-
-
-
-c-----For pcm non-deformed (bz=bp=1) K=0 quadrature is adequate
-      call gauher( xgh , wgh , 2*NGH );
-      call gaulag( xgl , wgl , 1*NGL , 0.D0 );
-      do ih = 1 , NGH
-          zb(ih) = b0 * xgh( 1 + NGH-ih );
-          wz(ih) = wgh(1+NGH-ih) * DEXP( xgh(1+NGH-ih)**2.D0 );
-      enddo
-      do il = 1 , NGL
-          rb(il) = b0 * DSQRT( xgl(il) );
-          wr(il) = wgl(il) * DEXP( xgl(il) );
-      enddo
-      do ib = 1 , N_blocks
-          do i = 1 , id_spx(ib)
-              nz = nz_spx(i,ib);
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-
-                  z  = DBLE(isign(1,ih)) * zb(abs(ih));
-                  ii = i-1+ia_spx(ib);
-
-                   pz(ih,ii) =   phi_nz(nz,b0,z);
-                  dpz(ih,ii) = d_phi_nz(nz,b0,z);
-
-              enddo
-          enddo
-      enddo
-      do ib = 1 , N_blocks
-          do i = 1 , id_spx(ib)
-              nr = nr_spx(i,ib);
-              ml = ml_spx(i,ib);
-              do il = 1 , NGL
-
-                  r  = rb(il);
-                  ii = i-1+ia_spx(ib);
-
-                   pr(il,ii) =   phi_nr_ml(nr,abs(ml),b0,r);
-                  dpr(il,ii) = d_phi_nr_ml(nr,abs(ml),b0,r);
-
-              enddo
-          enddo
-      enddo
 
 
 
@@ -216,10 +171,11 @@ c-----Calculation of rcm
                           acc = 0.D0;
                           do ih = -NGH , +NGH
                               if( ih .eq. 0 ) CYCLE;
-                              z = DBLE(isign(1,ih)) * zb(abs(ih));
-                              w = b0 * wz(abs(ih));
+                              z = DBLE(isign(1,ih)) * zb_fam(abs(ih));
 
-                              acc = acc + w * z*pz(ih,i)*pz(ih,j);
+                              acc = acc + z
+     &                                  * wz(abs(ih))
+     &                                  * phi_z(ih,i)*phi_z(ih,j);
                           enddo
                           acc = acc / DBLE(nneu+npro);
 
@@ -263,10 +219,11 @@ c-----Calculation of rcm
 
                           acc = 0.D0;
                           do il = 1 , NGL
-                              r = rb(il);
-                              w = (0.5D0*b0*b0) * wr(il);
+                              r = rb_fam(il);
 
-                              acc = acc + w * r*pr(il,i)*pr(il,j);
+                              acc = acc + r
+     &                                  * wr(il)
+     &                                  * phi_r(il,i)*phi_r(il,j);
                           enddo
                           acc =  0.5D0 * acc / DBLE(nneu+npro);
 
@@ -321,10 +278,10 @@ c-----Calculation of pcm
                           acc = 0.D0;
                           do ih = -NGH , +NGH
                               if( ih .eq. 0 ) CYCLE;
-                              w = b0 * wz(abs(ih));
 
-                              acc = acc + w * ( + pz(ih,i)*dpz(ih,j)
-     &                                          - pz(ih,j)*dpz(ih,i) );
+                              acc = acc + ( + phi_z(ih,i)*dphi_z(ih,j)
+     &                                      - phi_z(ih,j)*dphi_z(ih,i) )
+     &                                    * wz(abs(ih));
                           enddo
                           acc = -0.5D0 * acc;
 
@@ -368,13 +325,15 @@ c-----Calculation of pcm
 
                           acc = 0.D0;
                           do il = 1 , NGL
-                              r = rb(il);
-                              w = (0.5D0*b0*b0) * wr(il);
+                              r = rb_fam(il);
 
-                              acc = acc + w * ( + pr(il,i)*dpr(il,j)
-     &                                          - pr(il,j)*dpr(il,i) );
-                              acc = acc + w * DBLE(ml2*ml2-ml1*ml1)
-     &                                      * pr(il,i)*pr(il,j) / r;
+                              acc = acc + ( + phi_r(il,i)*dphi_r(il,j)
+     &                                      - phi_r(il,j)*dphi_r(il,i) )
+     &                                    * wr(il);
+
+                              acc = acc + wr(il)
+     &                                  * DBLE(ml2*ml2-ml1*ml1)
+     &                                  * phi_r(il,i)*phi_r(il,j) / r;
                           enddo
                           acc =  - 0.25D0 * acc;
 
@@ -397,8 +356,9 @@ c-----Calculation of pcm
 
 
 
+#ifdef DEBUG
 c-----Verify [rcm,pcm] = (i/A)*I
-      if( lpr ) then
+      if( .true. ) then
 
       ! Tmp = rcm*pcm
       do ib = 1 , N_blocks
@@ -416,7 +376,7 @@ c-----Verify [rcm,pcm] = (i/A)*I
      &                        COMPLEX( +1.D0 , 0.D0 )   ,
      &                        rcm(i0,k0)                , NTX        ,
      &                        pcm(k0,j0)                , NTX        ,
-     &                        COMPLEX( 1.D0 , 0.D0 )    ,
+     &                        COMPLEX( +1.D0 , 0.D0 )   ,
      &                        Tmp(i0,j0)                , NTX        );
 
                   endif
@@ -440,7 +400,7 @@ c-----Verify [rcm,pcm] = (i/A)*I
      &                        COMPLEX( -1.D0 , 0.D0 )   ,
      &                        pcm(i0,k0)                , NTX        ,
      &                        rcm(k0,j0)                , NTX        ,
-     &                        COMPLEX( 1.D0 , 0.D0 )    ,
+     &                        COMPLEX( +1.D0 , 0.D0 )   ,
      &                        Tmp(i0,j0)                , NTX        );
 
                   endif
@@ -482,8 +442,8 @@ c-----Verify [rcm,pcm] = (i/A)*I
                       if( fg2.eq.'g' .and. Nsh2.eq.n0f+1 ) CYCLE;
 
 
-                      call assert( ABS(Tmp(i,j)).lt.1.D-12 ,
-     &                             '[rcm,pcm] =/= (i/A)*I'   );
+                      call assert( ABS(Tmp(i,j)) .lt. 1.D-12 ,
+     &                             '[rcm,pcm] =/= (i/A)*I'     );
 
 
                   enddo
@@ -493,6 +453,7 @@ c-----Verify [rcm,pcm] = (i/A)*I
        enddo
 
       endif
+#endif
 
 
 

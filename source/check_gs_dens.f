@@ -36,7 +36,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) ''
-      write(6,*) '****** BEGIN check_gs_dens() ************************';
+      write(6,*) '****** BEGIN check_gs_dens() ***********************';
       write(6,*) '';
       endif
 
@@ -156,10 +156,10 @@ c-----Prints densities
 
           write(6,*) 'Comparison of the isoscalar-vector densities';
           write(6,*) '';
-          write(6,*) '         Coordinate [fm]          ',
-     &               '        rho_new   ',
-     &               '        rho_old   ',
-     &               '        |error|  ',
+          write(6,*) '         Coordinate [fm]         ',
+     &               '         rho_new  ',
+     &               '         rho_old  ',
+     &               '         |error|  ',
      &               '     rel.error';
 
           write(6,*) '';
@@ -186,10 +186,10 @@ c-----Prints densities
 
           write(6,*) 'Comparison of the isoscalar-scalar densities';
           write(6,*) '';
-          write(6,*) '         Coordinate [fm]          ',
-     &               '        rho_new   ',
-     &               '        rho_old   ',
-     &               '        |error|  ',
+          write(6,*) '         Coordinate [fm]         ',
+     &               '         rho_new  ',
+     &               '         rho_old  ',
+     &               '         |error|  ',
      &               '     rel.error';
 
           write(6,*) '';
@@ -231,7 +231,7 @@ c-----Prints densities
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END check_gs_dens() **************************';
+      write(6,*) '****** END check_gs_dens() *************************';
       write(6,*) '';
       endif
 

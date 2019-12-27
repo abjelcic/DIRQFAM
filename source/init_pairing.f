@@ -48,7 +48,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_pairing() *************************';
+      write(6,*) '****** BEGIN init_pairing() ************************';
       write(6,*) '';
       endif
 
@@ -105,7 +105,7 @@ c======================================================================c
                   do ml2 = -MLMAX , MLMAX
                       if( 2*nr2+abs(ml2) .gt. N0FX ) CYCLE;
 
-                      !See Appendix (E.4)
+                      !See Appendix (E.4) and (E.5)
                       if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
 
 
@@ -129,6 +129,7 @@ c======================================================================c
                           endif
                           x = x / ( a2 + b0*b0*bp*bp )**DBLE(nr+1);
 
+                          call assert(NRR.le.2*NRMAX+MLMAX,'Overflow');
                           Vr( nr1 , ml1 , nr2 , ml2 , NRR ) = x;
 
                       enddo
@@ -176,6 +177,15 @@ c======================================================================c
                      do Nz = 0 , nz1+nz2
                         if( mod(Nz,2) .ne. mod(nz1+nz2,2) ) CYCLE;
 
+                        call assert( nz1.le.NZMAX        , 'Overflow' );
+                        call assert( nz2.le.NZMAX        , 'Overflow' );
+                        call assert( nr1.le.NRMAX        , 'Overflow' );
+                        call assert( nr2.le.NRMAX        , 'Overflow' );
+                        call assert( abs(ml1).le.MLMAX   , 'Overflow' );
+                        call assert( abs(ml2).le.MLMAX   , 'Overflow' );
+                        call assert( Nz.le.2*NZMAX       , 'Overflow' );
+                        call assert( Nr.le.2*NRMAX+MLMAX , 'Overflow' );
+
                         il = il + 1;
                         W(il) = fac * Vz( nz1 , nz2 , Nz )
      &                              * Vr( nr1 , ml1 , nr2 , ml2 , Nr );
@@ -197,7 +207,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_pairing() ***************************';
+      write(6,*) '****** END init_pairing() **************************';
       write(6,*) '';
       endif
 

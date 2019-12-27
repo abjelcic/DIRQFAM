@@ -44,6 +44,7 @@ c-----Printing strength.out header
       write( tape_strength , '(a)' , advance = 'no' )
      &      'S(f,omega) = -1/pi * Im[Tr[hermconj(f)*drho(omega)]] ';
 
+      ! Unit of measurement of S(f,omega)
       select case( J_multipole )
           case( 0 )
               write(tape_strength,*) '[fm^4/MeV]';
@@ -66,20 +67,12 @@ c-----Printing strength.out header
 
       call print_header( tape_strength );
 
-      write(tape_strength,*) '';
-      write(tape_strength,'(a,a)') 'omega[MeV/hbar]        ',
-     &                             '             S(f,omega)';
-      write(tape_strength,*) '';
-
+      write(tape_strength,'(/,a,21x,a,/)')'omega[MeV/hbar]',
+     &                                    'S(f,omega)';
 
       if( i_calculation_type .eq. 0 ) then
-          write(6,*) '';
-          write(6,*) '                ',
-     &               'Hartree response';
-          write(6,*) '';
-          write(6,'(a,a)') 'omega[MeV/hbar]        ',
-     &                     '             S(f,omega)';
-          write(6,*) '';
+          write(6,'(/,17x,a,/)') 'Free response';
+          write(6,'(a,21x,a,/)') 'omega[MeV/hbar]' , 'S(f,omega)';
       endif
 
       call flush(tape_strength);
@@ -90,22 +83,19 @@ c-----Printing strength.out header
 
 
 
-c-----Hartree response, energy sweep
+c-----Free response, energy sweep
       if( i_calculation_type .eq. 0 ) then
 
-          ! Hartree response is defined as a response
-          ! which doesn't take into account induced
-          ! self-consistent Hamiltonian H02,H20.
-          ! Therefore, we set dh and dDelta to zero.
-          dh_1      = COMPLEX( 0.D0 , 0.D0 );
-          dh_2      = COMPLEX( 0.D0 , 0.D0 );
-          dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
-          dDelta_mi = COMPLEX( 0.D0 , 0.D0 );
+          ! Free response is defined as a response
+          ! which does not take into account induced
+          ! self-consistent Hamiltonian (H02 = H20 = 0).
 
           omega = omega_start;
           do while( omega .le. omega_end + 1.D-4 )
 
-              call fam_drhodkappa( .false. );
+              call fam_xy      ( .false. );
+              call fam_spurious( .false. );
+              call fam_drho    ( .false. );
 
               Sn = fam_strength( .false. , 1 );
               Sp = fam_strength( .false. , 2 );
@@ -132,7 +122,7 @@ c-----Fully self-consistent response, energy sweep
           ! vector for initial sweep energy is zero.
           ! Otherwise, we use self-consistent solution
           ! of previous energy as initial guess
-          ! for the following energy
+          ! for the following energy.
           dh_1      = COMPLEX( 0.D0 , 0.D0 );
           dh_2      = COMPLEX( 0.D0 , 0.D0 );
           dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
@@ -178,7 +168,6 @@ c-----Calculation for given energy, printing vector density
           write(tape_strength,'(1f15.5,1f31.10)') omega , Sp+Sn;
           call flush(tape_strength);
 
-          !Printing time dependent vector density
           call print_dens( .false. );
 
       endif

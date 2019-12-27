@@ -23,24 +23,31 @@ c======================================================================c
      &
      &                      rho_sat;
 
-      common /gs_dens/ rhov_GS ( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS ( -NGH:NGH , 1:NGL     ),
-     &                 rhovK_GS( -NGH:NGH , 1:NGL , 2 );
+      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
+     &                 rhos_GS( -NGH:NGH , 1:NGL     );
 
       common /gs_mesons/ sig_GS( -NGH:NGH , 1:NGL ),
      &                   ome_GS( -NGH:NGH , 1:NGL ),
      &                   rho_GS( -NGH:NGH , 1:NGL );
 
-      COMPLEX*16 drho_v, drho_s, ldrho_v, ldrho_s;
-      common /ind_dens/ drho_v ( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s ( -NGH:NGH , 1:NGL     ),
-     &                  ldrho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  ldrho_s( -NGH:NGH , 1:NGL     );
+      COMPLEX*16 drho_v, drho_s;
+      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
+     &                  drho_s( -NGH:NGH , 1:NGL     );
 
-      COMPLEX*16 dj_r, dj_p, dj_z;
+      COMPLEX*16 dj_r, dj_p, dj_z, dj_1, dj_2, dj_3;
       common /ind_curr/ dj_r( -NGH:NGH , 1:NGL , 2 ),
      &                  dj_p( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_z( -NGH:NGH , 1:NGL , 2 );
+     &                  dj_z( -NGH:NGH , 1:NGL , 2 ),
+     &                  dj_1( -NGH:NGH , 1:NGL , 2 ),
+     &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
+     &                  dj_3( -NGH:NGH , 1:NGL , 2 );
+
+       COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
+       common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
+     &                  ldrho_s ( -NGH:NGH , 1:NGL ),
+     &                  ldj_1p  ( -NGH:NGH , 1:NGL ),
+     &                  ldj_2p  ( -NGH:NGH , 1:NGL ),
+     &                  ldj_3p  ( -NGH:NGH , 1:NGL );
 
       COMPLEX*16 dsig  ,
      &           dome_0, dome_r, dome_p, dome_z,
@@ -103,7 +110,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN fam_dpotentials() **********************';
+      write(6,*) '****** BEGIN fam_dpotentials() *********************';
       write(6,*) '';
       endif
 
@@ -113,9 +120,6 @@ c======================================================================c
 
 
       if( parname .eq. 'DD-PC1' ) then
-
-
-
 
 
 
@@ -145,9 +149,6 @@ c---------Calculation of density-dependent coupling "constants"
 
 
 
-
-
-
 c---------Calculation of Sig0
           do it = 1 , 2
               do il = 1 , NGL
@@ -172,9 +173,6 @@ c---------Calculation of Sig0
 
 
 
-
-
-
 c---------Calculation of Sig0_R
           do il = 1 , NGL
               do ih = -NGH , +NGH
@@ -185,17 +183,14 @@ c---------Calculation of Sig0_R
                   drhotv = - drho_v(ih,il,1) + drho_v(ih,il,2);
 
                   z = (a2_s(ih,il)+a2_v(ih,il)+a2_tv(ih,il))/2.D0*drhov;
-                  z = z + a1_s(ih,il)  * drhos;
-                  z = z + a1_v(ih,il)  * drhov;
+                  z = z + a1_s (ih,il) * drhos;
+                  z = z + a1_v (ih,il) * drhov;
                   z = z + a1_tv(ih,il) * drhotv;
 
                   Sig0_R(ih,il) = hbc * z;
 
               enddo
           enddo
-
-
-
 
 
 
@@ -219,17 +214,14 @@ c---------Calculation of Sig_s
 
 
 
-
-
-
 c---------Calculation of Sig_z
           do it = 1 , 2
               do il = 1 , NGL
                   do ih = -NGH , +NGH
                       if( ih .eq. 0 ) CYCLE;
 
-                      z = a0_v(ih,il) *(+dj_z(ih,il,1)+dj_z(ih,il,2));
-                      w = a0_tv(ih,il)*(-dj_z(ih,il,1)+dj_z(ih,il,2));
+                      z = a0_v (ih,il) * (+dj_z(ih,il,1)+dj_z(ih,il,2));
+                      w = a0_tv(ih,il) * (-dj_z(ih,il,1)+dj_z(ih,il,2));
 
                       if( it .eq. 1 ) then
                           w = - w;
@@ -243,17 +235,14 @@ c---------Calculation of Sig_z
 
 
 
-
-
-
 c---------Calculation of Sig_r
           do it = 1 , 2
               do il = 1 , NGL
                   do ih = -NGH , +NGH
                       if( ih .eq. 0 ) CYCLE;
 
-                      z = a0_v(ih,il) *(+dj_r(ih,il,1)+dj_r(ih,il,2));
-                      w = a0_tv(ih,il)*(-dj_r(ih,il,1)+dj_r(ih,il,2));
+                      z = a0_v (ih,il) * (+dj_r(ih,il,1)+dj_r(ih,il,2));
+                      w = a0_tv(ih,il) * (-dj_r(ih,il,1)+dj_r(ih,il,2));
 
                       if( it .eq. 1 ) then
                           w = - w;
@@ -267,17 +256,14 @@ c---------Calculation of Sig_r
 
 
 
-
-
-
 c---------Calculation of Sig_p
           do it = 1 , 2
               do il = 1 , NGL
                   do ih = -NGH , +NGH
                       if( ih .eq. 0 ) CYCLE;
 
-                      z = a0_v(ih,il) *(+dj_p(ih,il,1)+dj_p(ih,il,2));
-                      w = a0_tv(ih,il)*(-dj_p(ih,il,1)+dj_p(ih,il,2));
+                      z = a0_v (ih,il) * (+dj_p(ih,il,1)+dj_p(ih,il,2));
+                      w = a0_tv(ih,il) * (-dj_p(ih,il,1)+dj_p(ih,il,2));
 
                       if( it .eq. 1 ) then
                           w = - w;
@@ -291,9 +277,6 @@ c---------Calculation of Sig_p
 
 
 
-
-
-
       endif
 
 
@@ -304,9 +287,6 @@ c---------Calculation of Sig_p
       if( parname .eq. 'DD-ME2' ) then
 
           call fam_dmesons( .false. );
-
-
-
 
 
 
@@ -344,9 +324,6 @@ c---------Calculation of Sig0
                   enddo
               enddo
           enddo
-
-
-
 
 
 
@@ -401,9 +378,6 @@ c---------Calculation of Sig0_R
 
 
 
-
-
-
 c---------Calculation of Sig_s
           do il = 1 , NGL
               do ih = -NGH , +NGH
@@ -426,9 +400,6 @@ c---------Calculation of Sig_s
 
               enddo
           enddo
-
-
-
 
 
 
@@ -459,9 +430,6 @@ c---------Calculation of Sig_z
 
 
 
-
-
-
 c---------Calculation of Sig_r
           do it = 1 , 2
               do il = 1 , NGL
@@ -489,9 +457,6 @@ c---------Calculation of Sig_r
 
 
 
-
-
-
 c---------Calculation of Sig_p
           do it = 1 , 2
               do il = 1 , NGL
@@ -516,9 +481,6 @@ c---------Calculation of Sig_p
                   enddo
               enddo
           enddo
-
-
-
 
 
 
@@ -562,7 +524,7 @@ c-----Calculation of the induced potentials
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END fam_dpotentials() ************************';
+      write(6,*) '****** END fam_dpotentials() ***********************';
       write(6,*) '';
       endif
 

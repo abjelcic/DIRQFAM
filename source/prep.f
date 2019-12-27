@@ -1,17 +1,21 @@
 
       program PREP
 
+      IMPLICIT NONE;
+
       INTEGER*4 tape;
       INTEGER*4 n0f, n0b;
       INTEGER*4 NGH, NGL;
-      INTEGER*4 J_multipole, K_multipole;
+      INTEGER*4 J_multipole, K_multipole, J_MAX;
       INTEGER*4 broyd_n, broyd_m;
       INTEGER*4 NWMAX;
       INTEGER*4 NBSX;
       INTEGER*4 KTRUNC, NCOORD;
+      INTEGER*4 NMESMAX, NHMAX;
       INTEGER*4 NTX, KX, MVX, MVTX;
 
-      parameter( NSIZE = 100000 );
+      INTEGER*4 NSIZE;
+      parameter( NSIZE = 200000 );
       INTEGER*4 nz_spx(NSIZE), nr_spx(NSIZE), ml_spx(NSIZE);
       CHARACTER fg_spx(NSIZE);
       CHARACTER fg1, fg2;
@@ -63,7 +67,9 @@ c-----Reading n0f, n0b, NGH, NGL, J_multipole, K_multipole
       if( MOD(n0f,2) .ne. 0 ) then
           stop 'Error: n0f has to be even number!';
       endif
-
+      if( MOD(n0b,2) .ne. 0 ) then
+          stop 'Error: n0b has to be even number!';
+      endif
 
 
 
@@ -113,35 +119,15 @@ c-----Construction of quantum numbers
 
 c-----Calculation of maximal block dimension (NBSX) of the U,V matrices
 c-----In fact, this is the dimension of the omega^pi = 1/2^+ block.
-      NBSX = 0;
-      ! f-component
-      do nz = 0 , n0f
-          do nr = 0 , n0f/2
-              if( MOD(nz,2) .eq. 0 ) then
-                  if( 2*nr+nz .le. n0f   ) NBSX = NBSX + 1;
-              else
-                  if( 2*nr+nz .le. n0f-1 ) NBSX = NBSX + 1;
-              endif
-          enddo
-      enddo
-      ! g-component
-      do nz = 0 , n0f+1
-          do nr = 0 , (n0f+1)/2
-              if( MOD(nz,2) .eq. 0 ) then
-                  if( 2*nr+nz .le. n0f   ) NBSX = NBSX + 1;
-              else
-                  if( 2*nr+nz .le. n0f+1 ) NBSX = NBSX + 1;
-              endif
-          enddo
-      enddo
+      NBSX = ((n0f+2)*(n0f+3))/2;
 
 
 
 
 
 
-c-----Calculating length of the Broyden vector
-      broyd_m = 40;
+c-----Calculating Broyden's vector length
+      broyd_m = 50;
       broyd_n = 0;
       ! dh_1 matrix
       do i = 1 , nf+ng
@@ -222,7 +208,7 @@ c-----Calculating NWMAX
 
 c-----Setting KTRUNC and NCOORD
       NCOORD = (2*NGH)*NGL;
-      KTRUNC = 260;
+      KTRUNC = NBSX + 10;
 
 
 
@@ -230,12 +216,12 @@ c-----Setting KTRUNC and NCOORD
 
 
 c-----Setting NMESMAX shells and number of nz+2*nr+K <= NMESMAX pairs
-      NMESMAX = min(NGH,NGL);
-      N = NMESMAX - K_multipole;
-      if( N .le. 0 ) then
-          stop 'Error: NMESMAX too small in prep.f!';
+      NMESMAX = n0b;
+      J_MAX = 3;
+      if( NMESMAX-(J_MAX+1) .le. 0 ) then
+          stop 'Error: n0b too small in prep.f!';
       endif
-      NHSIZE  = ( (N+1)*(N+3) + 1 - MOD(N,2) )/4;
+      NHMAX = ( (NMESMAX+1)*(NMESMAX+3) + 1 - MOD(NMESMAX,2) )/4;
 
 
 
@@ -352,7 +338,7 @@ c-----Generating dirqfam.par file
       write(tape,'(6x,a)') 'parameter ( NDX  =       NGX )';
       write(tape,'(a)') '';
       write(tape,'(a)') 'c-----oscillator quantum number for bosons';
-      write(tape,'(6x,a)') 'parameter ( N0BX =        20 )';
+      write(tape,'(6x,a,i8,a)') 'parameter ( N0BX = ' , n0b , ' )';
       write(tape,'(a)') '';
       write(tape,'(a)') 'c-----number of bosons';
       write(tape,'(6x,a)') 'parameter ( nbxx = N0BX/2 )';
@@ -379,7 +365,7 @@ c-----Generating dirqfam.par file
       write(tape,'(6x,a,i8,a)') 'parameter ( MVX  = ' , MVX  , ' )';
       write(tape,'(6x,a,i8,a)') 'parameter ( MVTX = ' , MVTX , ' )';
       write(tape,'(a)') '';
-      write(tape,'(a)') 'c-----FAM parameters';
+      write(tape,'(a)') 'c-----QFAM parameters';
       write(tape,'(6x,a,i9,a)') 'parameter( NBSX       =', NBSX, ' )';
       write(tape,'(6x,a)') 'parameter( J_MAX      =        3 )';
       write(tape,'(6x,a,i9,a)') 'parameter( NFAM_BROYD =',broyd_n,' )';
@@ -388,7 +374,7 @@ c-----Generating dirqfam.par file
       write(tape,'(6x,a,i9,a)') 'parameter( KTRUNC     =',KTRUNC, ' )';
       write(tape,'(6x,a,i9,a)') 'parameter( NCOORD     =',NCOORD, ' )';
       write(tape,'(6x,a,i9,a)') 'parameter( NMESMAX    =',NMESMAX,' )';
-      write(tape,'(6x,a,i9,a)') 'parameter( NHSIZE     =',NHSIZE ,' )';
+      write(tape,'(6x,a,i9,a)') 'parameter( NHMAX      =',NHMAX,  ' )';
       write(tape,'(6x,a,i9,a)') 'parameter( JCHECK     =',
      &                           J_multipole,' )';
       write(tape,'(6x,a,i9,a)') 'parameter( KCHECK     =',

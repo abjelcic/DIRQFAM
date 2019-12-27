@@ -15,26 +15,23 @@ c======================================================================c
      &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
      &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
 
-      common /gs_dens/ rhov_GS ( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS ( -NGH:NGH , 1:NGL     ),
-     &                 rhovK_GS( -NGH:NGH , 1:NGL , 2 );
+      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
+     &                 rhos_GS( -NGH:NGH , 1:NGL     );
 
       common /fam/ omega_start, omega_end, delta_omega, omega_print,
      &             omega, gamma_smear,
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
-      COMPLEX*16 drho_v, drho_s, ldrho_v, ldrho_s;
-      common /ind_dens/ drho_v ( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s ( -NGH:NGH , 1:NGL     ),
-     &                  ldrho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  ldrho_s( -NGH:NGH , 1:NGL     );
+      COMPLEX*16 drho_v, drho_s;
+      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
+     &                  drho_s( -NGH:NGH , 1:NGL     );
 
 
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN print_dens() ***************************';
+      write(6,*) '****** BEGIN print_dens() **************************';
       write(6,*) '';
       endif
 
@@ -49,25 +46,18 @@ c======================================================================c
       write(tape_rhov,'(a,a)')'rho_v(r,z,phi,t) = rho0_v(r,z) + 2*eta*',
      &                        'Re[ exp(-i*omega*t) * drho_v(r,z,phi) ]';
 
-      write(tape_rhov,'(a,a,i1,a)')
-     &                'drho_v(r,z,phi) = drho_v(r,z)',
-     &                ' * cos(',K_multipole,'*phi)  ';
+      write(tape_rhov,'(a,a,i1,a)') 'drho_v(r,z,phi) = drho_v(r,z)',
+     &                              ' * cos(',K_multipole,'*phi)  ';
 
       call print_header( tape_rhov );
 
-      write(tape_rhov,'(a,1f7.3,a)') 'omega = ', omega,
-     &                               ' [MeV/hbar]';
+      write(tape_rhov,'(a,1f7.3,a)') 'omega = ', omega, ' [MeV/hbar]';
 
 
 
 
-      write(tape_rhov,*) '';
-      write(tape_rhov,*) '';
-      write(tape_rhov,'(4x,a,6x,a,7x,a,11x,a)')'r[fm]',
-     &                                         'z[fm]',
-     &                                         'rho0_v[fm^-3]',
-     &                                         'drho_v(r,z)[fm^-3]';
-      write(tape_rhov,*) '';
+      write(tape_rhov,'(/,/,4x,a,6x,a,7x,a,11x,a,/)')
+     & 'r[fm]' , 'z[fm]' , 'rho0_v[fm^-3]' , 'drho_v(r,z)[fm^-3]';
 
       do il = 1 , NGL
           do ih = -NGH , +NGH
@@ -92,7 +82,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END print_dens() *****************************';
+      write(6,*) '****** END print_dens() ****************************';
       write(6,*) '';
       endif
 
@@ -122,6 +112,8 @@ c======================================================================c
       CHARACTER*2 nucnam;
       common /nucnuc/ amas, nneu, npro, nmas, nucnam;
 
+      common /defbas/ beta0, q, bp, bz;
+
       common /fam/ omega_start, omega_end, delta_omega, omega_print,
      &             omega, gamma_smear,
      &             i_calculation_type, i_coulomb, i_pairing,
@@ -133,25 +125,26 @@ c======================================================================c
 
 
       if( i_calculation_type .eq. 0 ) then
-          write(tape,'(a)') 'Hartree response';
+          write(tape,'(a)') 'Free response';
       else
           write(tape,'(a)') 'Fully self-consistent response';
       endif
 
-      write(tape,'(i3,a,a,i2,a,a)') nmas, nucnam, ', ',
-     &                              n0f, ' shells, ',
-     &                              parname;
+      write(tape,'(i3,a,a,i2,a,a,f7.3,a,a)') nmas, nucnam, ', ',
+     &                                       n0f, ' shells, ',
+     &                                       'beta0 = ', beta0, ', ',
+     &                                       parname;
 
       if( i_coulomb .eq. 1 ) then
-          write(tape,'(a)') 'Electromagnetism included in calculation';
+          write(tape,'(a)')'Electromagnetism included in calculation';
       else
-          write(tape,'(a)') 'Electromagnetism excluded from calculation';
+          write(tape,'(a)')'Electromagnetism excluded from calculation';
       endif
 
       if( i_pairing .eq. 1 ) then
-          write(tape,'(a)') 'Pairing included in calculation';
+          write(tape,'(a)')'Pairing included in calculation';
       else
-          write(tape,'(a)') 'Pairing excluded from calculation';
+          write(tape,'(a)')'Pairing excluded from calculation';
       endif
 
       if( ISO .eq. 0 ) then

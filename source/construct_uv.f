@@ -37,7 +37,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN construct_v() **************************';
+      write(6,*) '****** BEGIN construct_v() *************************';
       endif
 
 
@@ -163,7 +163,7 @@ c---------Antiparticles (negative E in Dirac sea)
           do ib = 1 , N_blocks
 
               write(6,'(a,i2)') 'Block number #', ib;
-              write(6,*) '---------------------------------------------';
+              write(6,*) '--------------------------------------------';
 
               do j = 1 , id_spx(ib)
 
@@ -198,7 +198,7 @@ c---------Antiparticles (negative E in Dirac sea)
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END construct_v() ****************************';
+      write(6,*) '****** END construct_v() ***************************';
       endif
 
       return;
@@ -248,7 +248,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN construct_u() **************************';
+      write(6,*) '****** BEGIN construct_u() *************************';
       endif
 
 
@@ -374,7 +374,7 @@ c---------Antiparticles (negative E in Dirac sea)
           do ib = 1 , N_blocks
 
               write(6,'(a,i2)') 'Block number #', ib;
-              write(6,*) '---------------------------------------------';
+              write(6,*) '--------------------------------------------';
 
               do j = 1 , id_spx(ib)
 
@@ -409,7 +409,7 @@ c---------Antiparticles (negative E in Dirac sea)
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END construct_u() ****************************';
+      write(6,*) '****** END construct_u() ***************************';
       endif
 
       return;

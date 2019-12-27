@@ -137,7 +137,7 @@ c-----Initialization
 
 
 
-c-----Inserting the new vector in Broyden mixing procedure
+c-----Inserting the new vector in Broyden's mixing procedure
       if( initialize .eqv. .false. ) then
 
          il = 0;
@@ -205,6 +205,8 @@ c-----Inserting the new vector in Broyden mixing procedure
             enddo
          enddo
 
+         call assert( il.eq.nn , 'il =/= nn in fam_broyden()' );
+
       endif
 
 
@@ -212,16 +214,15 @@ c-----Inserting the new vector in Broyden mixing procedure
 
 
 
-c-----Calculation of the relative difference
-c-----between two consecutive Broyden vectors
-      call assert( il.eq.nn , 'il =/= nn in fam_broyden()' );
+c-----Calculation of the relative difference (Frobenious norm)
+c-----between two consecutive Broyden's vectors
       s1 = 0.D0;
       s2 = 0.D0;
       do i = 1 , nn
          s1 = s1 + vin(i)**2.D0;
          s2 = s2 + vou(i)**2.D0;
       enddo
-      if( s1 .ne. 0.D0 ) then
+      if( s1 .gt. 1.D-10 ) then
           error = DSQRT(s2/s1);
       else
           error = 1.D+99;
@@ -232,7 +233,7 @@ c-----between two consecutive Broyden vectors
 
 
 
-c-----Broyden mixing procedure starts here
+c-----Broyden's mixing procedure starts here
       if ( mm.eq.0 .or. iter.eq.1 ) then
          do i = 1 , nn
             vin(i) = vin(i) + xmi*vou(i);
@@ -305,14 +306,14 @@ c-----Broyden mixing procedure starts here
          enddo
 
       endif
-c-----Broyden mixing procedure ends here
+c-----Broyden's mixing procedure ends here
 
 
 
 
 
 
-c-----Extracting the new mixed vector from Broyden mixing procedure
+c-----Extracting the new mixed vector from Broyden's mixing procedure
       il = 1;
       do it = 1 , 2
          do ib2 = 1 , N_blocks

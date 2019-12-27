@@ -13,9 +13,9 @@ c======================================================================c
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
-      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
-     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
 
       COMPLEX*16 dV_Cou;
       common /fam_coul/ dV_Cou( -NGH:NGH , 1:NGL ),
@@ -32,7 +32,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_coulomb() *************************';
+      write(6,*) '****** BEGIN init_coulomb() ************************';
       write(6,*) '';
       endif
 
@@ -83,7 +83,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_coulomb() ***************************';
+      write(6,*) '****** END init_coulomb() **************************';
       write(6,*) '';
       endif
 

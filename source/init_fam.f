@@ -57,7 +57,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_fam() *****************************';
+      write(6,*) '****** BEGIN init_fam() ****************************';
       write(6,*) '';
       endif
 
@@ -172,17 +172,18 @@ c-----TMR separable pairing parameters
 
 c-----Calculation of QFAM energies
       do it = 1 , 2
-          ie = 1;
+          ie = 0;
           do ib = 1 , N_blocks
               do i = 1 , id_spx(ib)
-                  call assert(  E_fam_v(i,ib,it).eq.E_fam_u(i,ib,it) ,
-     &                         'E_fam_v =/= E_fam_u'                  );
+                  Eu = E_fam_u(i,ib,it);
+                  Ev = E_fam_v(i,ib,it);
+                  call assert( DABS(Eu-Ev).lt.1.D-15 , 'Eu =/= Ev' );
 
-                  E_fam(ie,it) = E_fam_v(i,ib,it);
                   ie = ie + 1;
+                  E_fam(ie,it) = Eu;
               enddo
           enddo
-          call assert( ie-1 .eq. N_total , 'ie-1 =/= N_total' );
+          call assert( ie .eq. N_total , 'ie =/= N_total' );
       enddo
 
 
@@ -235,7 +236,7 @@ c-----Calculation of nnz_blocks
 
 
 
-c-----Calculation of quadrature weights+nodes and basis functions
+c-----Calculation of the quadrature weights+nodes and basis functions
       call init_basis( .false. );
 
 
@@ -243,7 +244,7 @@ c-----Calculation of quadrature weights+nodes and basis functions
 
 
 
-c-----Calculation of ground state densities and meson fields
+c-----Calculation of the ground state densities and meson fields
       call init_gs( .false. );
 
 
@@ -251,7 +252,7 @@ c-----Calculation of ground state densities and meson fields
 
 
 
-c-----Calculation of multipole excitation operator
+c-----Calculation of the multipole excitation operator
       call init_multipole( .false. );
 
 
@@ -259,7 +260,7 @@ c-----Calculation of multipole excitation operator
 
 
 
-c-----Calculation of Rcm and Pcm operators
+c-----Calculation of the Rcm and Pcm operators
       call init_spurious( .false. );
 
 
@@ -275,7 +276,7 @@ c-----Preparation of mesons
 
 
 
-c-----Preparation of Coulomb (weighted Green's function)
+c-----Preparation of Coulomb (Green's function)
       call init_coulomb( .false. );
 
 
@@ -293,7 +294,7 @@ c-----Preparation of pairing (W coefficients)
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_fam() *******************************';
+      write(6,*) '****** END init_fam() ******************************';
       write(6,*) '';
       endif
 

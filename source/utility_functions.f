@@ -81,7 +81,8 @@ c----------------------------------------------------------------------c
       REAL*8 b, z;
       pi = 3.14159265358979324D0;
 
-      call assert( nz.ge.0 , 'nz < 0 in phi_nz()' );
+      call assert( nz .ge. 0    , 'nz <  0 in phi_nz()' );
+      call assert( b  .gt. 0.D0 , 'b  <= 0 in phi_nz()' );
 
       x = z/b;
       phi_0 = 1.D0 / DSQRT(b*DSQRT(pi)) * DEXP( -0.5D0 * x*x );
@@ -126,7 +127,8 @@ c----------------------------------------------------------------------c
       INTEGER*4 nz;
       REAL*8 b, z;
 
-      call assert( nz.ge.0 , 'nz < 0 in phi_nz()' );
+      call assert( nz .ge. 0    , 'nz <  0 in d_phi_nz()' );
+      call assert( b  .gt. 0.D0 , 'b  <= 0 in d_phi_nz()' );
 
       x = z/b;
       if( nz .eq. 0 ) then
@@ -165,8 +167,9 @@ c----------------------------------------------------------------------c
       INTEGER*4 nr, ml;
       REAL*8 b, r;
 
-      call assert( nr.ge.0         , 'nr < 0 in phi_nr_ml()'         );
-      call assert( r.gt.0.D0       , 'r <=0 in phi_nr_ml()'          );
+      call assert( nr .ge. 0    , 'nr <  0 in phi_nr_ml()' );
+      call assert( b  .gt. 0.D0 , 'b  <= 0 in phi_nr_ml()' );
+      call assert( r  .gt. 0.D0 , 'r  <= 0 in phi_nr_ml()' );
       call assert( abs(ml).le.IGFV , '|ml| too large in phi_nr_ml()' );
 
       ml = abs(ml);
@@ -215,8 +218,9 @@ c----------------------------------------------------------------------c
       INTEGER*4 nr, ml;
       REAL*8 b, r;
 
-      call assert( nr.ge.0   , 'nr < 0 in d_phi_nr_ml()' );
-      call assert( r.gt.0.D0 , 'r <= 0 in d_phi_nr_ml()' );
+      call assert( nr .ge. 0    , 'nr <  0 in d_phi_nr_ml()' );
+      call assert( b  .gt. 0.D0 , 'b  <= 0 in d_phi_nr_ml()' );
+      call assert( r  .gt. 0.D0 , 'r  <= 0 in d_phi_nr_ml()' );
 
       ml = abs(ml);
       eta = r*r/(b*b);
@@ -263,63 +267,68 @@ c----------------------------------------------------------------------c
       REAL*8  epsi       /1.D-15/;
       LOGICAL first_call /.true./;
 
-      SAVE first_call, epsi , pi;
+      SAVE first_call, epsi;
       SAVE K0, K1, K2, K3;
 
+
+
+      call assert( a.ge.0.D0 .and. a.le.1.D0 , 'a should be in [0,1]' );
+      call assert( K.ge.0    .and. K.le.3    , 'K should be 0,1,2,3'  );
 
 
 
       if( first_call ) then
           first_call = .false.;
 
-          pi = 4.D0*DATAN(1.D0);
+          K0 = 0.D0;
+          K1 = 0.D0;
+          K2 = 0.D0;
+          K3 = 0.D0;
 
-          K0(0) = pi/2.D0;
-          K0(1) = -pi/8.D0;
-          K0(2) = K0(1) * 3.D0/16.D0;
-          K0(3) = K0(2) * 5.D0/12.D0;
+          pi = 3.14159265358979324D0;
 
-          K1(0) = 0.D0;
-          K1(1) = -pi/16.D0;
-          K1(2) = K1(1)/4.D0;
-          K1(3) = K1(2) * 15.D0/32.D0;
+          K0(0) = + pi *  1.D0 /    2.D0;
+          K0(1) = - pi *  1.D0 /    8.D0;
+          K0(2) = - pi *  3.D0 /  128.D0;
+          K0(3) = - pi *  5.D0 /  512.D0;
 
-          K2(0) = 0.D0;
-          K2(1) = 0.D0;
-          K2(2) = -pi/256.D0;
-          K2(3) = K2(2) * 3.D0/4.D0;
+          K1(1) = - pi *  1.D0 /   16.D0;
+          K1(2) = - pi *  1.D0 /   64.D0;
+          K1(3) = - pi * 15.D0 / 2048.D0;
 
-          K3(0) = 0.D0;
-          K3(1) = 0.D0;
-          K3(2) = 0.D0;
-          K3(3) = -pi/2048.D0;
+          K2(2) = - pi *  1.D0 /  256.D0;
+          K2(3) = - pi *  3.D0 / 1024.D0;
+
+          K3(3) = - pi *  1.D0 / 2048.D0;
 
           do n = 4 , LMT
-              K0(n) = K0(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n-0));
-              K1(n) = K1(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n-1));
-              K2(n) = K2(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n-4));
-              K3(n) = K3(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n-9));
+              K0(n) = K0(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 0));
+              K1(n) = K1(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 1));
+              K2(n) = K2(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 4));
+              K3(n) = K3(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 9));
           enddo
 
       endif
 
 
-      if( a .eq. 1.D0 ) then
+
+      if( DABS( a - 1.D0 ) .lt. 1.D-14 ) then
           select case( K )
               case( 0 )
-                  I_K = 1.D0;
+                  I_K = + 1.D0 /  1.D0;
               case( 1 )
-                  I_K = -1.D0/3.D0;
+                  I_K = - 1.D0 /  3.D0;
               case( 2 )
-                  I_K = -2.D0/30.D0;
+                  I_K = - 2.D0 / 30.D0;
               case( 3 )
-                  I_K = -1.D0/35.D0;
+                  I_K = - 1.D0 / 35.D0;
               case default
                   stop 'Error: K > 3 in I_K()!';
           end select
 
           return;
       endif
+
 
 
       if( a .gt. 0.2D0 ) then
@@ -382,6 +391,8 @@ c----------------------------------------------------------------------c
           return;
 
       endif
+
+
 
       return;
       end;
@@ -511,7 +522,7 @@ c======================================================================c
       call assert( NRR+abs(MLL)  .le.IGFV , 'IGFV too small' );
       call assert(  nr+abs(ml)   .le.IGFV , 'IGFV too small' );
 
-      fac = iv(NRR+nr+nr1+nr2);
+      fac = iv(nr1+nr2+NRR+nr);
       fac = fac / DSQRT( 2.D0**(DBLE( 2*NRR+abs(MLL)+2*nr+abs(ml) )) );
       fac = fac * wf(nr1)*wf(nr1+abs(ml1))*wf(nr2)*wf(nr2+abs(ml2));
       fac = fac * wfi(NRR)*wfi(NRR+abs(MLL))*wfi(nr)*wfi(nr+abs(ml));

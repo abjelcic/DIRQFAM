@@ -50,11 +50,13 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN fam_ddelta() ***************************';
+      write(6,*) '****** BEGIN fam_ddelta() **************************';
       write(6,*) '';
       endif
 
       if( i_pairing .eq. 0 ) then
+          dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
+          dDelta_mi = COMPLEX( 0.D0 , 0.D0 );
           return;
       endif
 
@@ -63,9 +65,8 @@ c======================================================================c
 
 
 
+#ifdef DEBUG
 c-----Selection rules test
-      if( .false. ) then
-
       do it = 1 , 2
           do ib2 = 1 , N_blocks
               do ib1 = 1 , N_blocks
@@ -108,8 +109,7 @@ c-----Selection rules test
               enddo
           enddo
       enddo
-
-      endif
+#endif
 
 
 
@@ -283,7 +283,7 @@ c-----Calculation of full dDelta_pl and dDelta_mi
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END fam_ddelta() *****************************';
+      write(6,*) '****** END fam_ddelta() ****************************';
       write(6,*) '';
       endif
 

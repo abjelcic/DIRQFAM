@@ -29,7 +29,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN check_unitarity() **********************';
+      write(6,*) '****** BEGIN check_unitarity() *********************';
       write(6,*) '';
       write(6,*) '---------------------------------------';
       if( it .eq. 1 ) then
@@ -186,7 +186,7 @@ c----- u * hermconj(v)  -       v  * hermconj(u)   = 0
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END check_unitarity() ************************';
+      write(6,*) '****** END check_unitarity() ***********************';
       write(6,*) '';
       endif
 

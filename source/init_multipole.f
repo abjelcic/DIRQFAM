@@ -35,9 +35,9 @@ c======================================================================c
      &                    dkappa_nnz( NBX , NBX ),
      &                    f_nnz     ( NBX , NBX );
 
-      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
-     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
 
       common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
 
@@ -53,14 +53,14 @@ c======================================================================c
 
       CHARACTER fg1, fg2;
       COMPLEX*16 Temp( NTX , NTX );
-      REAL*8 f( -NGH:NGH , 1:NGL , 2 , 0:J_max , 0:J_MAX );
+      REAL*8 f( -NGH:NGH , 1:NGL , 2 , 0:J_MAX , 0:J_MAX );
       REAL*8 fac_iso(2);
 
 
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_multipole() ***********************';
+      write(6,*) '****** BEGIN init_multipole() **********************';
       write(6,*) '';
       endif
 
@@ -74,18 +74,24 @@ c                                                                      c
 c     with only J=0,K=0 exception: f = fac_iso(t_z) * |r|^2.           c
 c                                                                      c
 c                                                                      c
-c     For isoscalar excitation: fac_iso(t_z) = +1, and for isovector:  c
-c     fac_iso(+1/2) = +1 (protons), fac_iso(-1/2) = -1 (neutrons),     c
-c     with only exception for J=1 excitations, where we used:          c
-c     fac_iso(+1/2) = + N/(N+Z) (protons),                             c
-c     fac_iso(-1/2) = - Z/(N+Z) (neutrons).                            c
+c     For isoscalar excitation:                                        c
+c         fac_iso(t_z) = +1                                            c
+c                                                                      c
+c     For isovector excitation:                                        c
+c         fac_iso(+1/2) = +1 (protons),                                c
+c         fac_iso(-1/2) = -1 (neutrons),                               c
+c     with only exception for J=1 excitation, where we used:           c
+c         fac_iso(+1/2) = + N/(N+Z) (protons),                         c
+c         fac_iso(-1/2) = - Z/(N+Z) (neutrons).                        c
 c                                                                      c
 c     We coded it=1 for neut.(t_z=-1/2), and it=2 for prot.(t_z=+1/2)  c
 c----------------------------------------------------------------------c
 
 
       call assert( J_multipole.le.J_MAX       , 'Wrong value of J' );
+      call assert( J_multipole.ge.0           , 'Wrong value of J' );
       call assert( K_multipole.le.J_multipole , 'Wrong value of K' );
+      call assert( K_multipole.ge.0           , 'Wrong value of K' );
 
       Temp  = COMPLEX( 0.D0 , 0.D0 );
       f1_JK = COMPLEX( 0.D0 , 0.D0 );
@@ -419,7 +425,7 @@ c-----                     + hermconjg(u) * transp(f2_JK) * v
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_multipole() ************************';
+      write(6,*) '****** END init_multipole() ***********************';
       write(6,*) '';
       endif
 

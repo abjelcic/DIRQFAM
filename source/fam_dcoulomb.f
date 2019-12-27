@@ -13,11 +13,12 @@ c======================================================================c
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
-      COMPLEX*16 drho_v, drho_s, ldrho_v, ldrho_s;
-      common /ind_dens/ drho_v ( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s ( -NGH:NGH , 1:NGL     ),
-     &                  ldrho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  ldrho_s( -NGH:NGH , 1:NGL     );
+       COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
+       common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
+     &                  ldrho_s ( -NGH:NGH , 1:NGL ),
+     &                  ldj_1p  ( -NGH:NGH , 1:NGL ),
+     &                  ldj_2p  ( -NGH:NGH , 1:NGL ),
+     &                  ldj_3p  ( -NGH:NGH , 1:NGL );
 
       COMPLEX*16 dV_Cou;
       common /fam_coul/ dV_Cou( -NGH:NGH , 1:NGL ),
@@ -31,7 +32,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN fam_dcoulomb() *************************';
+      write(6,*) '****** BEGIN fam_dcoulomb() ************************';
       write(6,*) '';
       endif
 
@@ -51,7 +52,7 @@ c======================================================================c
               do il1 = 1 , NGL
                   do ih1 = -NGH , +NGH
                       if( ih1 .eq. 0 ) CYCLE;
-                      z = z + G(ih1,il1,ih,il) * ldrho_v(ih1,il1,2);
+                      z = z + G(ih1,il1,ih,il) * ldrho_vp(ih1,il1);
                   enddo
               enddo
 
@@ -62,12 +63,9 @@ c======================================================================c
 
 
 
-
-
-
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END fam_dcoulomb() ***************************';
+      write(6,*) '****** END fam_dcoulomb() **************************';
       write(6,*) '';
       endif
 

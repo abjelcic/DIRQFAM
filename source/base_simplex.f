@@ -129,7 +129,7 @@ c-----Calculation of nf_size and ng_size
 
 c-----Sort basis blocks with respect to nz parity
 c-----This sort makes U,V matrices appear with pure real/imag blocks
-c-----Current code doesn't use this info at all and it is not necessary
+c-----Current code does not use this info and it is not necessary
       do ib = 1 , N_blocks
 
           do i = 1 , nf_size(ib)
@@ -179,7 +179,7 @@ c-----Current code doesn't use this info at all and it is not necessary
 
 
 
-c-----Test wheather the basis has correctly been constructed
+c-----Test whether the basis has correctly been constructed
       if( .true. ) then
 
           if( lpr ) then
@@ -188,10 +188,10 @@ c-----Test wheather the basis has correctly been constructed
                   write(6,*)'-----------------------------------------';
                   do i = 1 , id_spx(ib)
 
-                      write(6,200) i, '.  fg = ', fg_spx(i,ib),
-     &                                '   nz = ', nz_spx(i,ib),
-     &                                '   nr = ', nr_spx(i,ib),
-     &                                '   ml = ', ml_spx(i,ib);
+                      write(6,200) i, '. fg = ', fg_spx(i,ib),
+     &                                '  nz = ', nz_spx(i,ib),
+     &                                '  nr = ', nr_spx(i,ib),
+     &                                '  ml = ', ml_spx(i,ib);
                   enddo
               enddo
 

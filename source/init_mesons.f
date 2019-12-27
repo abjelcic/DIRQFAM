@@ -12,6 +12,7 @@ c======================================================================c
       common /partyp/ parname;
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
+      common /basnnn/ n0f, n0b;
 
       common /fam/ omega_start, omega_end, delta_omega, omega_print,
      &             omega, gamma_smear,
@@ -30,27 +31,25 @@ c======================================================================c
      &
      &                      rho_sat;
 
-      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
-     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
 
-      common /mesmat/ Qsig( NHSIZE , NCOORD ), QKsig( NHSIZE , NCOORD ),
-     &                Qome( NHSIZE , NCOORD ), QKome( NHSIZE , NCOORD ),
-     &                Qrho( NHSIZE , NCOORD ), QKrho( NHSIZE , NCOORD ),
-     &                   P( NHSIZE , NCOORD );
+      common /mesmat/ Psig( NHMAX , NCOORD , 0:J_MAX+1 ),
+     &                Pome( NHMAX , NCOORD , 0:J_MAX+1 ),
+     &                Prho( NHMAX , NCOORD , 0:J_MAX+1 ),
+     &                nP( 0:J_MAX+1 );
 
 
 
-      INTEGER*4 nz_mes( NHSIZE );
-      INTEGER*4 nr_mes( NHSIZE );
+      INTEGER*4 nz_mes( NHMAX , 0:J_MAX+1 );
+      INTEGER*4 nr_mes( NHMAX , 0:J_MAX+1 );
 
-      REAL*8 H   ( NHSIZE , NHSIZE );
-      REAL*8 Hsig( NHSIZE , NHSIZE );
-      REAL*8 Home( NHSIZE , NHSIZE );
-      REAL*8 Hrho( NHSIZE , NHSIZE );
+      REAL*8 H   ( NHMAX , NHMAX , 0:J_MAX+1 );
+      REAL*8 Htmp( NHMAX , NHMAX );
 
-      REAL*8 phiz ( -NGH:NGH , 0:(NMESMAX)   );
-      REAL*8 phirK(    1:NGL , 0:(NMESMAX/2) );
+      REAL*8 phiz ( -NGH:NGH , 0:(NMESMAX)               );
+      REAL*8 phirK(    1:NGL , 0:(NMESMAX/2) , 0:J_MAX+1 );
 
       hbc    = 197.328284D0;
       b0_mes = b0 / DSQRT(2.D0);
@@ -61,7 +60,7 @@ c======================================================================c
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** BEGIN init_mesons() **************************';
+      write(6,*) '****** BEGIN init_mesons() *************************';
       write(6,*) '';
       endif
 
@@ -75,65 +74,76 @@ c======================================================================c
 
 
 
+c-----Setting dimensions of P and H matrices
+      do K = 0 , J_MAX+1
+          N = n0b - K;
+          nP(K) = ( (N+1)*(N+3) + 1 - MOD(N,2) )/4;
+
+          call assert( nP(K).le.NHMAX , 'NHMAX too small' );
+      enddo
+
+
+
+
+
+
 c-----Construction of (nz,nr) pairs with nz + 2*nr + K <= NMESMAX
-      il = 0;
-      do nr = 0 , ( NMESMAX - K_multipole )/2
-          do nz = 0 , NMESMAX - K_multipole - 2*nr
-              il = il + 1;
-              nz_mes(il) = nz;
-              nr_mes(il) = nr;
+      do K = 0 , J_MAX+1
+          il = 0;
+          do nr = 0 , ( NMESMAX - K )/2
+              do nz = 0 , NMESMAX - K - 2*nr
+                  il = il + 1;
+                  nz_mes(il,K) = nz;
+                  nr_mes(il,K) = nr;
+              enddo
           enddo
+          call assert( il.eq.nP(K) , 'nP(K) wrong' );
       enddo
-      call assert( il.eq.NHSIZE , 'NHSIZE too small' );
 
 
 
 
 
 
-c-----Construction of H matrix
+c-----Construction of H matrices
       H = 0.D0;
-      do i = 1 , NHSIZE
-          nz1 = nz_mes(i);
-          nr1 = nr_mes(i);
-          do j = 1 , NHSIZE
-              nz2 = nz_mes(j);
-              nr2 = nr_mes(j);
+      do K = 0 , J_MAX+1
+          do i = 1 , nP(K)
+              nz1 = nz_mes(i,K);
+              nr1 = nr_mes(i,K);
+              do j = 1 , nP(K)
+                  nz2 = nz_mes(j,K);
+                  nr2 = nr_mes(j,K);
 
-              facp = 1.D0 / ( b0_mes*bp_mes )**2.D0
-              facz = 1.D0 / ( b0_mes*bz_mes )**2.D0;
+                  facp = 1.D0 / ( b0_mes*bp_mes )**2.D0
+                  facz = 1.D0 / ( b0_mes*bz_mes )**2.D0;
 
-              if( nz1.eq.nz2 .and. nr1.eq.nr2 ) then
-                  x = + ( DBLE(nz1) + 0.5D0 )     * facz
-     &                + DBLE(2*nr1+K_multipole+1) * facp;
+                  if( nz1.eq.nz2 .and. nr1.eq.nr2 ) then
+                      x = (DBLE(nz1)+0.5D0)*facz + DBLE(2*nr1+K+1)*facp;
+                      H(i,j,K) = H(i,j,K) + x;
+                  endif
 
-                  H(i,j) = H(i,j) + x;
-              endif
+                  if( nz1.eq.nz2 .and. nr1.eq.nr2+1 ) then
+                      x = DSQRT( DBLE(nr1*(nr1+K)) ) * facp;
+                      H(i,j,K) = H(i,j,K) + x;
+                  endif
 
-              if( nz1.eq.nz2 .and. nr1.eq.nr2+1 ) then
-                  x = DSQRT( DBLE(nr1*(nr1+K_multipole)) ) * facp;
+                  if( nz1.eq.nz2 .and. nr2.eq.nr1+1 ) then
+                      x = DSQRT( DBLE(nr2*(nr2+K)) ) * facp;
+                      H(i,j,K) = H(i,j,K) + x;
+                  endif
 
-                  H(i,j) = H(i,j) + x;
-              endif
+                  if( nz1.eq.nz2+2 .and. nr1.eq.nr2 ) then
+                      x = - DSQRT(DBLE((nz2+1)*(nz2+2)))/2.D0 * facz;
+                      H(i,j,K) = H(i,j,K) + x;
+                  endif
 
-              if( nz1.eq.nz2 .and. nr2.eq.nr1+1 ) then
-                  x = DSQRT( DBLE(nr2*(nr2+K_multipole)) ) * facp;
+                  if( nz2.eq.nz1+2 .and. nr1.eq.nr2 ) then
+                      x = - DSQRT(DBLE((nz1+1)*(nz1+2)))/2.D0 * facz;
+                      H(i,j,K) = H(i,j,K) + x;
+                  endif
 
-                  H(i,j) = H(i,j) + x;
-              endif
-
-              if( nz1.eq.nz2+2 .and. nr1.eq.nr2 ) then
-                  x = - DSQRT(DBLE((nz2+1)*(nz2+2)))/2.D0 * facz;
-
-                  H(i,j) = H(i,j) + x;
-              endif
-
-              if( nz2.eq.nz1+2 .and. nr1.eq.nr2 ) then
-                  x = - DSQRT(DBLE((nz1+1)*(nz1+2)))/2.D0 * facz;
-
-                  H(i,j) = H(i,j) + x;
-              endif
-
+              enddo
           enddo
       enddo
 
@@ -142,112 +152,21 @@ c-----Construction of H matrix
 
 
 
-c-----Construction of P matrix
+c-----Calculation of phiz and phirK
       do nz = 0 , NMESMAX
           do ih = -NGH , +NGH
               if( ih .eq. 0 ) CYCLE;
+
               z = DBLE(isign(1,ih)) * zb_fam(abs(ih));
-              phiz(ih,nz) = phi_nz( nz , b0_mes*bz_mes , z );
+              phiz(ih,nz) = phi_nz(nz,b0_mes*bz_mes,z);
+
           enddo
       enddo
-      do nr = 0 , NMESMAX/2
-          do il = 1 , NGL
-              r = rb_fam(il);
-              K = K_multipole;
-              phirK(il,nr) = phi_nr_ml( nr , K , b0_mes*bp_mes , r );
-          enddo
-      enddo
-      do i = 1 , NHSIZE
-          nz = nz_mes(i);
-          nr = nr_mes(i);
-
-          ihl = 0;
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-
-                  ihl = ihl + 1;
-                  P( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-
-              enddo
-          enddo
-
-      enddo
-
-
-
-
-
-
-c-----Calculation of {Qsig,Qome,Qrho} matrices
-      do nz = 0 , NMESMAX
-          do ih = -NGH , +NGH
-              if( ih .eq. 0 ) CYCLE;
-              z = DBLE(isign(1,ih)) * zb_fam(abs(ih));
-              phiz(ih,nz) = phi_nz( nz , b0_mes*bz_mes , z );
-          enddo
-      enddo
-      do nr = 0 , NMESMAX/2
-          do il = 1 , NGL
-              r = rb_fam(il);
-              K = K_multipole;
-              phirK(il,nr) = phi_nr_ml( nr , K , b0_mes*bp_mes , r );
-          enddo
-      enddo
-      do i = 1 , NHSIZE
-          nz = nz_mes(i);
-          nr = nr_mes(i);
-
-          ihl = 0;
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-
-                  ihl = ihl + 1;
-                  Qsig( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-                  Qome( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-                  Qrho( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-
-              enddo
-          enddo
-
-      enddo
-      do i = 1 , NHSIZE
-          do j = 1 , NHSIZE
-              Hsig(i,j) = H(i,j);
-              Home(i,j) = H(i,j);
-              Hrho(i,j) = H(i,j);
-          enddo
-          Hsig(i,i) = Hsig(i,i) + (m_sig/hbc)**2.D0;
-          Home(i,i) = Home(i,i) + (m_ome/hbc)**2.D0;
-          Hrho(i,i) = Hrho(i,i) + (m_rho/hbc)**2.D0;
-      enddo
-
-      call dposv( 'U'   , NHSIZE , NCOORD ,
-     &             Hsig , NHSIZE ,
-     &             Qsig , NHSIZE , INFO1   );
-
-      call dposv( 'U'   , NHSIZE , NCOORD ,
-     &             Home , NHSIZE ,
-     &             Qome , NHSIZE , INFO2   );
-
-      call dposv( 'U'   , NHSIZE , NCOORD ,
-     &             Hrho , NHSIZE ,
-     &             Qrho , NHSIZE , INFO3   );
-
-      call assert( INFO1.eq.0 , 'INFO =/= 0 in dposv()' );
-      call assert( INFO2.eq.0 , 'INFO =/= 0 in dposv()' );
-      call assert( INFO3.eq.0 , 'INFO =/= 0 in dposv()' );
-
-      do i = 1 , NHSIZE
-          ihl = 0;
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-                  ihl = ihl + 1;
-                  Qsig(i,ihl) = Qsig(i,ihl) * wzwr(abs(ih),il);
-                  Qome(i,ihl) = Qome(i,ihl) * wzwr(abs(ih),il);
-                  Qrho(i,ihl) = Qrho(i,ihl) * wzwr(abs(ih),il);
+      do K = 0 , J_MAX+1
+          do nr = 0 , NMESMAX/2
+              do il = 1 , NGL
+                  r = rb_fam(il);
+                  phirK(il,nr,K) = phi_nr_ml(nr,K,b0_mes*bp_mes,r);
               enddo
           enddo
       enddo
@@ -257,77 +176,85 @@ c-----Calculation of {Qsig,Qome,Qrho} matrices
 
 
 
-c-----Calculation of {QKsig,QKome,QKrho} matrices
-      do nz = 0 , NMESMAX
-          do ih = -NGH , +NGH
-              if( ih .eq. 0 ) CYCLE;
-              z = DBLE(isign(1,ih)) * zb_famK(abs(ih));
-              phiz(ih,nz) = phi_nz( nz , b0_mes*bz_mes , z );
-          enddo
-      enddo
-      do nr = 0 , NMESMAX/2
-          do il = 1 , NGL
-              r = rb_famK(il);
-              K = K_multipole;
-              phirK(il,nr) = phi_nr_ml( nr , K , b0_mes*bp_mes , r );
-          enddo
-      enddo
-      do i = 1 , NHSIZE
-          nz = nz_mes(i);
-          nr = nr_mes(i);
+c-----Calculation of {Psig,Pome,Prho} matrices
+      do K = 0 , J_MAX+1
 
-          ihl = 0;
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
 
-                  ihl = ihl + 1;
-                  QKsig( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-                  QKome( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
-                  QKrho( i , ihl ) = phiz(ih,nz) * phirK(il,nr);
+          do i = 1 , nP(K)
+              nz = nz_mes(i,K);
+              nr = nr_mes(i,K);
+              call assert( nz.le.NMESMAX   , 'nz > NMESMAX'   );
+              call assert( nr.le.NMESMAX/2 , 'nr > NMESMAX/2' );
 
+              ihl = 0;
+              do il = 1 , NGL
+                  do ih = -NGH , +NGH
+                      if( ih .eq. 0 ) CYCLE;
+
+                      ihl = ihl + 1;
+                      Psig(i,ihl,K) = phiz(ih,nz) * phirK(il,nr,K);
+                      Pome(i,ihl,K) = phiz(ih,nz) * phirK(il,nr,K);
+                      Prho(i,ihl,K) = phiz(ih,nz) * phirK(il,nr,K);
+
+                  enddo
               enddo
           enddo
 
-      enddo
-      do i = 1 , NHSIZE
-          do j = 1 , NHSIZE
-              Hsig(i,j) = H(i,j);
-              Home(i,j) = H(i,j);
-              Hrho(i,j) = H(i,j);
-          enddo
-          Hsig(i,i) = Hsig(i,i) + (m_sig/hbc)**2.D0;
-          Home(i,i) = Home(i,i) + (m_ome/hbc)**2.D0;
-          Hrho(i,i) = Hrho(i,i) + (m_rho/hbc)**2.D0;
-      enddo
 
-      call dposv( 'U'    , NHSIZE , NCOORD ,
-     &             Hsig  , NHSIZE ,
-     &             QKsig , NHSIZE , INFO1   );
+          do imes = 1 , 3
 
-      call dposv( 'U'    , NHSIZE , NCOORD ,
-     &             Home  , NHSIZE ,
-     &             QKome , NHSIZE , INFO2   );
-
-      call dposv( 'U'    , NHSIZE , NCOORD ,
-     &             Hrho  , NHSIZE ,
-     &             QKrho , NHSIZE , INFO3   );
-
-      call assert( INFO1.eq.0 , 'INFO =/= 0 in dposv()' );
-      call assert( INFO2.eq.0 , 'INFO =/= 0 in dposv()' );
-      call assert( INFO3.eq.0 , 'INFO =/= 0 in dposv()' );
-
-      do i = 1 , NHSIZE
-          ihl = 0;
-          do il = 1 , NGL
-              do ih = -NGH , +NGH
-                  if( ih .eq. 0 ) CYCLE;
-                  ihl = ihl + 1;
-                  QKsig(i,ihl) = QKsig(i,ihl) * wzwrK(abs(ih),il);
-                  QKome(i,ihl) = QKome(i,ihl) * wzwrK(abs(ih),il);
-                  QKrho(i,ihl) = QKrho(i,ihl) * wzwrK(abs(ih),il);
+              do i = 1 , nP(K)
+                  do j = 1 , nP(K)
+                      Htmp(i,j) = H(i,j,K);
+                  enddo
               enddo
+
+              select case( imes )
+                  case( 1 )
+                      do i = 1 , nP(K)
+                          Htmp(i,i) = Htmp(i,i) + (m_sig/hbc)**2.D0;
+                      enddo
+                  case( 2 )
+                      do i = 1 , nP(K)
+                          Htmp(i,i) = Htmp(i,i) + (m_ome/hbc)**2.D0;
+                      enddo
+                  case( 3 )
+                      do i = 1 , nP(K)
+                          Htmp(i,i) = Htmp(i,i) + (m_rho/hbc)**2.D0;
+                      enddo
+                  case default
+                      stop 'Error: imes > 3!';
+              end select
+
+              call dpotrf( 'L' , nP(K) , Htmp , NHMAX , INFO );
+              call assert( INFO.eq.0 , 'dpotrf() failed' );
+
+              select case( imes )
+                  case( 1 )
+                      call dtrsm( 'L'            , 'L'    ,
+     &                            'N'            , 'N'    ,
+     &                            nP(K)          , NCOORD , 1.D0 ,
+     &                            Htmp           , NHMAX  ,
+     &                            Psig(1,1,K)    , NHMAX           );
+                  case( 2 )
+                      call dtrsm( 'L'            , 'L'    ,
+     &                            'N'            , 'N'    ,
+     &                            nP(K)          , NCOORD , 1.D0 ,
+     &                            Htmp           , NHMAX  ,
+     &                            Pome(1,1,K)    , NHMAX           );
+                  case( 3 )
+                      call dtrsm( 'L'            , 'L'    ,
+     &                            'N'            , 'N'    ,
+     &                            nP(K)          , NCOORD , 1.D0 ,
+     &                            Htmp           , NHMAX  ,
+     &                            Prho(1,1,K)    , NHMAX           );
+                  case default
+                      stop 'Error: imes > 3!';
+              end select
+
           enddo
+
+
       enddo
 
 
@@ -337,7 +264,7 @@ c-----Calculation of {QKsig,QKome,QKrho} matrices
 
       if(lpr) then
       write(6,*) '';
-      write(6,*) '****** END init_mesons() ****************************';
+      write(6,*) '****** END init_mesons() ***************************';
       write(6,*) '';
       endif
 
