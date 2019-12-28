@@ -55,7 +55,7 @@ the code uses data from previous run stored in <code>dirhb.wel</code> and <code>
 as starting potentials and pairing field respectively.
 
 
-* Nuclide to be computed. Element name, followed by the mass number. If the element name
+* Even-even nuclide to be computed. Element name, followed by the mass number. If the element name
 has only one character, it should begin with an underscore, eg. <code>_C 12</code>,
 <code>_O 16</code> and <code>_U 238</code>.
 
