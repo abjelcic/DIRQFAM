@@ -118,8 +118,8 @@ c-----                           + v * y_fam * hermconj(v)
 
 
 
-c-----Calculation of dkappa_mi = + v * hermconj(x_fam) * hermconj(v)
-c-----                           - u * hermconj(y_fam) * hermconj(u)
+c-----Calculation of dkappa_mi = - v * x_fam * hermconj(v)
+c-----                           + u * y_fam * hermconj(u)
       dkappa_mi = COMPLEX( 0.D0 , 0.D0 );
       do it = 1 , 2
           do ib2 = 1 , N_blocks
@@ -131,11 +131,11 @@ c-----                           - u * hermconj(y_fam) * hermconj(u)
                  !if( dh_nnz    (ib1,ib2) ) then
                   if( dkappa_nnz(ib1,ib2) ) then
 
-                  call zgemm( 'n'         , 'c'         ,
+                  call zgemm( 'n'         , 'n'         ,
      &                        id_spx(ib1) , id_spx(ib2) , id_spx(ib1) ,
-     &                        COMPLEX( 1.D0 , 0.D0 )    ,
+     &                        COMPLEX( -1.D0 , 0.D0 )   ,
      &                        v(1,1,ib1,it)             , NBSX        ,
-     &                        x_fam(j0,i0,it)           , NTX         ,
+     &                        x_fam(i0,j0,it)           , NTX         ,
      &                        COMPLEX( 0.D0 , 0.D0 )    ,
      &                        Temp(i0,j0)               , NTX         );
 
@@ -144,16 +144,16 @@ c-----                           - u * hermconj(y_fam) * hermconj(u)
      &                        COMPLEX( 1.D0 , 0.D0 )    ,
      &                        Temp(i0,j0)               , NTX         ,
      &                        v(1,1,ib2,it)             , NBSX        ,
-     &                        COMPLEX( 1.D0 , 0.D0 )   ,
+     &                        COMPLEX( 1.D0 , 0.D0 )    ,
      &                        dkappa_mi(i0,j0,it)       , NTX         );
 
 
 
-                  call zgemm( 'n'         , 'c'         ,
+                  call zgemm( 'n'         , 'n'         ,
      &                        id_spx(ib1) , id_spx(ib2) , id_spx(ib1) ,
-     &                        COMPLEX( -1.D0 , 0.D0 )   ,
+     &                        COMPLEX( 1.D0 , 0.D0 )    ,
      &                        u(1,1,ib1,it)             , NBSX        ,
-     &                        y_fam(j0,i0,it)           , NTX         ,
+     &                        y_fam(i0,j0,it)           , NTX         ,
      &                        COMPLEX( 0.D0 , 0.D0 )    ,
      &                        Temp(i0,j0)               , NTX         );
 

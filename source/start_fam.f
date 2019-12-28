@@ -128,7 +128,7 @@ c-----Fully self-consistent response, energy sweep
           dDelta_pl = COMPLEX( 0.D0 , 0.D0 );
           dDelta_mi = COMPLEX( 0.D0 , 0.D0 );
 
-          ! One can easily parallelize this energy
+          ! One can easily parallelize the following energy
           ! loop for systematic, large scale calculations
           omega = omega_start;
           do while( omega .le. omega_end + 1.D-4 )

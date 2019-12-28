@@ -101,7 +101,7 @@ c-----Main QFAM iteration for fixed energy
       if( J_multipole.eq.1 .or. J_multipole.eq.3 ) then
       if( K_multipole.eq.0 .or. K_multipole.eq.1 ) then
 
-          ! Elimination of spurious zero-energy Nambu-Goldstone mode
+          ! Elimination of the spurious Nambu-Goldstone mode
           call fam_spurious( .false. );
 
           ! Update drho matrix since we only need

@@ -148,9 +148,9 @@ c======================================================================c
       endif
 
       if( ISO .eq. 0 ) then
-          write(tape,'(a)') 'Isoscalar excitation';
+          write(tape,'(a)')'Isoscalar excitation';
       else
-          write(tape,'(a)') 'Isovector excitation';
+          write(tape,'(a)')'Isovector excitation';
       endif
 
       write(tape,'(a,i1)') 'J = ', J_multipole;

@@ -46,8 +46,6 @@ c======================================================================c
       REAL*8 xgl(1*NGL), wgl(1*NGL);
 
       REAL*8 PHI  ( NTX , NCOORD );
-      REAL*8 dzPHI( NTX , NCOORD );
-      REAL*8 drPHI( NTX , NCOORD );
 
 
 
@@ -191,7 +189,7 @@ c-----Calculation of wPhi
 
 
 
-c-----Calculation of PHI_U, PHI_SVt
+c-----Calculation of PHI_U, PHI_SVt, k_PHI
       do i = 1 , N_total
           ihl = 0;
           do il = 1 , NGL
@@ -294,12 +292,12 @@ c======================================================================c
 
 
 
-      call assert( M.gt.0       , 'M <= 0 in lowrank_approx()'     );
-      call assert( N.gt.0       , 'N <= 0 in lowrank_approx()'     );
-      call assert( TOL.gt.0.D0  , 'TOL <= 0 in lowrank_approx()'   );
-      call assert( LDA.ge.M     , 'LDA < M in lowrank_approx()'    );
-      call assert( LDAU.ge.M    , 'LDAU < M in lowrank_approx()'   );
-      call assert( LDASVt.ge.K  , 'LDASVt < K in lowrank_approx()' );
+      call assert( M     .gt.   0 , 'M      <= 0 in lowrank_approx()' );
+      call assert( N     .gt.   0 , 'N      <= 0 in lowrank_approx()' );
+      call assert( TOL   .gt.0.D0 , 'TOL    <= 0 in lowrank_approx()' );
+      call assert( LDA   .ge.   M , 'LDA    <  M in lowrank_approx()' );
+      call assert( LDAU  .ge.   M , 'LDAU   <  M in lowrank_approx()' );
+      call assert( LDASVt.ge.   K , 'LDASVt <  K in lowrank_approx()' );
 
 
 
