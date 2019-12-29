@@ -536,12 +536,12 @@ c======================================================================c
      &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
      &                  dj_3( -NGH:NGH , 1:NGL , 2 );
 
-       COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
-       common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
-     &                  ldrho_s ( -NGH:NGH , 1:NGL ),
-     &                  ldj_1p  ( -NGH:NGH , 1:NGL ),
-     &                  ldj_2p  ( -NGH:NGH , 1:NGL ),
-     &                  ldj_3p  ( -NGH:NGH , 1:NGL );
+      COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
+      common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
+     &                 ldrho_s ( -NGH:NGH , 1:NGL ),
+     &                 ldj_1p  ( -NGH:NGH , 1:NGL ),
+     &                 ldj_2p  ( -NGH:NGH , 1:NGL ),
+     &                 ldj_3p  ( -NGH:NGH , 1:NGL );
 
 
 

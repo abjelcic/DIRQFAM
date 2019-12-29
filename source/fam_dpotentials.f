@@ -42,12 +42,12 @@ c======================================================================c
      &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
      &                  dj_3( -NGH:NGH , 1:NGL , 2 );
 
-       COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
-       common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
-     &                  ldrho_s ( -NGH:NGH , 1:NGL ),
-     &                  ldj_1p  ( -NGH:NGH , 1:NGL ),
-     &                  ldj_2p  ( -NGH:NGH , 1:NGL ),
-     &                  ldj_3p  ( -NGH:NGH , 1:NGL );
+      COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
+      common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
+     &                 ldrho_s ( -NGH:NGH , 1:NGL ),
+     &                 ldj_1p  ( -NGH:NGH , 1:NGL ),
+     &                 ldj_2p  ( -NGH:NGH , 1:NGL ),
+     &                 ldj_3p  ( -NGH:NGH , 1:NGL );
 
       COMPLEX*16 dsig  ,
      &           dome_0, dome_r, dome_p, dome_z,
@@ -62,9 +62,11 @@ c======================================================================c
      &                    drho_p( -NGH:NGH , 1:NGL ),
      &                    drho_z( -NGH:NGH , 1:NGL );
 
-      COMPLEX*16 dV_Cou;
-      common /fam_coul/ dV_Cou( -NGH:NGH , 1:NGL ),
-     &                       G( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL );
+      COMPLEX*16 dVCou_0, dVCou_r, dVCou_p, dVCou_z;
+      common /fam_coul/ dVCou_0( -NGH:NGH , 1:NGL ),
+     &                  dVCou_r( -NGH:NGH , 1:NGL ),
+     &                  dVCou_p( -NGH:NGH , 1:NGL ),
+     &                  dVCou_z( -NGH:NGH , 1:NGL );
 
       COMPLEX*16 dVpS, dVmS, dSig_z, dSig_r, dSig_p;
       common /fam_pot/ dVpS  ( -NGH:NGH , 1:NGL , 2 ),
@@ -492,8 +494,6 @@ c---------Calculation of Sig_p
 
 
 c-----Calculation of the induced potentials
-      call fam_dcoulomb( .false. );
-
       do it = 1 , 2
           do il = 1 , NGL
               do ih = -NGH , +NGH
@@ -508,12 +508,21 @@ c-----Calculation of the induced potentials
                   dSig_r(ih,il,it) = Sig_r(ih,il,it);
                   dSig_p(ih,il,it) = Sig_p(ih,il,it);
 
-                  if( it .eq. 2 ) then
-                      dVpS(ih,il,it) = dVpS(ih,il,it) + dV_Cou(ih,il);
-                      dVmS(ih,il,it) = dVmS(ih,il,it) + dV_Cou(ih,il);
-                  endif
-
               enddo
+          enddo
+      enddo
+
+      call fam_dcoulomb( .false. );
+      do il = 1 , NGL
+          do ih = -NGH , +NGH
+              if( ih .eq. 0 ) CYCLE;
+
+              dVpS  (ih,il,2) = dVpS  (ih,il,2) + dVCou_0(ih,il);
+              dVmS  (ih,il,2) = dVmS  (ih,il,2) + dVCou_0(ih,il);
+              dSig_z(ih,il,2) = dSig_z(ih,il,2) + dVCou_z(ih,il);
+              dSig_r(ih,il,2) = dSig_r(ih,il,2) + dVCou_r(ih,il);
+              dSig_p(ih,il,2) = dSig_p(ih,il,2) + dVCou_p(ih,il);
+
           enddo
       enddo
 

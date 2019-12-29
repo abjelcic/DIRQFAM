@@ -26,7 +26,6 @@ c======================================================================c
 
 
       COMPLEX*16 trace;
-      pi = 3.14159265358979324D0;
 
 
 
@@ -51,7 +50,7 @@ c-----Calculates S(f,omega) = -1/pi * Im[Tr[hermconj(f)*drho(omega)]]
           enddo
       enddo
 
-
+      pi = 3.14159265358979324D0;
       fam_strength = - 1.D0/pi * DIMAG( trace );
 
 

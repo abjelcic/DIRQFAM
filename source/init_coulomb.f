@@ -17,10 +17,10 @@ c======================================================================c
      &                    rb_fam( 1:NGL ), wr( 1:NGL ),
      &                    wzwr( 1:NGH , 1:NGL );
 
-      COMPLEX*16 dV_Cou;
-      common /fam_coul/ dV_Cou( -NGH:NGH , 1:NGL ),
-     &                       G( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL );
-                            !G( z' , r' , z , r )
+      common /fam_green/ G1( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
+     &                   G2( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
+     &                   G3( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL );
+                        !G (     z'   ,  r'   ,     z    ,  r    )
 
 
 
@@ -42,11 +42,9 @@ c======================================================================c
       endif
 
 
-
-
-
-
-      G = 0.D0;
+      G1 = 0.D0;
+      G2 = 0.D0;
+      G3 = 0.D0;
       do il1 = 1 , NGL
           r1 = rb_fam(il1);
 
@@ -66,7 +64,10 @@ c======================================================================c
                       fac =  wzwr(abs(ih2),il2) * (2.D0*hbc*alpha)
      &                     * DSQRT( (r1+r2)**2.D0 + (z1-z2)**2.D0 );
 
-                      G(ih2,il2,ih1,il1) = fac * I_K( a , K_multipole );
+                      K = K_multipole;
+                      G1(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K-1) );
+                      G2(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K+1) );
+                      G3(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K+0) );
 
                   enddo
 
@@ -75,9 +76,6 @@ c======================================================================c
           enddo
 
       enddo
-
-
-
 
 
 

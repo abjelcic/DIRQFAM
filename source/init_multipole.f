@@ -75,7 +75,7 @@ c     with only J=0,K=0 exception: f = fac_iso(t_z) * |r|^2.           c
 c                                                                      c
 c                                                                      c
 c     For isoscalar excitation:                                        c
-c         fac_iso(t_z) = +1                                            c
+c         fac_iso(t_z) = +1.                                           c
 c                                                                      c
 c     For isovector excitation:                                        c
 c         fac_iso(+1/2) = +1 (protons),                                c
