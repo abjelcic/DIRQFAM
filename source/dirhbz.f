@@ -12092,8 +12092,14 @@ c           s1 = s2
                   if (nz1.eq.nz2)   szz = (nz1+0.5d0)
                endif
                if (nz1.eq.nz2) then
-                  if (nr1.eq.nr2+1) srp = -sq(nr1*(nr1+ml1))
-                  if (nr1.eq.nr2-1) srp = -sq((nr1+1)*(nr1+ml1+1))
+c=======================================================================c-----!abjelcic
+                  if (nr1.eq.nr2+1) then                                c
+                      srp = -DSQRT(DBLE(nr1*(nr1+ml1)));                c
+                  endif                                                 c
+                  if (nr1.eq.nr2-1) then                                c
+                      srp = -DSQRT(DBLE((nr1+1)*(nr1+ml1+1)));          c
+                  endif                                                 c
+c=======================================================================c-----!abjelcic
                   if (nr1.eq.nr2)   srp = (nr1+1)
                endif
             endif
