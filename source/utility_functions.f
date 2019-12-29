@@ -253,27 +253,26 @@ c======================================================================c
 c----------------------------------------------------------------------c
 c Calculates the integral of sqrt(1-a*cos(x)^2)*cos(2*K*x) on [0,pi/2] c
 c Parameter a is in [0,1]                                              c
-c Parameter K is in {0,1,2,3}                                          c
-c Calculates correctly at least 8 most significant digits              c
+c Parameter K is in {0,1,2,3,4}                                        c
 c----------------------------------------------------------------------c
       IMPLICIT NONE;
       REAL*8 a, x, Ec, Kc, pi, fac1, fac2, fac3;
       INTEGER*4 K, n;
 
       INTEGER*4 LMT;
-      parameter( LMT = 20 );
+      parameter( LMT = 30 );
 
-      REAL*8  K0(0:LMT), K1(0:LMT), K2(0:LMT), K3(0:LMT);
+      REAL*8  K0(0:LMT), K1(0:LMT), K2(0:LMT), K3(0:LMT), K4(0:LMT);
       REAL*8  epsi       /1.D-15/;
       LOGICAL first_call /.true./;
 
       SAVE first_call, epsi;
-      SAVE K0, K1, K2, K3;
+      SAVE K0, K1, K2, K3, K4;
 
 
 
-      call assert( a.ge.0.D0 .and. a.le.1.D0 , 'a should be in [0,1]' );
-      call assert( K.ge.0    .and. K.le.3    , 'K should be 0,1,2,3'  );
+      call assert( a.ge.0.D0 .and. a.le.1.D0 , 'a not in [0,1]'       );
+      call assert( K.ge.0    .and. K.le.4    , 'K not in {0,1,2,3,4}' );
 
 
 
@@ -284,28 +283,36 @@ c----------------------------------------------------------------------c
           K1 = 0.D0;
           K2 = 0.D0;
           K3 = 0.D0;
+          K4 = 0.D0;
 
           pi = 3.14159265358979324D0;
 
-          K0(0) = + pi *  1.D0 /    2.D0;
-          K0(1) = - pi *  1.D0 /    8.D0;
-          K0(2) = - pi *  3.D0 /  128.D0;
-          K0(3) = - pi *  5.D0 /  512.D0;
+          K0(0) = + pi *    1.D0 /     2.D0;
+          K0(1) = - pi *    1.D0 /     8.D0;
+          K0(2) = - pi *    3.D0 /   128.D0;
+          K0(3) = - pi *    5.D0 /   512.D0;
+          K0(4) = - pi *  175.D0 / 32768.D0;
 
-          K1(1) = - pi *  1.D0 /   16.D0;
-          K1(2) = - pi *  1.D0 /   64.D0;
-          K1(3) = - pi * 15.D0 / 2048.D0;
+          K1(1) = - pi *    1.D0 /    16.D0;
+          K1(2) = - pi *    1.D0 /    64.D0;
+          K1(3) = - pi *   15.D0 /  2048.D0;
+          K1(4) = - pi *   35.D0 /  8192.D0;
 
-          K2(2) = - pi *  1.D0 /  256.D0;
-          K2(3) = - pi *  3.D0 / 1024.D0;
+          K2(2) = - pi *    1.D0 /   256.D0;
+          K2(3) = - pi *    3.D0 /  1024.D0;
+          K2(4) = - pi *   35.D0 / 16384.D0;
 
-          K3(3) = - pi *  1.D0 / 2048.D0;
+          K3(3) = - pi *    1.D0 /  2048.D0;
+          K3(4) = - pi *    5.D0 /  8192.D0;
 
-          do n = 4 , LMT
+          K4(4) = - pi *    5.D0 / 65536.D0;
+
+          do n = 5 , LMT
               K0(n) = K0(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 0));
               K1(n) = K1(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 1));
               K2(n) = K2(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 4));
               K3(n) = K3(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n- 9));
+              K4(n) = K4(n-1) * DBLE((2*n-1)*(2*n-3))/DBLE(4*(n*n-16));
           enddo
 
       endif
@@ -322,8 +329,10 @@ c----------------------------------------------------------------------c
                   I_K = - 2.D0 / 30.D0;
               case( 3 )
                   I_K = - 1.D0 / 35.D0;
+              case( 4 )
+                  I_K = - 1.D0 / 63.D0;
               case default
-                  stop 'Error: K > 3 in I_K()!';
+                  stop 'Error: K > 4 in I_K()!';
           end select
 
           return;
@@ -331,32 +340,36 @@ c----------------------------------------------------------------------c
 
 
 
-      if( a .gt. 0.2D0 ) then
+      if( a .gt. 0.465D0 ) then
 
           call CElliptic( epsi , a , Kc , Ec , n );
 
           select case( K )
-            case( 0 )
-              fac1 = 0.D0;
-              fac2 = 1.D0;
-              fac3 = 1.D0;
-            case( 1 )
-              fac1 = 2.D0*(1.D0-a);
-              fac2 = a-2.D0;
-              fac3 = 1.D0/(3.D0*a);
-            case( 2 )
-              fac1 = (8.D0*(1.D0-a)*(2.D0-a));
-              fac2 = -(a*(a-16.D0)+16.D0);
-              fac3 = 1.D0/(15.D0*a*a);
-            case( 3 )
-              fac1 = 2.D0*(1.D0-a)*(-5.D0*a*a+32.D0*(a-2.D0)*(a-2.D0));
-              fac2 = (2.D0-a)*(5.D0*a*a-8.D0*(a*(a-16.D0)+16.D0));
-              fac3 = 1.D0/(105.D0*a*a*a);
-            case default
-              stop 'Error: K > 3 in I_K()!';
+              case( 0 )
+                  fac1 = 0.D0;
+                  fac2 = 1.D0;
+                  fac3 = 1.D0;
+              case( 1 )
+                  fac1 = 2*(1-a);
+                  fac2 = a-2;
+                  fac3 = 3*a;
+              case( 2 )
+                  fac1 = (8*(1-a)*(2-a));
+                  fac2 = -(a*(a-16)+16);
+                  fac3 = 15*a*a;
+              case( 3 )
+                  fac1 = 2*(1-a)*(-5*a*a+32*(a-2)*(a-2));
+                  fac2 = (2-a)*(5*a*a-8*(a*(a-16)+16));
+                  fac3 = 105*a*a*a;
+              case( 4 )
+                  fac1 = 32*(1-a)*(2-a)*(a*(5*a-32)+32);
+                  fac2 = -( a*(a*(a*(5*a-448)+2496)-4096)+2048);
+                  fac3 = 315*a*a*a*a;
+              case default
+                  stop 'Error: K > 4 in I_K()!';
           end select
 
-          I_K = fac3 * ( fac1*Kc + fac2*Ec );
+          I_K = ( fac1*Kc + fac2*Ec ) / fac3;
           return;
 
       else
@@ -384,8 +397,13 @@ c----------------------------------------------------------------------c
                       I_K = I_K + x*K3(n);
                       x = x*a;
                   enddo
+              case( 4 )
+                  do n = 0 , LMT
+                      I_K = I_K + x*K4(n);
+                      x = x*a;
+                  enddo
               case default
-                  stop 'Error: K > 3 in I_K()!';
+                  stop 'Error: K > 4 in I_K()!';
           end select
 
           return;

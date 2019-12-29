@@ -14,6 +14,7 @@ c======================================================================c
      &             J_multipole, K_multipole, ISO;
 
       common /fam_iter/ error, tol, iter, iter_max;
+      DATA tol /1.D-5/;
 
 
 
@@ -21,7 +22,7 @@ c======================================================================c
       CHARACTER*26 text2;
       CHARACTER*21 text3;
 
-      tol      = 1.D-5;  ! Self-consistency tolerance
+      tol      = tol;    ! Self-consistency tolerance
       iter     = 0;      ! Index of current iteration
       iter_max = 999;    ! Maximum number of iterations
       error    = 1.D+99; ! Error in current iteration

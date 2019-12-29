@@ -119,6 +119,8 @@ c======================================================================c
      &             i_calculation_type, i_coulomb, i_pairing,
      &             J_multipole, K_multipole, ISO;
 
+      common /fam_iter/ error, tol, iter, iter_max;
+
 
 
 
@@ -127,7 +129,8 @@ c======================================================================c
       if( i_calculation_type .eq. 0 ) then
           write(tape,'(a)') 'Free response';
       else
-          write(tape,'(a)') 'Fully self-consistent response';
+          write(tape,'(2a,E7.1)') 'Fully self-consistent response ',
+     &                            'with tolerance = ', tol;
       endif
 
       write(tape,'(i3,a,a,i2,a,a,f7.3,a,a)') nmas, nucnam, ', ',

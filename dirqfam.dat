@@ -6,7 +6,7 @@ Pu 240                         ! Even-even nucleus under consideration
 c---------------------------------------------------------------------
 Init.Gap =    1.000     1.000  ! Initial values for the Gaps
 c---------------------------------------------------------------------
-Force    =  DD-PC1             ! Parametrization of the Lagrangian
+Force    =  DD-ME2             ! Parametrization of the Lagrangian
 c---------------------------------------------------------------------
 icstr    =  0                  ! Constraint calculation (no=0, yes=1)
 betac    =  0.000              ! Expected beta value
