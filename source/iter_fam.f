@@ -14,13 +14,26 @@ c======================================================================c
      &             J_multipole, K_multipole, ISO;
 
       common /fam_iter/ error, tol, iter, iter_max;
+#ifdef DEBUG
+      DATA tol /1.D-9/;
+#else
       DATA tol /1.D-5/;
+#endif
 
 
 
       CHARACTER*28 text1;
       CHARACTER*26 text2;
       CHARACTER*21 text3;
+      CHARACTER*13 format1;
+      CHARACTER*18 format2;
+#ifdef DEBUG
+      format1   = '(i3,a,1f14.9)';
+      format2   = '(2x,a,1e14.9,1x,a)';
+#else
+      format1   = '(i3,a,1f10.5)';
+      format2   = '(6x,a,1e14.9,1x,a)';
+#endif
 
       tol      = tol;    ! Self-consistency tolerance
       iter     = 0;      ! Index of current iteration
@@ -60,9 +73,10 @@ c======================================================================c
 c-----Main QFAM iteration for fixed energy
       do iter = 1 , iter_max
 
-          write( 6 , '(i3,a,1f10.5)' , advance = 'no' )
+          write( 6 , format1 , advance = 'no' )
      &    iter , '.Iteration, error = ' , error;
           call flush(6);
+
 
           call fam_h20h02     ( .false. );
           call fam_xy         ( .false. );
@@ -77,8 +91,9 @@ c-----Main QFAM iteration for fixed energy
           Sn = fam_strength( .false. , 1 );
           Sp = fam_strength( .false. , 2 );
 
-          write( 6 , '(3x,a,1e15.10,3x,a)' , advance = 'yes' )
-     &    'S(f,w) = ' , Sn+Sp , '|';
+
+          write( 6 , format2 , advance = 'yes' )
+     &    'S(f,w) = ' , Sn + Sp , '|';
           call flush(6);
 
 
