@@ -34,11 +34,11 @@ c======================================================================c
 
       parameter ( nn = NFAM_BROYD );
       parameter ( mm = MFAM_BROYD );
-      REAL*8 bbeta(mm,mm), df(nn,mm), dv(nn,mm),
-     &       bwork(mm)   , curv(nn) , ibwork(mm);
+      INTEGER*4 ibwork(mm);
+      REAL*8 bbeta(mm,mm), df(nn,mm), dv(nn,mm), bwork(mm), curv(nn);
       REAL*8 vin(nn);
       REAL*8 vou(nn);
-      SAVE bbeta, df, dv, bwork, curv, bw0, ibwork, vin;
+      SAVE ibwork, bbeta, df, dv, bwork, curv, bw0, vin;
       DATA bmix /0.3D0/;
       DATA xmi  /0.1D0/;
 
