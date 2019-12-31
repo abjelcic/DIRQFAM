@@ -11,9 +11,9 @@ c======================================================================c
       INTEGER*4 tape_strength, tape_rhov;
       common /out_tapes/ tape_strength, tape_rhov;
 
-      common /quadrature/ zb_fam( 1:NGH ), zb_famK( 1:NGH ),
-     &                    rb_fam( 1:NGL ), rb_famK( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL ), wzwrK( 1:NGH , 1:NGL );
+      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
+     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
+     &                    wzwr( 1:NGH , 1:NGL );
 
       common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
      &                 rhos_GS( -NGH:NGH , 1:NGL     );
