@@ -6,7 +6,7 @@ MCMODEL = -mcmodel=large
 
 LDFLAGS = -lblas -llapack
 
-OPT = $(PREPROC) -O3 $(MCMODEL) -march=native -funroll-loops
+OPT = $(PREPROC) -O3 $(MCMODEL) -march=native
 
 DEBUG = $(PREPROC) -Og -g $(MCMODEL) -Wall -Wextra -Wno-unused-parameter -fcheck=all -fbacktrace
 
