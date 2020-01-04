@@ -8,9 +8,6 @@ c======================================================================c
       include 'dirqfam.par'
       LOGICAL lpr;
 
-      common /baspar/ hom, hb0, b0;
-      common /defbas/ beta0, q, bp, bz;
-
       common /fam/ omega_start, omega_end, delta_omega, omega_print,
      &             omega, gamma_smear,
      &             i_calculation_type, i_coulomb, i_pairing,
@@ -144,7 +141,7 @@ c-----Calculation of drho_v
           Ar = 0.D0;
           Ai = 0.D0;
           do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
+              do ib1 = 1 , ib2
                   if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   j0 = ia_spx(ib2);
@@ -155,6 +152,7 @@ c-----Calculation of drho_v
 
                       i0 = ia_spx(ib1);
                       i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                      if( ib1 .eq. ib2 ) i1 = j;
                       do i = i0 , i1
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
@@ -162,7 +160,9 @@ c-----Calculation of drho_v
                           if( fg1.ne.fg2 ) CYCLE;
                           if( abs(ml1-ml2).ne.K_multipole ) CYCLE;
 
-                          z = + drho_1(i,j,it) + drho_2(i,j,it);
+                          z = + drho_1(i,j,it) + drho_2(i,j,it)
+     &                        + drho_1(j,i,it) + drho_2(j,i,it);
+                          if( i .eq. j ) z = 0.5D0 * z;
 
                           Ar(i,j) = DREAL(z);
                           Ai(i,j) = DIMAG(z);
@@ -203,7 +203,7 @@ c-----Calculation of drho_s (protons + neutrons)
           Ar = 0.D0;
           Ai = 0.D0;
           do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
+              do ib1 = 1 , ib2
                   if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   j0 = ia_spx(ib2);
@@ -214,6 +214,7 @@ c-----Calculation of drho_s (protons + neutrons)
 
                       i0 = ia_spx(ib1);
                       i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                      if( ib1 .eq. ib2 ) i1 = j;
                       do i = i0 , i1
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
@@ -222,7 +223,10 @@ c-----Calculation of drho_s (protons + neutrons)
                           if( abs(ml1-ml2).ne.K_multipole ) CYCLE;
 
                           z = + drho_1(i,j,1) + drho_2(i,j,1)
-     &                        + drho_1(i,j,2) + drho_2(i,j,2);
+     &                        + drho_1(i,j,2) + drho_2(i,j,2)
+     &                        + drho_1(j,i,1) + drho_2(j,i,1)
+     &                        + drho_1(j,i,2) + drho_2(j,i,2);
+                          if( i .eq. j ) z = 0.5D0 * z;
                           if( fg1.eq.'g' .and. fg2.eq.'g' ) z = -z;
 
                           Ar(i,j) = DREAL(z);
@@ -263,7 +267,7 @@ c-----Calculation of dj_1
           Ar = 0.D0;
           Ai = 0.D0;
           do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
+              do ib1 = 1 , ib2
                   if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   j0 = ia_spx(ib2);
@@ -274,6 +278,7 @@ c-----Calculation of dj_1
 
                       i0 = ia_spx(ib1);
                       i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                      if( ib1 .eq. ib2 ) i1 = j;
                       do i = i0 , i1
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
@@ -281,7 +286,8 @@ c-----Calculation of dj_1
                           if( fg1.eq.fg2 ) CYCLE;
                           if( ml1+ml2+1 .ne. +K_multipole ) CYCLE;
 
-                          z = + drho_1(i,j,it) + drho_2(i,j,it);
+                          z = + drho_1(i,j,it) + drho_2(i,j,it)
+     &                        - drho_1(j,i,it) - drho_2(j,i,it);
                           if( fg1.eq.'g' .and. fg2.eq.'f' ) z = -z;
 
                           Ar(i,j) = DREAL(z);
@@ -328,7 +334,7 @@ c-----Calculation of dj_2
           Ar = 0.D0;
           Ai = 0.D0;
           do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
+              do ib1 = 1 , ib2
                   if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   j0 = ia_spx(ib2);
@@ -339,6 +345,7 @@ c-----Calculation of dj_2
 
                       i0 = ia_spx(ib1);
                       i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                      if( ib1 .eq. ib2 ) i1 = j;
                       do i = i0 , i1
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
@@ -346,7 +353,8 @@ c-----Calculation of dj_2
                           if( fg1.eq.fg2 ) CYCLE;
                           if( ml1+ml2+1 .ne. -K_multipole ) CYCLE;
 
-                          z = + drho_1(i,j,it) + drho_2(i,j,it);
+                          z = + drho_1(i,j,it) + drho_2(i,j,it)
+     &                        - drho_1(j,i,it) - drho_2(j,i,it);
                           if( fg1.eq.'g' .and. fg2.eq.'f' ) z = -z;
 
                           Ar(i,j) = DREAL(z);
@@ -393,7 +401,7 @@ c-----Calculation of dj_3
           Ar = 0.D0;
           Ai = 0.D0;
           do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
+              do ib1 = 1 , ib2
                   if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
 
                   j0 = ia_spx(ib2);
@@ -404,6 +412,7 @@ c-----Calculation of dj_3
 
                       i0 = ia_spx(ib1);
                       i1 = ia_spx(ib1)+id_spx(ib1)-1;
+                      if( ib1 .eq. ib2 ) i1 = j;
                       do i = i0 , i1
                           fg1 = fg_spx(i-i0+1,ib1);
                           ml1 = ml_spx(i-i0+1,ib1);
@@ -411,7 +420,8 @@ c-----Calculation of dj_3
                           if( fg1.eq.fg2 ) CYCLE;
                           if( abs(ml1-ml2).ne.K_multipole ) CYCLE;
 
-                          z = + drho_1(i,j,it) - drho_2(i,j,it);
+                          z = + drho_1(i,j,it) - drho_2(i,j,it)
+     &                        + drho_1(j,i,it) - drho_2(j,i,it);
 
                           Ar(i,j) = DREAL(z);
                           Ai(i,j) = DIMAG(z);
@@ -864,8 +874,8 @@ c======================================================================c
 
 c======================================================================c
       ! Calculates the diagonal D = diag( (U*V)^T * A * (U*V) )
-      ! elements of a complex matrix A whose block structure is
-      ! given by Annz logical matrix
+      ! elements of a complex upper triangular matrix A whose block
+      ! structure is given by Annz
       !
       !  [in]: A         is complex  NxN  matrix, A = AR + j*AI
       !        Annz      is logical NBxNB matrix
@@ -908,8 +918,8 @@ c======================================================================c
 c-----Real part
       ! Calculation of AUX1 = AR*U
       AUX1 = 0.D0;
-      do jb = 1 , NB
-          do ib = 1 , NB
+      do ib = 1 , NB
+          do jb = ib , NB
               i0 = ia_blk(ib);
               j0 = ia_blk(jb);
               if( Annz(ib,jb) ) then
@@ -957,8 +967,8 @@ c-----Real part
 c-----Imaginary part
       ! Calculation of AUX1 = AI*U
       AUX1 = 0.D0;
-      do jb = 1 , NB
-          do ib = 1 , NB
+      do ib = 1 , NB
+          do jb = ib , NB
               i0 = ia_blk(ib);
               j0 = ia_blk(jb);
               if( Annz(ib,jb) ) then
