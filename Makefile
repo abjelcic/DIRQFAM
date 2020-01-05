@@ -8,7 +8,18 @@ LDFLAGS = -lblas -llapack
 
 OPT = $(PREPROC) -O3 $(MCMODEL) -march=native
 
-DEBUG = $(PREPROC) -Og -g $(MCMODEL) -Wall -Wextra -Wno-unused-parameter -fcheck=all -fbacktrace
+DEBUG = $(PREPROC) -Og -g $(MCMODEL) -Wall                              \
+                                     -Wextra                            \
+                                     -Wconversion                       \
+                                     -Wno-unused-parameter              \
+                                     -Warray-temporaries                \
+                                     -Wsurprising                       \
+                                     -Wline-truncation                  \
+                                     -Wcharacter-truncation             \
+                                     -fcheck=all                        \
+                                     -fbacktrace                        \
+                                     -ffpe-trap=zero,overflow,underflow \
+                                     -fimplicit-none                    \
 
 
 

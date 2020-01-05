@@ -4,7 +4,8 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       include 'dirqfam.par'
       LOGICAL lpr;
 
@@ -215,7 +216,8 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       include 'dirqfam.par'
       LOGICAL lpr;
 

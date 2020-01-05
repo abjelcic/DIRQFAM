@@ -26,6 +26,8 @@ c======================================================================c
 
 c======================================================================c
 
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       include 'dirqfam.par'
 
       CHARACTER fg_spx;
@@ -75,7 +77,8 @@ c  phi_nz(nz,b,z) =   1/sqrt(b) * 1/sqrt(sqrt(pi)*2^nz*nz!)            c
 c                   * H_nz(z/b) * exp( -1/2 * (z/b)^2 )                c
 c----------------------------------------------------------------------c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
 
       INTEGER*4 nz;
       REAL*8 b, z;
@@ -122,7 +125,8 @@ c  d_phi_nz(nz,b,z) = d( phi_nz(nz,b,z) )/dz                           c
 c                                                                      c
 c----------------------------------------------------------------------c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
 
       INTEGER*4 nz;
       REAL*8 b, z;
@@ -159,7 +163,8 @@ c                         * (r/b)^|ml| * L_{nr}^|ml|( (r/b)^2 )        c
 c                         *  exp( -1/2 * (r/b)^2 )                     c
 c----------------------------------------------------------------------c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
 
       parameter( IGFV = 100 )
       common /gfvfak/ fak(0:IGFV);
@@ -213,7 +218,8 @@ c  d_phi_nr_ml(nr,ml,b,z) = d( phi_nr_ml(nr,ml,b,r) )/dr               c
 c                                                                      c
 c----------------------------------------------------------------------c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
 
       INTEGER*4 nr, ml;
       REAL*8 b, r;
@@ -427,7 +433,8 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       include 'dirqfam.par'
 
       common /gfviv / iv ( -IGFV : IGFV ); ! iv(n)  = (-1)^n
@@ -487,7 +494,8 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8 (a-h,o-z)
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       include 'dirqfam.par'
 
       common /gfviv / iv ( -IGFV : IGFV ); ! iv(n)  = (-1)^n
@@ -617,6 +625,8 @@ c======================================================================c
       !* -------------------------------------------------- *
       !* Reference: Ball, algorithms for RPN calculators.   *
       !******************************************************
+      IMPLICIT REAL*8    (a-h,o-z)
+      IMPLICIT INTEGER*4 (i-n)
       parameter( MAXN = 100 )
 
       REAL*8 epsi, x, xk, e1, e2, pi;
