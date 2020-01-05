@@ -4,13 +4,13 @@ betai    =    0.280            ! Deformation of the initial W.S. pot
 inin     =    1    1           ! Initialization from previous run
 Pu 240                         ! Even-even nucleus under consideration
 c---------------------------------------------------------------------
-Init.Gap =    1.000     1.000  ! Initial values for the Gaps
+Init.Gap =    1.000     1.000  ! Initial values of the pairing gaps
 c---------------------------------------------------------------------
 Force    =  DD-ME2             ! Parametrization of the Lagrangian
 c---------------------------------------------------------------------
 icstr    =  0                  ! Constraint calculation (no=0, yes=1)
-betac    =  0.000              ! Expected beta value
-cquad    =  0.100              ! "Spring" constant
+betac    =  0.000              ! Constrained expected beta value
+cquad    =  0.100              ! Constraint "spring" constant
 
 
 
