@@ -142,35 +142,38 @@ the equality sign <code>=</code> and the sentinel <code>|</code>.
 The output of the calculation is divided into two parts. The first output file
 <code>dirhb.out</code> located in the <code>GS\_output</code> directory contains
 the information on the ground state calculation. Detailed description of
-this file can be found in [2]. 
+this file can be found in [3]. 
 
 
 The second part of the output relevant for the QFAM calculation is located
 in the <code>QFAM\_output</code> directory. The calculated strength function is
 written to the <code>strength.out</code> file. If the calculation type flag is
 set to 2, an additional file <code>rhov.out</code> is generated which contains
-the induced (vector) density for the selected energy. The values printed in the 
+the induced and ground state (vector) density for selected energy. The values printed in the 
 <code>rhov.out</code> file are suitable for visualizing the oscillation of time
 dependent density. An example of animation easily obtainable from <code>rhov.out</code>
 file can be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
-
+An example of response function easily obtainable from <code>strength.out</code> file can
+be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
 
 
 ## How to run
 The programming language of the <code>DIRQFAM</code> code is Fortran and the user
-should provide an implementation of the BLAS and LAPACK linear algebra libraries.
+should provide an implementation of the BLAS and LAPACK (version 3.6.0. or higher)
+linear algebra libraries.
 The code is compiled by standard Makefile build automation which is set to work with
-the GFortran compiler. If the user invokes <code>make prep</code>, an auxiliary code
+the <a href="https://gcc.gnu.org/fortran/">GFortran</a> compiler.
+If the user invokes <code>make run</code>, first an auxiliary code
 will generate <code>dirqfam.par</code> file that contains the relevant information
-about the dimension of various arrays used in the code.  The <code>make run</code>
-command compiles the code and produces the executable file <code>run</code>.
+about the dimensions of various arrays used in the code followed by the
+compilation of the code which produces the executable file <code>run</code>.
 The code is then executed by invoking the <code>./run</code> command.
 </br>
-If the compilation process complains about the memory usage
-(too large <code>common</code> blocks), please set the compiler
-option <code>mcmodel</code> to value <code>-mcmodel=large</code>
-in <code>Makefile</code> file. The default value currently in
-<code>Makefile</code> is <code>-mcmodel=medium</code>.
+Since the dimensions of various arrays used are statically precalculated, the code
+stops if some of the parameters are changed and requires recompilation. This
+cumbersome way of using the code will be removed in next upgrades since
+the <code>DIRQFAM</code> code is built upon the legacy code <code>DIRHB</code>
+written in FORTRAN77 (lack of dynamic allocation).
 
 
 
