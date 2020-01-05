@@ -3,15 +3,16 @@
 within the relativistic self-consistent mean-field framework:
 the program DIRQFAM</i>.
 
-The corresponding <code>DIRQFAM</code> paper [1] can
-be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.
-
+The corresponding <code>DIRQFAM</code> paper [1]  (DD-PC1) can
+be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.</br>
+The corresponding <code>DIRQFAM</code> paper [2]  (DD-ME2) can
+be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.</br>
 
 
 
 
 # How to use
-The <code>DIRQFAM</code> code is built upon the <code>DIRHB</code> program package [2] for
+The <code>DIRQFAM</code> code is built upon the <code>DIRHB</code> program package [3] for
 the solution of the stationary relativistic Hartree-Bogoliubov equations for even-even open-shell
 nuclei with axially symmetric quadrupole deformation. <code>DIRQFAM</code> complements
 <code>DIRHBZ</code> code with the QFAM solver to calculate the multipole response for systems with 
@@ -23,35 +24,34 @@ axially symmetric quadrupole deformation.
 
 ## Input
 The input data are provided in <code>dirqfam.dat</code> file, and are separated
-into two parts: first part is the same as in [2] and determines the input parameters
+into two parts: first part is the same as in [3] and determines the input parameters
 for ground state calculation, while the second part serves as an interface for QFAM parameters.
 
 
 
-<strong>Ground state parameters</strong> (same as in [2])
+<strong>Ground state parameters</strong> (same as in [3])
 
 
 * <code>n0f</code>, <code>n0b</code>:</br>
 Number of oscillator shells used in expanding the large component of Dirac spinor
-(small component is expanded in <code>n0f+1</code> shells) of fermions and bosons
-respectively. In current version, only DD-PC1 interaction is implemented and <code>n0b</code>
-is irrelevant, while <code>n0f</code> should be even number. Recommended value of
+(small component is expanded in <code>n0f+1</code> shells) and wave functions of meson fields
+respectively. Both <code>n0f</code> and <code>n0b</code> must be even number. Recommended value of
 <code>n0f</code> depends on the nucleus and one should in principle rerun the calculation with
 larger <code>n0f</code> and compare the difference in output to establish whether the
-convergence is satisfying.
+convergence is satisfying. Recommended value of <code>n0b</code> is at least <code>2(n0f+1)</code>.
 
 
 * <code>beta0</code>, <code>betai</code>:</br>
 Deformation parameter of the oscillator basis and of the initial Woods-Saxon potentials
-respectively. In order to improve accuracy, one should choose this parameters to be close
-to the calculated self-consistent ground state quadrupole deformation.
+respectively. In order to improve accuracy, these parameters should be close
+to the self-consistent ground state quadrupole deformation.
 
 
 * <code>inin</code>:</br>
 The starting parameters for the initial potentials and initial pairing field respectively.
 If set to <code>1</code>, the code starts with Woods-Saxon as initial guess for the
 potentials and with diagonal pairing field respectively. Otherwise, if set to <code>0</code>,
-the code uses data from previous run stored in <code>dirhb.wel</code> and <code>dirhb.del</code>
+the code uses the data from previous run stored in <code>dirhb.wel</code> and/or <code>dirhb.del</code>
 as starting potentials and pairing field respectively.
 
 
@@ -67,13 +67,13 @@ if <code>inin</code> for pairing field is set to <code>1</code>. The default val
 
 * <code>Force</code>:</br>
 Acronym of the parameter set of the selected energy density functional.
-In current version, only <code>DD-PC1</code> is available.
+In current version of the code, <code>DD-PC1</code> and <code>DD-ME2</code> are available.
 
 
 * <code>icstr</code>, <code>betac</code>, <code>cquad</code>:</br>
 The quadrupole constraint control parameters. If <code>icstr</code> is set to
-<code>0</code>, quadrupole constraint is not included. If <code>icstr</code> is
-set to <code>1</code>, then constrained value of deformation <code>betac</code>
+<code>0</code>, the quadrupole constraint is not included. If <code>icstr</code> is
+set to <code>1</code>, then constrained value of expected deformation <code>betac</code>
 is imposed with the stiffness constant <code>cquad</code>. We recommend the
 default value of <code>cquad = 0.100</code>, but if the code fails to constrain
 the quadrupole moment, one should increase it keeping in mind that too large
@@ -81,7 +81,9 @@ stiffness constant may disrupt the convergence of iterations.
 
 
 Mind the alignment of input parameters, for example, parameter <code>n0f</code>
-should be written in 5 character width after the equality sign.
+should be written in 5 character width after the equality sign. An example of
+<code>dirqfam.dat</code> file is provided and the user should follow the same
+alignment pattern.
 
 </br>
 
@@ -90,10 +92,10 @@ should be written in 5 character width after the equality sign.
 
 
 * <code>Calculation type</code>:</br>
-Value <code>0</code>: Hartree response is  calculated for a given range of energies.</br>
-Value <code>1</code>: Self-consistent response is  calculated for a given range of energies.</br>
+Value <code>0</code>: Free response is calculated for a given range of energies.</br>
+Value <code>1</code>: Self-consistent response is calculated for a given range of energies.</br>
 Value <code>2</code>: Self-consistent response is calculated for a given energy and the
-induced density is outputted.
+induced density is printed.
 
 
 * <code>Include Coulomb</code>, <code>Include pairing</code>:</br>
@@ -103,18 +105,18 @@ both in ground state and the QFAM calculation respectively.
 
 * <code>NGH</code>, <code>NGL</code>:</br>
 Number of Gauss-Hermite/Gauss-Laguerre nodes in z>0/r direction respectively.
-Recommended values are <code>48</code>.
+Recommended values are at least <code>2(n0f+1)</code>.
 
 
 * <code>J multipolarity</code>, <code>K multipolarity</code>, <code>Isospin</code>:</br>
-Values J, K, and T, that define the multipole operator. In the current version,
+Values of J, K, and T, that define the multipole operator. In the current version,
 J value is restricted to 0 <= J <= 3. Multipolarity K should be 0 <= K <= J.
 <code>Isospin</code> selects isoscalar/isovector excitation if set to
 <code>0</code>/<code>1</code> respectively.
 
 
 * <code>Gamma smear</code>:</br>
-The smearing width (in MeV) used in the QFAM calculation. Reasonable value is around 1 MeV.
+The smearing width (in MeV) used in the QFAM calculation. Reasonable value is around 0.25-1.00 MeV.
 
 
 * <code>Omega start</code>, <code>Omega end</code>, <code>Delta omega</code>:</br>
