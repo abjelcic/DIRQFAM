@@ -67,8 +67,8 @@ prep: ./dirqfam.dat
 	$(FC) $(DEBUG) ./source/prep.f -o run_prep && ./run_prep && rm run_prep
 
 debug: prep $(SRCGS) $(SRCFAM)
-	$(FC) -c        $(OPT)  -fcheck=all $(SRCGS)       $(LDFLAGS) -o gs.o  && \
-	$(FC) -D DEBUG  $(DEBUG)            $(SRCFAM) gs.o $(LDFLAGS) -o run   && \
+	$(FC) -c        $(OPT)  -fcheck=all $(SRCGS)       $(LDFLAGS) -o gs.o && \
+	$(FC) -D DEBUG  $(DEBUG)            $(SRCFAM) gs.o $(LDFLAGS) -o run  && \
 	rm -f *.o
 
 clear:
