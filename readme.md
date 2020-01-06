@@ -179,6 +179,10 @@ will generate <code>dirqfam.par</code> file that contains the relevant informati
 about the dimensions of various arrays used in the code followed by the
 compilation of the code which produces the executable file <code>run</code>.
 The code is then executed by invoking the <code>./run</code> command.
+If the user invokes <code>make debug</code>, the code is compiled in debug mode
+in which various additional checks are performed and the self-consistency tolerance
+is lowered. Since the executable produced in debug mode is considerably slower,
+this mode should be used when testing and developing.
 <br>
 Since the dimensions of various arrays used are statically precalculated, the code
 won't rerun if some of the parameters are changed (between two runs) and requires recompilation. This
@@ -209,16 +213,16 @@ energy, depending on the self-consistency tolerance.
 
 | <code>n0f</code> | Memory[GiB] | Time[s] (K=0) | Time[s] (K=1) | Time[s] (K=2) | Time[s] (K=3) |
 | :--------------: | :---------: | :-----------: | :-----------: | :-----------: | :-----------: |
-|  6               | 0.98        | 0.151         | 0.183         | 0.174         | 0.174         |
-|  8               | 1.12        | 0.243         | 0.331         | 0.317         | 0.306         |
-| 10               | 1.42        | 0.425         | 0.655         | 0.626         | 0.596         |
-| 12               | 2.03        | 0.789         | 1.30          | 1.27          | 1.19          |
-| 14               | 3.16        | 1.44          | 2.50          | 2.42          | 2.31          |
-| 16               | 5.13        | 2.59          | 4.61          | 4.47          | 4.34          |
-| 18               | 8.39        | 4.57          | 8.07          | 7.88          | 7.65          |
-| 20               | 13.5        | 7.74          | 13.6          | 13.3          | 13.0          |
-| 22               | 21.3        | 12.3          | 21.8          | 21.3          | 21.2          |
-| 24               | 29.8        | 19.4          | 34.3          | 33.9          | 33.3          |
+|  6               | ~ 0.98      | 0.151         | 0.183         | 0.174         | 0.174         |
+|  8               | ~ 1.12      | 0.243         | 0.331         | 0.317         | 0.306         |
+| 10               | ~ 1.42      | 0.425         | 0.655         | 0.626         | 0.596         |
+| 12               | ~ 2.03      | 0.789         | 1.30          | 1.27          | 1.19          |
+| 14               | ~ 3.16      | 1.44          | 2.50          | 2.42          | 2.31          |
+| 16               | ~ 5.13      | 2.59          | 4.61          | 4.47          | 4.34          |
+| 18               | ~ 8.39      | 4.57          | 8.07          | 7.88          | 7.65          |
+| 20               | ~ 13.5      | 7.74          | 13.6          | 13.3          | 13.0          |
+| 22               | ~ 21.3      | 12.3          | 21.8          | 21.3          | 21.2          |
+| 24               | ~ 29.8      | 19.4          | 34.3          | 33.9          | 33.3          |
 
 In future releases, memory consumption will be significantly reduced.
 
