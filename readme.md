@@ -201,18 +201,23 @@ number of shells in expansion, type of parametrization used and number
 of vectors retained in Broyden's mixing procedure (default value is 35).
 <br>
 
-The following table shows running time for every QFAM iteration.
+The following table shows running time for every QFAM iteration together
+with memory usage.
 It takes roughly 30-60 iterations to reach self-consistency for a given excitation
 energy, depending on the self-consistency tolerance.
-| N shells | Total time per iteration (K=0) | Total time per iteration (K=1) | Total time per iteration (K=2) | Total time per iteration (K=3) |
-| :------: | :----------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
-| 8        | 0.58 s                         | 0.86 s                         | 0.82 s                         | 0.77 s                         |
-| 10       | 1.20 s                         | 1.87 s                         | 1.81 s                         | 1.73 s                         |
-| 12       | 2.38 s                         | 3.79 s                         | 3.68 s                         | 3.64 s                         | 
-| 14       | 4.52 s                         | 7.38 s                         | 7.24 s                         | 7.03 s                         |
-| 16       | 8.40 s                         | 14.0 s                         | 13.9 s                         | 13.6 s                         |
-| 18       | 14.8 s                         | 24.5 s                         | 24.4 s                         | 23.8 s                         |
-| 20       | 25.4 s                         | 41.0 s                         | 41.0 s                         | 41.0 s                         |
+
+| <code>n0f</code> | Memory[GiB] | Time[s] (K=0) | Time[s] (K=1) | Time[s] (K=2) | Time[s] (K=3) |
+| :--------------: | :---------: | :-----------: | :-----------: | :-----------: | :-----------: |
+|  6               |             | 0.151         | 0.183         | 0.174         | 0.174         |
+|  8               |             | 0.243         | 0.331         | 0.317         | 0.306         |
+| 10               |             | 0.425         | 0.655         | 0.626         | 0.596         |
+| 12               |             | 0.789         | 1.30          | 1.27          | 1.19          |
+| 14               |             | 1.44          | 2.50          | 2.42          | 2.31          |
+| 16               |             | 2.59          | 4.61          | 4.47          | 4.34          |
+| 18               |             | 4.57          | 8.07          | 7.88          | 7.65          |
+| 20               |             | 7.74          | 13.6          | 13.3          | 13.0          |
+| 22               |             | 12.3          | 21.8          | 21.3          | 21.2          |
+| 24               |             | 19.4          | 34.3          | 33.9          | 33.3          |
 
 <br>
 
