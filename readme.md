@@ -192,7 +192,7 @@ written in FORTRAN77 (lack of dynamic allocation).
 Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK.
 
 Test was performed on isoscalar octupole J = 3 excitation of <sup>20</sup>Ne nucleus with
-very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48</code><br />.
+very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48</code>.
 The <code>DD-ME2</code> parametrization was used with <code>n0b = 48</code>. 
 
 In fact, running time per iteration and memory usage of QFAM submodule
@@ -201,17 +201,9 @@ number of shells in expansion, type of parametrization used and number
 of vectors retained in Broyden's mixing procedure (default value is 35).
 <br>
 
-The following table shows running time of every QFAM iteration.
-It takes roughly 30-60 iterations for a given excitation energy,
-depending on the self-consistency tolerance.
-
-
-
-<br>
-The following table depicts the dependence of running time per QFAM iteration on
-multipolarity K for fixed J = 3. Again, test was performed on <sup>20</sup>Ne
-nucleus with very dense Gaussian mesh: <code>NGH = 48</code> and <code>NGL = 48</code>.
-
+The following table shows running time for every QFAM iteration.
+It takes roughly 30-60 iterations to reach self-consistency for a given excitation
+energy, depending on the self-consistency tolerance.
 | N shells | Total time per iteration (K=0) | Total time per iteration (K=1) | Total time per iteration (K=2) | Total time per iteration (K=3) |
 | :------: | :----------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
 | 8        | 0.58 s                         | 0.86 s                         | 0.82 s                         | 0.77 s                         |
@@ -222,11 +214,17 @@ nucleus with very dense Gaussian mesh: <code>NGH = 48</code> and <code>NGL = 48<
 | 18       | 14.8 s                         | 24.5 s                         | 24.4 s                         | 23.8 s                         |
 | 20       | 25.4 s                         | 41.0 s                         | 41.0 s                         | 41.0 s                         |
 
+<br>
 
 
 
 
-<br><br>
+
+
+
+
+
+<br><br><br><br><br><br><br><br>
 To conceive a sense of numerical complexity we are dealing with, the
 following table displays the number of vectors (only simplex +i part)
 of simplex-y deformed harmonic oscillator basis as a function of number
