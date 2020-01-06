@@ -219,41 +219,17 @@ energy, depending on the self-consistency tolerance.
 | 22               |             | 12.3          | 21.8          | 21.3          | 21.2          |
 | 24               |             | 19.4          | 34.3          | 33.9          | 33.3          |
 
-<br>
 
 
-
-
-
-
-
-
-
-<br><br><br><br><br><br><br><br>
-To conceive a sense of numerical complexity we are dealing with, the
-following table displays the number of vectors (only simplex +i part)
-of simplex-y deformed harmonic oscillator basis as a function of number
-of shells. It represents typical size of a matrix appearing in QFAM equations.
-
-| N shells | Large <i>f</i> component (N+1)(N+2)(N+3)/6 | Small <i>g</i> component (N+2)(N+3)(N+4)/6 | Total size |
-| :------: | :----------------------------------------: | :----------------------------------------: | :--------: |
-| 6        | 84                                         | 120                                        | 204        |
-| 8        | 165                                        | 220                                        | 385        |
-| 10       | 286                                        | 364                                        | 650        |
-| 12       | 455                                        | 560                                        | 1015       |
-| 14       | 680                                        | 816                                        | 1496       |
-| 16       | 969                                        | 1140                                       | 2109       |
-| 18       | 1330                                       | 1540                                       | 2870       |
-| 20       | 1771                                       | 2024                                       | 3795       |
 
 
 
 # References
-[1] A. Bjelčić, T.Nikšić, <i>Implementation of the quasiparticle finite
+[1,2] A. Bjelčić, T.Nikšić, <i>Implementation of the quasiparticle finite
 amplitude method within the relativistic self-consistent mean-field framework:
 the program DIRQFAM</i>, arXiv preprint submitted to Computer Physics Communications
 
-[2] T. Nikšić, N. Paar, D. Vretenar, P. Ring, <i>DIRHB - a relativistic
+[3] T. Nikšić, N. Paar, D. Vretenar, P. Ring, <i>DIRHB - a relativistic
 self-consistent mean-field framework for atomic nuclei</i>, Comp. Phys.
 Comm. 185, 1808 (2014).
 
