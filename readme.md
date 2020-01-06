@@ -159,10 +159,20 @@ be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here
 
 ## How to run
 The programming language of the <code>DIRQFAM</code> code is Fortran and the user
-should provide an implementation of the BLAS and LAPACK (version 3.6.0. or higher)
+should provide an implementation of the
+<a href="http://www.netlib.org/blas/">BLAS</a> and
+<a href="http://www.netlib.org/lapack/">LAPACK</a> (version 3.6.0. or higher)
 linear algebra libraries.
+Since the code depends heavily on <code>zgemm</code>, <code>dgemm</code> and
+<code>dgemv</code> subroutines, the user should provide an efficient implementation
+of the BLAS library. We recommend an open source implementation
+<a href="https://www.openblas.net/">OpenBLAS</a>.
+</br>
+
 The code is compiled by standard Makefile build automation which is set to work with
 the <a href="https://gcc.gnu.org/fortran/">GFortran</a> compiler.
+</br>
+
 If the user invokes <code>make run</code>, first an auxiliary code
 will generate <code>dirqfam.par</code> file that contains the relevant information
 about the dimensions of various arrays used in the code followed by the
@@ -170,7 +180,7 @@ compilation of the code which produces the executable file <code>run</code>.
 The code is then executed by invoking the <code>./run</code> command.
 </br>
 Since the dimensions of various arrays used are statically precalculated, the code
-stops if some of the parameters are changed and requires recompilation. This
+won't rerun if some of the parameters are changed (between two runs) and requires recompilation. This
 cumbersome way of using the code will be removed in next upgrades since
 the <code>DIRQFAM</code> code is built upon the legacy code <code>DIRHB</code>
 written in FORTRAN77 (lack of dynamic allocation).
