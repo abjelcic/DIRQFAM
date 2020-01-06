@@ -160,7 +160,7 @@ c-----DD-ME2 parameters
       m_ome   = + 783.000000000000000D0; ![MeV/c^2]
       m_rho   = + 763.000000000000000D0; ![MeV/c^2]
 
-      rho_sat = +   0.152000000000090D0; ![ fm^-3 ]
+      rho_sat = +   0.152000000000000D0; ![ fm^-3 ]
 
 c-----TMR separable pairing parameters
       G_pairing = + 728.000000000D0; ![MeV/fm^3]
