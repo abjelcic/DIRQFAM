@@ -8,7 +8,8 @@ be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
 The corresponding <code>DIRQFAM</code> paper [2]  (DD-ME2) can
 be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
 
-
+Stabile versions of the <code>DIRQFAM</code> code are located at
+<a href="https://github.com/abjelcic/DIRQFAM/releases">releases</a> page. 
 
 
 # How to use
