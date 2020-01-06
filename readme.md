@@ -4,9 +4,9 @@ within the relativistic self-consistent mean-field framework:
 the program DIRQFAM</i>.
 
 The corresponding <code>DIRQFAM</code> paper [1]  (DD-PC1) can
-be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.</br>
+be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
 The corresponding <code>DIRQFAM</code> paper [2]  (DD-ME2) can
-be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.</br>
+be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
 
 
 
@@ -32,7 +32,7 @@ for ground state calculation, while the second part serves as an interface for Q
 <strong>Ground state parameters</strong> (same as in [3])
 
 
-* <code>n0f</code>, <code>n0b</code>:</br>
+* <code>n0f</code>, <code>n0b</code>:<br>
 Number of oscillator shells used in expanding the large component of Dirac spinor
 (small component is expanded in <code>n0f+1</code> shells) and wave functions of meson fields
 respectively. Both <code>n0f</code> and <code>n0b</code> must be even number. Recommended value of
@@ -41,13 +41,13 @@ larger <code>n0f</code> and compare the difference in output to establish whethe
 convergence is satisfying. Recommended value of <code>n0b</code> is at least <code>2(n0f+1)</code>.
 
 
-* <code>beta0</code>, <code>betai</code>:</br>
+* <code>beta0</code>, <code>betai</code>:<br>
 Deformation parameter of the oscillator basis and of the initial Woods-Saxon potentials
 respectively. In order to improve accuracy, these parameters should be close
 to the self-consistent ground state quadrupole deformation.
 
 
-* <code>inin</code>:</br>
+* <code>inin</code>:<br>
 The starting parameters for the initial potentials and initial pairing field respectively.
 If set to <code>1</code>, the code starts with Woods-Saxon as initial guess for the
 potentials and with diagonal pairing field respectively. Otherwise, if set to <code>0</code>,
@@ -60,17 +60,17 @@ has only one character, it should begin with an underscore, eg. <code>_C 12</cod
 <code>_O 16</code> and <code>_U 238</code>.
 
 
-* <code>Init.Gap</code>:</br>
+* <code>Init.Gap</code>:<br>
 Initial pairing gap (in MeV) of diagonal pairing field for protons and neutrons, relevant
 if <code>inin</code> for pairing field is set to <code>1</code>. The default value is 1 MeV.
 
 
-* <code>Force</code>:</br>
+* <code>Force</code>:<br>
 Acronym of the parameter set of the selected energy density functional.
 In current version of the code, <code>DD-PC1</code> and <code>DD-ME2</code> are available.
 
 
-* <code>icstr</code>, <code>betac</code>, <code>cquad</code>:</br>
+* <code>icstr</code>, <code>betac</code>, <code>cquad</code>:<br>
 The quadrupole constraint control parameters. If <code>icstr</code> is set to
 <code>0</code>, the quadrupole constraint is not included. If <code>icstr</code> is
 set to <code>1</code>, then constrained value of expected deformation <code>betac</code>
@@ -85,47 +85,47 @@ should be written in 5 character width after the equality sign. An example of
 <code>dirqfam.dat</code> file is provided and the user should follow the same
 alignment pattern.
 
-</br>
+<br>
 
 
 <strong>QFAM parameters interface</strong>
 
 
-* <code>Calculation type</code>:</br>
+* <code>Calculation type</code>:<br>
 Value <code>0</code>: Free response is calculated for a given range of energies.</br>
 Value <code>1</code>: Self-consistent response is calculated for a given range of energies.</br>
 Value <code>2</code>: Self-consistent response is calculated for a given energy and the
 induced density is printed.
 
 
-* <code>Include Coulomb</code>, <code>Include pairing</code>:</br>
+* <code>Include Coulomb</code>, <code>Include pairing</code>:<br>
 If set to <code>0</code>/<code>1</code>, Coulomb interaction or pairing is omitted/included
 both in ground state and the QFAM calculation respectively.
 
 
-* <code>NGH</code>, <code>NGL</code>:</br>
+* <code>NGH</code>, <code>NGL</code>:<br>
 Number of Gauss-Hermite/Gauss-Laguerre nodes in z>0/r direction respectively.
 Recommended values are at least <code>2(n0f+1)</code>.
 
 
-* <code>J multipolarity</code>, <code>K multipolarity</code>, <code>Isospin</code>:</br>
+* <code>J multipolarity</code>, <code>K multipolarity</code>, <code>Isospin</code>:<br>
 Values of J, K, and T, that define the multipole operator. In the current version,
 J value is restricted to 0 <= J <= 3. Multipolarity K should be 0 <= K <= J.
 <code>Isospin</code> selects isoscalar/isovector excitation if set to
 <code>0</code>/<code>1</code> respectively.
 
 
-* <code>Gamma smear</code>:</br>
+* <code>Gamma smear</code>:<br>
 The smearing width (in MeV) used in the QFAM calculation. Reasonable value is around 0.25-1.00 MeV.
 
 
-* <code>Omega start</code>, <code>Omega end</code>, <code>Delta omega</code>:</br>
+* <code>Omega start</code>, <code>Omega end</code>, <code>Delta omega</code>:<br>
 Parameters (in MeV/hbar) that control the starting point, the ending point and
 the increment of the energy range over which the response is calculated.
 Relevant only if the calculation type flag is set to <code>0</code> or <code>1</code>.
 
 
-* <code>Omega print</code>:</br>
+* <code>Omega print</code>:<br>
 If the user chooses to calculate the response and print the induced density
 for some particular value of energy (calculation type flag set to <code>2</code>),
 this value of energy is also provided in the input file.
@@ -167,18 +167,18 @@ Since the code depends heavily on <code>zgemm</code>, <code>dgemm</code> and
 <code>dgemv</code> subroutines, the user should provide an efficient implementation
 of the BLAS library. We recommend an open source implementation
 <a href="https://www.openblas.net/">OpenBLAS</a>.
-</br>
+<br>
 
 The code is compiled by standard Makefile build automation which is set to work with
 the <a href="https://gcc.gnu.org/fortran/">GFortran</a> compiler.
-</br>
+<br>
 
 If the user invokes <code>make run</code>, first an auxiliary code
 will generate <code>dirqfam.par</code> file that contains the relevant information
 about the dimensions of various arrays used in the code followed by the
 compilation of the code which produces the executable file <code>run</code>.
 The code is then executed by invoking the <code>./run</code> command.
-</br>
+<br>
 Since the dimensions of various arrays used are statically precalculated, the code
 won't rerun if some of the parameters are changed (between two runs) and requires recompilation. This
 cumbersome way of using the code will be removed in next upgrades since
@@ -188,37 +188,24 @@ written in FORTRAN77 (lack of dynamic allocation).
 
 
 
-# Running time benchmark
-Benchmark was done on Intel<sup>®</sup> Xeon<sup>®</sup> CPU X5650 @ 2.67 GHz.
+# Performance benchmark
+Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK.
 
-Test was performed for J = 3, K = 1 excitation of <sup>20</sup>Ne nucleus with
-very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48.</code><br />
+Test was performed on isoscalar octupole J = 3 excitation of <sup>20</sup>Ne nucleus with
+very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48</code><br />.
+The <code>DD-ME2</code> parametrization was used with <code>n0b = 48</code>. 
 
-In fact, running time per iteration and memory used depend only on the
-multipolarity K, number of nodes in Gaussian mesh, number of shells N in
-expansion and number of vectors retained in Broyden's mixing procedure
-(default value is 20).
+In fact, running time per iteration and memory usage of QFAM submodule
+depend only on the multipolarity K, number of nodes in Gaussian mesh,
+number of shells in expansion, type of parametrization used and number
+of vectors retained in Broyden's mixing procedure (default value is 35).
+<br>
+
+The following table shows running time of every QFAM iteration.
+It takes roughly 30-60 iterations for a given excitation energy,
+depending on the self-consistency tolerance.
 
 
-The following table shows running time of subroutines for every QFAM iteration.
-It takes roughly 30-60 iterations for a given excitation energy and it depends on
-many factors, some of which are the nucleus under consideration, smearing parameter,
-vicinity of resonance, density of Gaussian mesh (inaccurate numerical integration
-introduces noise and may perturb convergence of iterations) and tolerance of Broyden's
-iterations. Therefore, within 5-10 minutes, one can get a 14 shells response for
-selected energy. If properly parallelized, provided enough memory and independent
-nodes, within few hours one can obtain full 20 shells response of extremely heavy
-deformed nucleus with very dense Gaussian mesh.
-
-| N shells  | Total time per iteration | Memory used | fam_drhodkappa | fam_ddensdcurr | fam_dpotentials | fam_dh1 | fam_ddelta | fam_broyden |
-| :-------: | :----------------------: | :--------:  | :------------: | :------------: | :-------------: | :-----: | :--------: | :---------: |
-| 8         | 0.86 s                   | 0.5 GiB     | 0.12 s         | 0.41 s         | 0.05 s          | 0.24 s  | 0.01 s     | 0.03 s      | 
-| 10        | 1.87 s                   | 0.8 GiB     | 0.23 s         | 0.88 s         | 0.05 s          | 0.60 s  | 0.03 s     | 0.08 s      | 
-| 12        | 3.79 s                   | 1.5 GiB     | 0.45 s         | 1.80 s         | 0.05 s          | 1.24 s  | 0.07 s     | 0.18 s      | 
-| 14        | 7.38 s                   | 2.5 GiB     | 0.82 s         | 3.54 s         | 0.05 s          | 2.37 s  | 0.14 s     | 0.46 s      | 
-| 16        | 14.02 s                  | 4.3 GiB     | 1.57 s         | 7.10 s         | 0.05 s          | 4.22 s  | 0.27 s     | 0.81 s      | 
-| 18        | 24.49 s                  | 7.1 GiB     | 2.70 s         | 12.57 s        | 0.05 s          | 7.11 s  | 0.60 s     | 1.46 s      | 
-| 20        | 41.03 s                  |11.5 GiB     | 4.75 s         | 21.67 s        | 0.05 s          | 11.37 s | 1.12 s     | 2.07 s      | 
 
 <br>
 The following table depicts the dependence of running time per QFAM iteration on
