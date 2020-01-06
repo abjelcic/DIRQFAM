@@ -190,7 +190,7 @@ written in FORTRAN77 (lack of dynamic allocation).
 
 
 # Performance benchmark
-Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK with OpenBLAS on single-thread.
+Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK machine with OpenBLAS on single-thread.
 
 Test was performed on isoscalar octupole J = 3 excitation of <sup>20</sup>Ne nucleus with
 very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48</code>.
@@ -209,17 +209,18 @@ energy, depending on the self-consistency tolerance.
 
 | <code>n0f</code> | Memory[GiB] | Time[s] (K=0) | Time[s] (K=1) | Time[s] (K=2) | Time[s] (K=3) |
 | :--------------: | :---------: | :-----------: | :-----------: | :-----------: | :-----------: |
-|  6               |             | 0.151         | 0.183         | 0.174         | 0.174         |
-|  8               |             | 0.243         | 0.331         | 0.317         | 0.306         |
-| 10               |             | 0.425         | 0.655         | 0.626         | 0.596         |
-| 12               |             | 0.789         | 1.30          | 1.27          | 1.19          |
-| 14               |             | 1.44          | 2.50          | 2.42          | 2.31          |
-| 16               |             | 2.59          | 4.61          | 4.47          | 4.34          |
-| 18               |             | 4.57          | 8.07          | 7.88          | 7.65          |
-| 20               |             | 7.74          | 13.6          | 13.3          | 13.0          |
-| 22               |             | 12.3          | 21.8          | 21.3          | 21.2          |
-| 24               |             | 19.4          | 34.3          | 33.9          | 33.3          |
+|  6               | 0.98        | 0.151         | 0.183         | 0.174         | 0.174         |
+|  8               | 1.12        | 0.243         | 0.331         | 0.317         | 0.306         |
+| 10               | 1.42        | 0.425         | 0.655         | 0.626         | 0.596         |
+| 12               | 2.03        | 0.789         | 1.30          | 1.27          | 1.19          |
+| 14               | 3.16        | 1.44          | 2.50          | 2.42          | 2.31          |
+| 16               | 5.13        | 2.59          | 4.61          | 4.47          | 4.34          |
+| 18               | 8.39        | 4.57          | 8.07          | 7.88          | 7.65          |
+| 20               | 13.5        | 7.74          | 13.6          | 13.3          | 13.0          |
+| 22               | 21.3        | 12.3          | 21.8          | 21.3          | 21.2          |
+| 24               | 29.8        | 19.4          | 34.3          | 33.9          | 33.3          |
 
+In future releases, memory consumption will be significantly reduced.
 
 
 
