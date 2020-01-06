@@ -153,9 +153,9 @@ set to 2, an additional file <code>rhov.out</code> is generated which contains
 the induced and ground state (vector) density for selected energy. The values printed in the 
 <code>rhov.out</code> file are suitable for visualizing the oscillation of time
 dependent density. An example of animation easily obtainable from <code>rhov.out</code>
-file can be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
+file can be found <a href="https://github.com/abjelcic/Depot/raw/master/anim.zip">here</a>.
 An example of response function profile easily obtainable from <code>strength.out</code> file can
-be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
+be found <a href="https://github.com/abjelcic/Depot/raw/master/resp.zip">here</a>.
 
 
 ## How to run
