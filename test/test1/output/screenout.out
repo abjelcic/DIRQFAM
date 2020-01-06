@@ -7,335 +7,592 @@
   *          and separable pairing         *  
   * -------------------------------------- *  
   *      Niksic, Paar, Vretenar, Ring      *  
-  *          31/ 7/2019/01:51:25           *
+  *           6/ 1/2020/15:31:54           *
   *       Ne  20  N =  10  Z =  10
-  *                DD-PC1    
+  *                DD-ME2    
   ******************************************  
   1.It. si =   0.000000  E/A =   0.000 R =   0.000 b =   0.000  mix = 0.50
-  2.It. si =  82.192028  E/A =  -7.090 R =   2.934 b =   0.662  mix = 0.50
-  3.It. si =  54.009559  E/A =  -7.203 R =   2.916 b =   0.631  mix = 0.50
-  4.It. si =  26.158853  E/A =  -7.240 R =   2.895 b =   0.596  mix = 0.50
-  5.It. si =   5.621714  E/A =  -7.253 R =   2.875 b =   0.560  mix = 0.50
-  6.It. si =   2.285331  E/A =  -7.254 R =   2.868 b =   0.538  mix = 0.50
-  7.It. si =   0.859683  E/A =  -7.253 R =   2.865 b =   0.528  mix = 0.50
-  8.It. si =   0.273761  E/A =  -7.253 R =   2.863 b =   0.524  mix = 0.50
-  9.It. si =   0.124142  E/A =  -7.253 R =   2.863 b =   0.523  mix = 0.50
- 10.It. si =   0.086423  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 11.It. si =   0.024940  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 12.It. si =   0.008461  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 13.It. si =   0.004345  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 14.It. si =   0.003667  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 15.It. si =   0.002929  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 16.It. si =   0.001484  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 17.It. si =   0.000815  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 18.It. si =   0.000651  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 19.It. si =   0.000392  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 20.It. si =   0.000529  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 21.It. si =   0.000049  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 22.It. si =   0.000102  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 23.It. si =   0.000011  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 24.It. si =   0.000007  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 25.It. si =   0.000004  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- Ne  20: Iteration converged after  25 steps   si =      0.0000001352
+  2.It. si =  71.065081  E/A =  -7.005 R =   2.968 b =   0.714  mix = 0.50
+  3.It. si =  51.036363  E/A =  -7.173 R =   2.941 b =   0.672  mix = 0.50
+  4.It. si =  30.982761  E/A =  -7.273 R =   2.908 b =   0.626  mix = 0.50
+  5.It. si =  12.329271  E/A =  -7.312 R =   2.874 b =   0.579  mix = 0.50
+  6.It. si =   2.934755  E/A =  -7.316 R =   2.851 b =   0.547  mix = 0.50
+  7.It. si =   0.684374  E/A =  -7.316 R =   2.854 b =   0.548  mix = 0.50
+  8.It. si =   0.241751  E/A =  -7.316 R =   2.852 b =   0.545  mix = 0.50
+  9.It. si =   0.226137  E/A =  -7.316 R =   2.851 b =   0.545  mix = 0.50
+ 10.It. si =   0.258545  E/A =  -7.316 R =   2.851 b =   0.547  mix = 0.50
+ 11.It. si =   0.099411  E/A =  -7.316 R =   2.851 b =   0.547  mix = 0.50
+ 12.It. si =   0.075437  E/A =  -7.316 R =   2.852 b =   0.547  mix = 0.50
+ 13.It. si =   0.036158  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 14.It. si =   0.021219  E/A =  -7.316 R =   2.852 b =   0.548  mix = 0.50
+ 15.It. si =   0.056230  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 16.It. si =   0.014806  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 17.It. si =   0.004516  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 18.It. si =   0.000661  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 19.It. si =   0.000345  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 20.It. si =   0.000243  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 21.It. si =   0.000188  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 22.It. si =   0.000114  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 23.It. si =   0.000020  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 24.It. si =   0.000005  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ 25.It. si =   0.000001  E/A =  -7.316 R =   2.852 b =   0.549  mix = 0.50
+ Ne  20: Iteration converged after  25 steps   si =      0.0000008566
  ****** END ITER ************************************
-                                               
-                                               
-                                               
-  *******************************************  
-  *      Relativistic Quasiparticle RPA     *  
-  *           Simplex-y Basis               *  
-  *                                         *  
-  *   Finite Amplitude Method Calculation   *  
-  *         with Density-Dependent          *  
-  *          Point-Coupling Force           *  
-  *         and Separable Pairing           *  
-  * --------------------------------------- *  
-  *                                         *  
-  *           A.Bjelcic, T.Niksic           *  
-  *                                         *  
-  *******************************************  
-                                               
-Initializing FAM.
+                                                
+                                                
+                                                
+  ********************************************  
+  *       Relativistic Quasiparticle RPA     *  
+  *            Simplex-y Basis               *  
+  *                                          *  
+  *   Finite Amplitude Method Calculation    *  
+  *          with Density-Dependent          *  
+  *  Meson-Exchange or Point-Coupling Force  *  
+  *          and Separable Pairing           *  
+  * ---------------------------------------- *  
+  *                                          *  
+  *            A.Bjelcic, T.Niksic           *  
+  *                                          *  
+  ********************************************  
+                                                
+Initializing QFAM submodule.
  
-START ITERATION ---------------------> omega =  5.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error = **********                             |
-  3.Iteration, error =    9.82653                             |
-  4.Iteration, error =    2.37474                             |
-  5.Iteration, error =    0.47628                             |
-  6.Iteration, error =    0.42097                             |
-  7.Iteration, error =    0.19651                             |
-  8.Iteration, error =    0.08370                             |
-  9.Iteration, error =    0.08078                             |
- 10.Iteration, error =    0.07367                             |
- 11.Iteration, error =    0.05456                             |
- 12.Iteration, error =    0.03801                             |
- 13.Iteration, error =    0.01247                             |
- 14.Iteration, error =    0.00239                             |
- 15.Iteration, error =    0.00133                             |
- 16.Iteration, error =    0.00065                             |
- 17.Iteration, error =    0.00018                             |
- 18.Iteration, error =    0.00007                             |
- 19.Iteration, error =    0.00004                             |
- 20.Iteration, error =    0.00002                             |
-ITERATION CONVERGED AFTER  20 STEPS, FINAL error =  0.66189E-05
+START ITERATIONS ---------------------> omega =  5.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .123205962E+01 |
+  2.Iteration, error = **************  S(f,w) = .110416416E+01 |
+  3.Iteration, error =    8.338581299  S(f,w) = .802215179E+00 |
+  4.Iteration, error =    1.251315601  S(f,w) = .590419494E+00 |
+  5.Iteration, error =    0.248556355  S(f,w) = .629795958E+00 |
+  6.Iteration, error =    0.174236399  S(f,w) = .625027434E+00 |
+  7.Iteration, error =    0.151481492  S(f,w) = .625125739E+00 |
+  8.Iteration, error =    0.149884503  S(f,w) = .624921146E+00 |
+  9.Iteration, error =    0.152319166  S(f,w) = .630577657E+00 |
+ 10.Iteration, error =    0.112883282  S(f,w) = .593172448E+00 |
+ 11.Iteration, error =    0.053746465  S(f,w) = .631966630E+00 |
+ 12.Iteration, error =    0.036856123  S(f,w) = .643014764E+00 |
+ 13.Iteration, error =    0.032471414  S(f,w) = .645970128E+00 |
+ 14.Iteration, error =    0.032301553  S(f,w) = .584828815E+00 |
+ 15.Iteration, error =    0.020959349  S(f,w) = .637515327E+00 |
+ 16.Iteration, error =    0.011479718  S(f,w) = .661705259E+00 |
+ 17.Iteration, error =    0.007559444  S(f,w) = .605771796E+00 |
+ 18.Iteration, error =    0.004216204  S(f,w) = .639890853E+00 |
+ 19.Iteration, error =    0.001582691  S(f,w) = .640707712E+00 |
+ 20.Iteration, error =    0.000848768  S(f,w) = .635954243E+00 |
+ 21.Iteration, error =    0.000277159  S(f,w) = .637048952E+00 |
+ 22.Iteration, error =    0.000075274  S(f,w) = .636995684E+00 |
+ 23.Iteration, error =    0.000024854  S(f,w) = .636945583E+00 |
+ 24.Iteration, error =    0.000008975  S(f,w) = .636947859E+00 |
+ 25.Iteration, error =    0.000002779  S(f,w) = .636948163E+00 |
+ 26.Iteration, error =    0.000002926  S(f,w) = .636948163E+00 |
+ 27.Iteration, error =    0.000002937  S(f,w) = .636948174E+00 |
+ 28.Iteration, error =    0.000002985  S(f,w) = .636948785E+00 |
+ 29.Iteration, error =    0.000000574  S(f,w) = .636948431E+00 |
+ 30.Iteration, error =    0.000000212  S(f,w) = .636948314E+00 |
+ 31.Iteration, error =    0.000000071  S(f,w) = .636948425E+00 |
+ 32.Iteration, error =    0.000000020  S(f,w) = .636948432E+00 |
+ 33.Iteration, error =    0.000000007  S(f,w) = .636948429E+00 |
+ 34.Iteration, error =    0.000000003  S(f,w) = .636948421E+00 |
+ITERATIONS CONVERGED AFTER  34 STEPS, FINAL error =  0.73911E-09
+
  
+START ITERATIONS ---------------------> omega = 10.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .328952013E+01 |
+  2.Iteration, error =    0.277602602  S(f,w) = .309914149E+01 |
+  3.Iteration, error =    0.272548552  S(f,w) = .264299765E+01 |
+  4.Iteration, error =    0.280735293  S(f,w) = .274245803E+01 |
+  5.Iteration, error =    0.272436841  S(f,w) = .252939181E+01 |
+  6.Iteration, error =    0.239602728  S(f,w) = .224575349E+01 |
+  7.Iteration, error =    0.225374851  S(f,w) = .229676551E+01 |
+  8.Iteration, error =    0.222218815  S(f,w) = .227340533E+01 |
+  9.Iteration, error =    0.223375102  S(f,w) = .240071217E+01 |
+ 10.Iteration, error =    0.213014764  S(f,w) = .249761769E+01 |
+ 11.Iteration, error =    0.132051440  S(f,w) = .202093803E+01 |
+ 12.Iteration, error =    0.076684063  S(f,w) = .227953163E+01 |
+ 13.Iteration, error =    0.058864848  S(f,w) = .227227029E+01 |
+ 14.Iteration, error =    0.049977578  S(f,w) = .213247167E+01 |
+ 15.Iteration, error =    0.041952431  S(f,w) = .246925374E+01 |
+ 16.Iteration, error =    0.024252546  S(f,w) = .237550846E+01 |
+ 17.Iteration, error =    0.011263732  S(f,w) = .238980770E+01 |
+ 18.Iteration, error =    0.008262250  S(f,w) = .242541106E+01 |
+ 19.Iteration, error =    0.008167415  S(f,w) = .242346783E+01 |
+ 20.Iteration, error =    0.008205542  S(f,w) = .243805291E+01 |
+ 21.Iteration, error =    0.005840461  S(f,w) = .242145149E+01 |
+ 22.Iteration, error =    0.002263113  S(f,w) = .242640564E+01 |
+ 23.Iteration, error =    0.001163577  S(f,w) = .242981214E+01 |
+ 24.Iteration, error =    0.000719516  S(f,w) = .242939479E+01 |
+ 25.Iteration, error =    0.000520811  S(f,w) = .243085897E+01 |
+ 26.Iteration, error =    0.000246482  S(f,w) = .243013944E+01 |
+ 27.Iteration, error =    0.000093354  S(f,w) = .243019850E+01 |
+ 28.Iteration, error =    0.000057494  S(f,w) = .243051681E+01 |
+ 29.Iteration, error =    0.000016569  S(f,w) = .243045437E+01 |
+ 30.Iteration, error =    0.000004604  S(f,w) = .243045764E+01 |
+ 31.Iteration, error =    0.000002378  S(f,w) = .243046414E+01 |
+ 32.Iteration, error =    0.000000647  S(f,w) = .243046449E+01 |
+ 33.Iteration, error =    0.000000222  S(f,w) = .243046423E+01 |
+ 34.Iteration, error =    0.000000121  S(f,w) = .243046412E+01 |
+ 35.Iteration, error =    0.000000066  S(f,w) = .243046406E+01 |
+ 36.Iteration, error =    0.000000038  S(f,w) = .243046401E+01 |
+ 37.Iteration, error =    0.000000018  S(f,w) = .243046403E+01 |
+ 38.Iteration, error =    0.000000008  S(f,w) = .243046403E+01 |
+ 39.Iteration, error =    0.000000003  S(f,w) = .243046404E+01 |
+ 40.Iteration, error =    0.000000002  S(f,w) = .243046404E+01 |
+ITERATIONS CONVERGED AFTER  40 STEPS, FINAL error =  0.60551E-09
+
  
-START ITERATION ---------------------> omega = 10.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    0.30916                             |
-  3.Iteration, error =    0.32035                             |
-  4.Iteration, error =    0.35178                             |
-  5.Iteration, error =    0.21610                             |
-  6.Iteration, error =    0.24178                             |
-  7.Iteration, error =    0.21105                             |
-  8.Iteration, error =    0.17057                             |
-  9.Iteration, error =    0.15417                             |
- 10.Iteration, error =    0.13557                             |
- 11.Iteration, error =    0.05741                             |
- 12.Iteration, error =    0.03834                             |
- 13.Iteration, error =    0.02550                             |
- 14.Iteration, error =    0.01420                             |
- 15.Iteration, error =    0.00478                             |
- 16.Iteration, error =    0.00306                             |
- 17.Iteration, error =    0.00210                             |
- 18.Iteration, error =    0.00141                             |
- 19.Iteration, error =    0.00071                             |
- 20.Iteration, error =    0.00038                             |
- 21.Iteration, error =    0.00026                             |
- 22.Iteration, error =    0.00015                             |
- 23.Iteration, error =    0.00007                             |
- 24.Iteration, error =    0.00002                             |
- 25.Iteration, error =    0.00002                             |
-ITERATION CONVERGED AFTER  25 STEPS, FINAL error =  0.87875E-05
+START ITERATIONS ---------------------> omega = 15.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .192985906E+02 |
+  2.Iteration, error =    1.430467625  S(f,w) = .168573764E+02 |
+  3.Iteration, error =    1.470863858  S(f,w) = .116534083E+02 |
+  4.Iteration, error =    1.730171309  S(f,w) = .124281044E+02 |
+  5.Iteration, error =    1.399988866  S(f,w) = .128012274E+02 |
+  6.Iteration, error =    1.251242986  S(f,w) = .120328868E+02 |
+  7.Iteration, error =    1.014436780  S(f,w) = .127118825E+02 |
+  8.Iteration, error =    1.089610518  S(f,w) = .875492625E+01 |
+  9.Iteration, error =    1.259524273  S(f,w) = .890996494E+01 |
+ 10.Iteration, error =    1.270559764  S(f,w) = .497500082E+01 |
+ 11.Iteration, error =    0.694304404  S(f,w) = .946448220E+01 |
+ 12.Iteration, error =    0.429578225  S(f,w) = .892955031E+01 |
+ 13.Iteration, error =    0.387366683  S(f,w) = .921503321E+01 |
+ 14.Iteration, error =    0.448497289  S(f,w) = .731253340E+01 |
+ 15.Iteration, error =    0.469405455  S(f,w) = .793979891E+01 |
+ 16.Iteration, error =    0.445419996  S(f,w) = .813598103E+01 |
+ 17.Iteration, error =    0.447358452  S(f,w) = .867765390E+01 |
+ 18.Iteration, error =    0.205458718  S(f,w) = .847562601E+01 |
+ 19.Iteration, error =    0.050190591  S(f,w) = .885468532E+01 |
+ 20.Iteration, error =    0.013987287  S(f,w) = .881234923E+01 |
+ 21.Iteration, error =    0.006296624  S(f,w) = .880390312E+01 |
+ 22.Iteration, error =    0.004560946  S(f,w) = .884737989E+01 |
+ 23.Iteration, error =    0.001238744  S(f,w) = .883851840E+01 |
+ 24.Iteration, error =    0.000541184  S(f,w) = .883954301E+01 |
+ 25.Iteration, error =    0.000413870  S(f,w) = .884128552E+01 |
+ 26.Iteration, error =    0.000293265  S(f,w) = .884057525E+01 |
+ 27.Iteration, error =    0.000254513  S(f,w) = .884327848E+01 |
+ 28.Iteration, error =    0.000086625  S(f,w) = .884287953E+01 |
+ 29.Iteration, error =    0.000027323  S(f,w) = .884270335E+01 |
+ 30.Iteration, error =    0.000013129  S(f,w) = .884279682E+01 |
+ 31.Iteration, error =    0.000003239  S(f,w) = .884278576E+01 |
+ 32.Iteration, error =    0.000002487  S(f,w) = .884278441E+01 |
+ 33.Iteration, error =    0.000002326  S(f,w) = .884279056E+01 |
+ 34.Iteration, error =    0.000001924  S(f,w) = .884277906E+01 |
+ 35.Iteration, error =    0.000000801  S(f,w) = .884278531E+01 |
+ 36.Iteration, error =    0.000000372  S(f,w) = .884278672E+01 |
+ 37.Iteration, error =    0.000000183  S(f,w) = .884278568E+01 |
+ 38.Iteration, error =    0.000000049  S(f,w) = .884278591E+01 |
+ 39.Iteration, error =    0.000000015  S(f,w) = .884278597E+01 |
+ 40.Iteration, error =    0.000000010  S(f,w) = .884278604E+01 |
+ 41.Iteration, error =    0.000000003  S(f,w) = .884278607E+01 |
+ITERATIONS CONVERGED AFTER  41 STEPS, FINAL error =  0.63137E-09
+
  
+START ITERATIONS ---------------------> omega = 20.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .121720331E+03 |
+  2.Iteration, error =    4.242746819  S(f,w) = .131670955E+03 |
+  3.Iteration, error =    3.808371146  S(f,w) = .161025521E+03 |
+  4.Iteration, error =    3.781288845  S(f,w) = .160967728E+03 |
+  5.Iteration, error =    3.782409865  S(f,w) = .159912353E+03 |
+  6.Iteration, error =    2.626028973  S(f,w) = .141912484E+03 |
+  7.Iteration, error =    2.588970423  S(f,w) = .959579186E+02 |
+  8.Iteration, error =    1.413420786  S(f,w) = .103720876E+03 |
+  9.Iteration, error =    0.972589773  S(f,w) = .149023147E+03 |
+ 10.Iteration, error =    0.818506201  S(f,w) = .138782293E+03 |
+ 11.Iteration, error =    0.610320259  S(f,w) = .148750668E+03 |
+ 12.Iteration, error =    0.491652912  S(f,w) = .162747459E+03 |
+ 13.Iteration, error =    0.342398537  S(f,w) = .168335793E+03 |
+ 14.Iteration, error =    0.299828238  S(f,w) = .163374209E+03 |
+ 15.Iteration, error =    0.308352234  S(f,w) = .159259238E+03 |
+ 16.Iteration, error =    0.123567620  S(f,w) = .151204865E+03 |
+ 17.Iteration, error =    0.050065813  S(f,w) = .145650933E+03 |
+ 18.Iteration, error =    0.052435067  S(f,w) = .146956249E+03 |
+ 19.Iteration, error =    0.015636230  S(f,w) = .147756791E+03 |
+ 20.Iteration, error =    0.008020560  S(f,w) = .148081134E+03 |
+ 21.Iteration, error =    0.004923143  S(f,w) = .148043933E+03 |
+ 22.Iteration, error =    0.004524638  S(f,w) = .147837519E+03 |
+ 23.Iteration, error =    0.001270508  S(f,w) = .147894007E+03 |
+ 24.Iteration, error =    0.000493905  S(f,w) = .147924470E+03 |
+ 25.Iteration, error =    0.000406783  S(f,w) = .147939709E+03 |
+ 26.Iteration, error =    0.000162962  S(f,w) = .147933767E+03 |
+ 27.Iteration, error =    0.000070537  S(f,w) = .147932987E+03 |
+ 28.Iteration, error =    0.000068528  S(f,w) = .147933573E+03 |
+ 29.Iteration, error =    0.000058000  S(f,w) = .147932828E+03 |
+ 30.Iteration, error =    0.000060256  S(f,w) = .147934182E+03 |
+ 31.Iteration, error =    0.000021122  S(f,w) = .147934038E+03 |
+ 32.Iteration, error =    0.000015880  S(f,w) = .147933882E+03 |
+ 33.Iteration, error =    0.000014243  S(f,w) = .147933870E+03 |
+ 34.Iteration, error =    0.000014230  S(f,w) = .147933709E+03 |
+ 35.Iteration, error =    0.000010199  S(f,w) = .147933819E+03 |
+ 36.Iteration, error =    0.000006829  S(f,w) = .147933870E+03 |
+ 37.Iteration, error =    0.000003599  S(f,w) = .147933744E+03 |
+ 38.Iteration, error =    0.000001041  S(f,w) = .147933765E+03 |
+ 39.Iteration, error =    0.000000545  S(f,w) = .147933772E+03 |
+ 40.Iteration, error =    0.000000293  S(f,w) = .147933767E+03 |
+ 41.Iteration, error =    0.000000174  S(f,w) = .147933763E+03 |
+ 42.Iteration, error =    0.000000036  S(f,w) = .147933762E+03 |
+ 43.Iteration, error =    0.000000026  S(f,w) = .147933763E+03 |
+ 44.Iteration, error =    0.000000007  S(f,w) = .147933763E+03 |
+ 45.Iteration, error =    0.000000004  S(f,w) = .147933763E+03 |
+ 46.Iteration, error =    0.000000002  S(f,w) = .147933763E+03 |
+ 47.Iteration, error =    0.000000002  S(f,w) = .147933763E+03 |
+ITERATIONS CONVERGED AFTER  47 STEPS, FINAL error =  0.46225E-09
+
  
-START ITERATION ---------------------> omega = 15.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    0.93183                             |
-  3.Iteration, error =    0.94291                             |
-  4.Iteration, error =    1.01541                             |
-  5.Iteration, error =    0.98739                             |
-  6.Iteration, error =    1.09003                             |
-  7.Iteration, error =    1.15508                             |
-  8.Iteration, error =    1.20849                             |
-  9.Iteration, error =    1.08064                             |
- 10.Iteration, error =    0.46776                             |
- 11.Iteration, error =    0.40522                             |
- 12.Iteration, error =    0.35362                             |
- 13.Iteration, error =    0.37887                             |
- 14.Iteration, error =    0.40289                             |
- 15.Iteration, error =    0.31735                             |
- 16.Iteration, error =    0.10734                             |
- 17.Iteration, error =    0.03944                             |
- 18.Iteration, error =    0.01703                             |
- 19.Iteration, error =    0.00850                             |
- 20.Iteration, error =    0.00436                             |
- 21.Iteration, error =    0.00196                             |
- 22.Iteration, error =    0.00107                             |
- 23.Iteration, error =    0.00036                             |
- 24.Iteration, error =    0.00015                             |
- 25.Iteration, error =    0.00008                             |
- 26.Iteration, error =    0.00005                             |
- 27.Iteration, error =    0.00002                             |
-ITERATION CONVERGED AFTER  27 STEPS, FINAL error =  0.94494E-05
+START ITERATIONS ---------------------> omega = 25.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .364015877E+02 |
+  2.Iteration, error =    1.689630520  S(f,w) = .398271479E+02 |
+  3.Iteration, error =    1.592508121  S(f,w) = .428880657E+02 |
+  4.Iteration, error =    2.761404755  S(f,w) = .389456152E+02 |
+  5.Iteration, error =    3.031752420  S(f,w) = .351561521E+02 |
+  6.Iteration, error =    2.159274176  S(f,w) = .562000954E+02 |
+  7.Iteration, error =    1.024149406  S(f,w) = .579372903E+02 |
+  8.Iteration, error =    0.868063904  S(f,w) = .425644278E+02 |
+  9.Iteration, error =    0.498709257  S(f,w) = .422686056E+02 |
+ 10.Iteration, error =    0.294180200  S(f,w) = .526437181E+02 |
+ 11.Iteration, error =    0.332585294  S(f,w) = .536491972E+02 |
+ 12.Iteration, error =    0.215227142  S(f,w) = .551762870E+02 |
+ 13.Iteration, error =    0.213216748  S(f,w) = .522050458E+02 |
+ 14.Iteration, error =    0.065120525  S(f,w) = .518388082E+02 |
+ 15.Iteration, error =    0.048157790  S(f,w) = .523402113E+02 |
+ 16.Iteration, error =    0.040379088  S(f,w) = .523883814E+02 |
+ 17.Iteration, error =    0.017091176  S(f,w) = .524836546E+02 |
+ 18.Iteration, error =    0.007732222  S(f,w) = .523748491E+02 |
+ 19.Iteration, error =    0.004187346  S(f,w) = .522625550E+02 |
+ 20.Iteration, error =    0.002048107  S(f,w) = .523037398E+02 |
+ 21.Iteration, error =    0.000864512  S(f,w) = .523128744E+02 |
+ 22.Iteration, error =    0.000368322  S(f,w) = .523153078E+02 |
+ 23.Iteration, error =    0.000298384  S(f,w) = .523155971E+02 |
+ 24.Iteration, error =    0.000289704  S(f,w) = .523150721E+02 |
+ 25.Iteration, error =    0.000275831  S(f,w) = .523194204E+02 |
+ 26.Iteration, error =    0.000200091  S(f,w) = .523169956E+02 |
+ 27.Iteration, error =    0.000088273  S(f,w) = .523145056E+02 |
+ 28.Iteration, error =    0.000043704  S(f,w) = .523137443E+02 |
+ 29.Iteration, error =    0.000013596  S(f,w) = .523138159E+02 |
+ 30.Iteration, error =    0.000006968  S(f,w) = .523138749E+02 |
+ 31.Iteration, error =    0.000005726  S(f,w) = .523138781E+02 |
+ 32.Iteration, error =    0.000005112  S(f,w) = .523138806E+02 |
+ 33.Iteration, error =    0.000005143  S(f,w) = .523138833E+02 |
+ 34.Iteration, error =    0.000003738  S(f,w) = .523138924E+02 |
+ 35.Iteration, error =    0.000001413  S(f,w) = .523138883E+02 |
+ 36.Iteration, error =    0.000000431  S(f,w) = .523138883E+02 |
+ 37.Iteration, error =    0.000000231  S(f,w) = .523138886E+02 |
+ 38.Iteration, error =    0.000000031  S(f,w) = .523138888E+02 |
+ 39.Iteration, error =    0.000000017  S(f,w) = .523138889E+02 |
+ 40.Iteration, error =    0.000000015  S(f,w) = .523138889E+02 |
+ 41.Iteration, error =    0.000000012  S(f,w) = .523138890E+02 |
+ 42.Iteration, error =    0.000000006  S(f,w) = .523138890E+02 |
+ 43.Iteration, error =    0.000000002  S(f,w) = .523138890E+02 |
+ 44.Iteration, error =    0.000000001  S(f,w) = .523138890E+02 |
+ITERATIONS CONVERGED AFTER  44 STEPS, FINAL error =  0.29361E-09
+
  
+START ITERATIONS ---------------------> omega = 30.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .535079712E+02 |
+  2.Iteration, error =    1.388059643  S(f,w) = .508816005E+02 |
+  3.Iteration, error =    1.366904784  S(f,w) = .438408483E+02 |
+  4.Iteration, error =    1.240035523  S(f,w) = .349993962E+02 |
+  5.Iteration, error =    0.941059785  S(f,w) = .334733529E+02 |
+  6.Iteration, error =    0.559361321  S(f,w) = .306928580E+02 |
+  7.Iteration, error =    0.345380999  S(f,w) = .295217368E+02 |
+  8.Iteration, error =    0.128899804  S(f,w) = .299845398E+02 |
+  9.Iteration, error =    0.090975842  S(f,w) = .301440805E+02 |
+ 10.Iteration, error =    0.061721175  S(f,w) = .298794176E+02 |
+ 11.Iteration, error =    0.033059628  S(f,w) = .299642368E+02 |
+ 12.Iteration, error =    0.014661121  S(f,w) = .301862830E+02 |
+ 13.Iteration, error =    0.006035701  S(f,w) = .302327253E+02 |
+ 14.Iteration, error =    0.003583301  S(f,w) = .302803251E+02 |
+ 15.Iteration, error =    0.002351842  S(f,w) = .303420252E+02 |
+ 16.Iteration, error =    0.001033816  S(f,w) = .303368047E+02 |
+ 17.Iteration, error =    0.000487946  S(f,w) = .303415789E+02 |
+ 18.Iteration, error =    0.000197907  S(f,w) = .303442667E+02 |
+ 19.Iteration, error =    0.000098097  S(f,w) = .303438632E+02 |
+ 20.Iteration, error =    0.000053334  S(f,w) = .303442352E+02 |
+ 21.Iteration, error =    0.000025114  S(f,w) = .303444515E+02 |
+ 22.Iteration, error =    0.000015875  S(f,w) = .303447623E+02 |
+ 23.Iteration, error =    0.000007464  S(f,w) = .303451064E+02 |
+ 24.Iteration, error =    0.000002784  S(f,w) = .303450714E+02 |
+ 25.Iteration, error =    0.000001329  S(f,w) = .303450497E+02 |
+ 26.Iteration, error =    0.000000895  S(f,w) = .303450462E+02 |
+ 27.Iteration, error =    0.000000683  S(f,w) = .303450452E+02 |
+ 28.Iteration, error =    0.000000617  S(f,w) = .303450423E+02 |
+ 29.Iteration, error =    0.000000242  S(f,w) = .303450413E+02 |
+ 30.Iteration, error =    0.000000165  S(f,w) = .303450410E+02 |
+ 31.Iteration, error =    0.000000159  S(f,w) = .303450411E+02 |
+ 32.Iteration, error =    0.000000159  S(f,w) = .303450411E+02 |
+ 33.Iteration, error =    0.000000157  S(f,w) = .303450410E+02 |
+ 34.Iteration, error =    0.000000150  S(f,w) = .303450410E+02 |
+ 35.Iteration, error =    0.000000150  S(f,w) = .303450409E+02 |
+ 36.Iteration, error =    0.000000150  S(f,w) = .303450409E+02 |
+ 37.Iteration, error =    0.000000147  S(f,w) = .303450397E+02 |
+ 38.Iteration, error =    0.000000122  S(f,w) = .303450398E+02 |
+ 39.Iteration, error =    0.000000096  S(f,w) = .303450397E+02 |
+ 40.Iteration, error =    0.000000069  S(f,w) = .303450401E+02 |
+ 41.Iteration, error =    0.000000051  S(f,w) = .303450409E+02 |
+ 42.Iteration, error =    0.000000036  S(f,w) = .303450410E+02 |
+ 43.Iteration, error =    0.000000021  S(f,w) = .303450416E+02 |
+ 44.Iteration, error =    0.000000010  S(f,w) = .303450417E+02 |
+ 45.Iteration, error =    0.000000004  S(f,w) = .303450416E+02 |
+ 46.Iteration, error =    0.000000002  S(f,w) = .303450416E+02 |
+ 47.Iteration, error =    0.000000002  S(f,w) = .303450416E+02 |
+ 48.Iteration, error =    0.000000002  S(f,w) = .303450416E+02 |
+ 49.Iteration, error =    0.000000001  S(f,w) = .303450416E+02 |
+ 50.Iteration, error =    0.000000001  S(f,w) = .303450416E+02 |
+ 51.Iteration, error =    0.000000001  S(f,w) = .303450416E+02 |
+ITERATIONS CONVERGED AFTER  51 STEPS, FINAL error =  0.94451E-09
+
  
-START ITERATION ---------------------> omega = 20.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    1.22236                             |
-  3.Iteration, error =    1.19479                             |
-  4.Iteration, error =    1.54015                             |
-  5.Iteration, error =    1.56076                             |
-  6.Iteration, error =    1.37581                             |
-  7.Iteration, error =    1.44933                             |
-  8.Iteration, error =    0.68435                             |
-  9.Iteration, error =    0.26095                             |
- 10.Iteration, error =    0.27428                             |
- 11.Iteration, error =    0.31446                             |
- 12.Iteration, error =    0.30940                             |
- 13.Iteration, error =    0.24971                             |
- 14.Iteration, error =    0.10974                             |
- 15.Iteration, error =    0.05077                             |
- 16.Iteration, error =    0.03912                             |
- 17.Iteration, error =    0.02943                             |
- 18.Iteration, error =    0.01378                             |
- 19.Iteration, error =    0.00776                             |
- 20.Iteration, error =    0.00520                             |
- 21.Iteration, error =    0.00476                             |
- 22.Iteration, error =    0.00446                             |
- 23.Iteration, error =    0.00364                             |
- 24.Iteration, error =    0.00308                             |
- 25.Iteration, error =    0.00258                             |
- 26.Iteration, error =    0.00145                             |
- 27.Iteration, error =    0.00079                             |
- 28.Iteration, error =    0.00056                             |
- 29.Iteration, error =    0.00029                             |
- 30.Iteration, error =    0.00024                             |
- 31.Iteration, error =    0.00011                             |
- 32.Iteration, error =    0.00007                             |
- 33.Iteration, error =    0.00004                             |
- 34.Iteration, error =    0.00003                             |
-ITERATION CONVERGED AFTER  34 STEPS, FINAL error =  0.78953E-05
+START ITERATIONS ---------------------> omega = 35.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .905558234E+02 |
+  2.Iteration, error =    2.910423063  S(f,w) = .100178461E+03 |
+  3.Iteration, error =    2.701516962  S(f,w) = .125010899E+03 |
+  4.Iteration, error =    1.669756796  S(f,w) = .167281791E+03 |
+  5.Iteration, error =    0.441400192  S(f,w) = .116737835E+03 |
+  6.Iteration, error =    0.371892128  S(f,w) = .125380948E+03 |
+  7.Iteration, error =    0.201309244  S(f,w) = .135899544E+03 |
+  8.Iteration, error =    0.092554418  S(f,w) = .132166710E+03 |
+  9.Iteration, error =    0.047724790  S(f,w) = .129354257E+03 |
+ 10.Iteration, error =    0.037849819  S(f,w) = .127299629E+03 |
+ 11.Iteration, error =    0.021743161  S(f,w) = .126548184E+03 |
+ 12.Iteration, error =    0.018349767  S(f,w) = .125437595E+03 |
+ 13.Iteration, error =    0.013639853  S(f,w) = .125202848E+03 |
+ 14.Iteration, error =    0.011374188  S(f,w) = .125335086E+03 |
+ 15.Iteration, error =    0.008702687  S(f,w) = .125508195E+03 |
+ 16.Iteration, error =    0.007639774  S(f,w) = .125053684E+03 |
+ 17.Iteration, error =    0.002107103  S(f,w) = .125177810E+03 |
+ 18.Iteration, error =    0.001475623  S(f,w) = .125369227E+03 |
+ 19.Iteration, error =    0.000882918  S(f,w) = .125404719E+03 |
+ 20.Iteration, error =    0.000408989  S(f,w) = .125387385E+03 |
+ 21.Iteration, error =    0.000230115  S(f,w) = .125403476E+03 |
+ 22.Iteration, error =    0.000139011  S(f,w) = .125425347E+03 |
+ 23.Iteration, error =    0.000054234  S(f,w) = .125428573E+03 |
+ 24.Iteration, error =    0.000018520  S(f,w) = .125428398E+03 |
+ 25.Iteration, error =    0.000010374  S(f,w) = .125428325E+03 |
+ 26.Iteration, error =    0.000005943  S(f,w) = .125428641E+03 |
+ 27.Iteration, error =    0.000001412  S(f,w) = .125428671E+03 |
+ 28.Iteration, error =    0.000000751  S(f,w) = .125428685E+03 |
+ 29.Iteration, error =    0.000000466  S(f,w) = .125428696E+03 |
+ 30.Iteration, error =    0.000000166  S(f,w) = .125428697E+03 |
+ 31.Iteration, error =    0.000000077  S(f,w) = .125428699E+03 |
+ 32.Iteration, error =    0.000000052  S(f,w) = .125428699E+03 |
+ 33.Iteration, error =    0.000000034  S(f,w) = .125428700E+03 |
+ 34.Iteration, error =    0.000000022  S(f,w) = .125428701E+03 |
+ 35.Iteration, error =    0.000000007  S(f,w) = .125428701E+03 |
+ 36.Iteration, error =    0.000000005  S(f,w) = .125428701E+03 |
+ 37.Iteration, error =    0.000000005  S(f,w) = .125428701E+03 |
+ 38.Iteration, error =    0.000000005  S(f,w) = .125428701E+03 |
+ 39.Iteration, error =    0.000000005  S(f,w) = .125428701E+03 |
+ 40.Iteration, error =    0.000000005  S(f,w) = .125428701E+03 |
+ 41.Iteration, error =    0.000000004  S(f,w) = .125428701E+03 |
+ 42.Iteration, error =    0.000000002  S(f,w) = .125428701E+03 |
+ITERATIONS CONVERGED AFTER  42 STEPS, FINAL error =  0.74096E-09
+
  
+START ITERATIONS ---------------------> omega = 40.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .118696610E+03 |
+  2.Iteration, error =    1.375415104  S(f,w) = .111283193E+03 |
+  3.Iteration, error =    1.245499544  S(f,w) = .924604956E+02 |
+  4.Iteration, error =    0.889678064  S(f,w) = .774958902E+02 |
+  5.Iteration, error =    0.732397117  S(f,w) = .749222530E+02 |
+  6.Iteration, error =    0.565284378  S(f,w) = .667245307E+02 |
+  7.Iteration, error =    0.444308355  S(f,w) = .691800413E+02 |
+  8.Iteration, error =    0.285339266  S(f,w) = .694856817E+02 |
+  9.Iteration, error =    0.211534684  S(f,w) = .698122180E+02 |
+ 10.Iteration, error =    0.190358063  S(f,w) = .696358288E+02 |
+ 11.Iteration, error =    0.178024464  S(f,w) = .641992859E+02 |
+ 12.Iteration, error =    0.135468572  S(f,w) = .637756431E+02 |
+ 13.Iteration, error =    0.131966917  S(f,w) = .651376502E+02 |
+ 14.Iteration, error =    0.124011413  S(f,w) = .650384572E+02 |
+ 15.Iteration, error =    0.126279496  S(f,w) = .652565007E+02 |
+ 16.Iteration, error =    0.118512828  S(f,w) = .658569490E+02 |
+ 17.Iteration, error =    0.093630378  S(f,w) = .659444303E+02 |
+ 18.Iteration, error =    0.080415604  S(f,w) = .680382438E+02 |
+ 19.Iteration, error =    0.055607940  S(f,w) = .682079800E+02 |
+ 20.Iteration, error =    0.039711492  S(f,w) = .685357992E+02 |
+ 21.Iteration, error =    0.019390879  S(f,w) = .684378969E+02 |
+ 22.Iteration, error =    0.010120196  S(f,w) = .681597288E+02 |
+ 23.Iteration, error =    0.006901884  S(f,w) = .681922042E+02 |
+ 24.Iteration, error =    0.005647545  S(f,w) = .681328500E+02 |
+ 25.Iteration, error =    0.005337471  S(f,w) = .681331964E+02 |
+ 26.Iteration, error =    0.005328750  S(f,w) = .680897338E+02 |
+ 27.Iteration, error =    0.005071797  S(f,w) = .680883634E+02 |
+ 28.Iteration, error =    0.005085049  S(f,w) = .680015167E+02 |
+ 29.Iteration, error =    0.002581385  S(f,w) = .680248083E+02 |
+ 30.Iteration, error =    0.001903762  S(f,w) = .680298382E+02 |
+ 31.Iteration, error =    0.001555652  S(f,w) = .680192219E+02 |
+ 32.Iteration, error =    0.000533850  S(f,w) = .680306972E+02 |
+ 33.Iteration, error =    0.000169102  S(f,w) = .680288753E+02 |
+ 34.Iteration, error =    0.000119027  S(f,w) = .680284060E+02 |
+ 35.Iteration, error =    0.000115884  S(f,w) = .680284917E+02 |
+ 36.Iteration, error =    0.000115144  S(f,w) = .680269926E+02 |
+ 37.Iteration, error =    0.000073991  S(f,w) = .680296341E+02 |
+ 38.Iteration, error =    0.000021170  S(f,w) = .680295240E+02 |
+ 39.Iteration, error =    0.000012355  S(f,w) = .680287779E+02 |
+ 40.Iteration, error =    0.000003827  S(f,w) = .680287794E+02 |
+ 41.Iteration, error =    0.000001435  S(f,w) = .680287890E+02 |
+ 42.Iteration, error =    0.000001229  S(f,w) = .680287913E+02 |
+ 43.Iteration, error =    0.000001178  S(f,w) = .680287919E+02 |
+ 44.Iteration, error =    0.000001126  S(f,w) = .680287960E+02 |
+ 45.Iteration, error =    0.000001008  S(f,w) = .680287885E+02 |
+ 46.Iteration, error =    0.000000932  S(f,w) = .680287917E+02 |
+ 47.Iteration, error =    0.000000925  S(f,w) = .680287902E+02 |
+ 48.Iteration, error =    0.000000898  S(f,w) = .680287910E+02 |
+ 49.Iteration, error =    0.000000794  S(f,w) = .680287889E+02 |
+ 50.Iteration, error =    0.000000593  S(f,w) = .680287868E+02 |
+ 51.Iteration, error =    0.000000442  S(f,w) = .680287887E+02 |
+ 52.Iteration, error =    0.000000405  S(f,w) = .680287882E+02 |
+ 53.Iteration, error =    0.000000438  S(f,w) = .680287884E+02 |
+ 54.Iteration, error =    0.000000463  S(f,w) = .680287864E+02 |
+ 55.Iteration, error =    0.000000344  S(f,w) = .680287882E+02 |
+ 56.Iteration, error =    0.000000139  S(f,w) = .680287950E+02 |
+ 57.Iteration, error =    0.000000066  S(f,w) = .680287960E+02 |
+ 58.Iteration, error =    0.000000036  S(f,w) = .680287968E+02 |
+ 59.Iteration, error =    0.000000026  S(f,w) = .680287969E+02 |
+ 60.Iteration, error =    0.000000018  S(f,w) = .680287968E+02 |
+ 61.Iteration, error =    0.000000010  S(f,w) = .680287967E+02 |
+ 62.Iteration, error =    0.000000005  S(f,w) = .680287967E+02 |
+ 63.Iteration, error =    0.000000003  S(f,w) = .680287966E+02 |
+ 64.Iteration, error =    0.000000002  S(f,w) = .680287966E+02 |
+ 65.Iteration, error =    0.000000002  S(f,w) = .680287966E+02 |
+ 66.Iteration, error =    0.000000002  S(f,w) = .680287966E+02 |
+ 67.Iteration, error =    0.000000001  S(f,w) = .680287966E+02 |
+ 68.Iteration, error =    0.000000001  S(f,w) = .680287966E+02 |
+ITERATIONS CONVERGED AFTER  68 STEPS, FINAL error =  0.79122E-09
+
  
-START ITERATION ---------------------> omega = 25.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    1.36649                             |
-  3.Iteration, error =    1.16294                             |
-  4.Iteration, error =    1.38292                             |
-  5.Iteration, error =    1.18223                             |
-  6.Iteration, error =    0.37182                             |
-  7.Iteration, error =    0.15535                             |
-  8.Iteration, error =    0.08686                             |
-  9.Iteration, error =    0.07445                             |
- 10.Iteration, error =    0.06014                             |
- 11.Iteration, error =    0.04518                             |
- 12.Iteration, error =    0.02519                             |
- 13.Iteration, error =    0.01896                             |
- 14.Iteration, error =    0.01808                             |
- 15.Iteration, error =    0.01599                             |
- 16.Iteration, error =    0.00999                             |
- 17.Iteration, error =    0.00488                             |
- 18.Iteration, error =    0.00218                             |
- 19.Iteration, error =    0.00166                             |
- 20.Iteration, error =    0.00062                             |
- 21.Iteration, error =    0.00033                             |
- 22.Iteration, error =    0.00023                             |
- 23.Iteration, error =    0.00019                             |
- 24.Iteration, error =    0.00017                             |
- 25.Iteration, error =    0.00012                             |
- 26.Iteration, error =    0.00010                             |
- 27.Iteration, error =    0.00004                             |
- 28.Iteration, error =    0.00002                             |
- 29.Iteration, error =    0.00002                             |
- 30.Iteration, error =    0.00001                             |
-ITERATION CONVERGED AFTER  30 STEPS, FINAL error =  0.93146E-05
+START ITERATIONS ---------------------> omega = 45.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .330702590E+02 |
+  2.Iteration, error =    1.603246852  S(f,w) = .343464499E+02 |
+  3.Iteration, error =    1.571200961  S(f,w) = .381667841E+02 |
+  4.Iteration, error =    1.493838321  S(f,w) = .436743884E+02 |
+  5.Iteration, error =    1.470243955  S(f,w) = .469254011E+02 |
+  6.Iteration, error =    1.083464811  S(f,w) = .505175896E+02 |
+  7.Iteration, error =    0.624369304  S(f,w) = .516030499E+02 |
+  8.Iteration, error =    0.414761306  S(f,w) = .520163746E+02 |
+  9.Iteration, error =    0.291137900  S(f,w) = .532081991E+02 |
+ 10.Iteration, error =    0.194979477  S(f,w) = .536542453E+02 |
+ 11.Iteration, error =    0.143482751  S(f,w) = .531317228E+02 |
+ 12.Iteration, error =    0.110747537  S(f,w) = .533240190E+02 |
+ 13.Iteration, error =    0.076909113  S(f,w) = .541182648E+02 |
+ 14.Iteration, error =    0.044866267  S(f,w) = .538501888E+02 |
+ 15.Iteration, error =    0.036427921  S(f,w) = .533653056E+02 |
+ 16.Iteration, error =    0.028353612  S(f,w) = .527913190E+02 |
+ 17.Iteration, error =    0.017012549  S(f,w) = .528836086E+02 |
+ 18.Iteration, error =    0.007454785  S(f,w) = .529038415E+02 |
+ 19.Iteration, error =    0.006380669  S(f,w) = .529201311E+02 |
+ 20.Iteration, error =    0.005328074  S(f,w) = .529742153E+02 |
+ 21.Iteration, error =    0.002465894  S(f,w) = .529868484E+02 |
+ 22.Iteration, error =    0.002079619  S(f,w) = .529808840E+02 |
+ 23.Iteration, error =    0.002105960  S(f,w) = .529807381E+02 |
+ 24.Iteration, error =    0.002107508  S(f,w) = .529863973E+02 |
+ 25.Iteration, error =    0.001855119  S(f,w) = .529642856E+02 |
+ 26.Iteration, error =    0.000829768  S(f,w) = .529396518E+02 |
+ 27.Iteration, error =    0.000442122  S(f,w) = .529390129E+02 |
+ 28.Iteration, error =    0.000258231  S(f,w) = .529415354E+02 |
+ 29.Iteration, error =    0.000196240  S(f,w) = .529420574E+02 |
+ 30.Iteration, error =    0.000156499  S(f,w) = .529417386E+02 |
+ 31.Iteration, error =    0.000124653  S(f,w) = .529423387E+02 |
+ 32.Iteration, error =    0.000076714  S(f,w) = .529424119E+02 |
+ 33.Iteration, error =    0.000045370  S(f,w) = .529416199E+02 |
+ 34.Iteration, error =    0.000028056  S(f,w) = .529401902E+02 |
+ 35.Iteration, error =    0.000019122  S(f,w) = .529401940E+02 |
+ 36.Iteration, error =    0.000018967  S(f,w) = .529402144E+02 |
+ 37.Iteration, error =    0.000018750  S(f,w) = .529402018E+02 |
+ 38.Iteration, error =    0.000016877  S(f,w) = .529400456E+02 |
+ 39.Iteration, error =    0.000012154  S(f,w) = .529398553E+02 |
+ 40.Iteration, error =    0.000006050  S(f,w) = .529398106E+02 |
+ 41.Iteration, error =    0.000003055  S(f,w) = .529398240E+02 |
+ 42.Iteration, error =    0.000001534  S(f,w) = .529397688E+02 |
+ 43.Iteration, error =    0.000000622  S(f,w) = .529397354E+02 |
+ 44.Iteration, error =    0.000000334  S(f,w) = .529397177E+02 |
+ 45.Iteration, error =    0.000000151  S(f,w) = .529397146E+02 |
+ 46.Iteration, error =    0.000000080  S(f,w) = .529397114E+02 |
+ 47.Iteration, error =    0.000000056  S(f,w) = .529397117E+02 |
+ 48.Iteration, error =    0.000000035  S(f,w) = .529397103E+02 |
+ 49.Iteration, error =    0.000000025  S(f,w) = .529397101E+02 |
+ 50.Iteration, error =    0.000000022  S(f,w) = .529397101E+02 |
+ 51.Iteration, error =    0.000000021  S(f,w) = .529397101E+02 |
+ 52.Iteration, error =    0.000000021  S(f,w) = .529397101E+02 |
+ 53.Iteration, error =    0.000000021  S(f,w) = .529397101E+02 |
+ 54.Iteration, error =    0.000000021  S(f,w) = .529397101E+02 |
+ 55.Iteration, error =    0.000000021  S(f,w) = .529397100E+02 |
+ 56.Iteration, error =    0.000000017  S(f,w) = .529397100E+02 |
+ 57.Iteration, error =    0.000000013  S(f,w) = .529397100E+02 |
+ 58.Iteration, error =    0.000000009  S(f,w) = .529397099E+02 |
+ 59.Iteration, error =    0.000000006  S(f,w) = .529397099E+02 |
+ 60.Iteration, error =    0.000000004  S(f,w) = .529397099E+02 |
+ 61.Iteration, error =    0.000000003  S(f,w) = .529397099E+02 |
+ 62.Iteration, error =    0.000000003  S(f,w) = .529397099E+02 |
+ 63.Iteration, error =    0.000000003  S(f,w) = .529397099E+02 |
+ 64.Iteration, error =    0.000000003  S(f,w) = .529397099E+02 |
+ 65.Iteration, error =    0.000000003  S(f,w) = .529397099E+02 |
+ 66.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 67.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 68.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 69.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 70.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 71.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 72.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 73.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 74.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 75.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 76.Iteration, error =    0.000000002  S(f,w) = .529397099E+02 |
+ 77.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 78.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 79.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 80.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 81.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 82.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ 83.Iteration, error =    0.000000001  S(f,w) = .529397099E+02 |
+ITERATIONS CONVERGED AFTER  83 STEPS, FINAL error =  0.85684E-09
+
  
- 
-START ITERATION ---------------------> omega = 30.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    0.83162                             |
-  3.Iteration, error =    0.76085                             |
-  4.Iteration, error =    0.54799                             |
-  5.Iteration, error =    0.22996                             |
-  6.Iteration, error =    0.11254                             |
-  7.Iteration, error =    0.06033                             |
-  8.Iteration, error =    0.03911                             |
-  9.Iteration, error =    0.01357                             |
- 10.Iteration, error =    0.00692                             |
- 11.Iteration, error =    0.00265                             |
- 12.Iteration, error =    0.00084                             |
- 13.Iteration, error =    0.00038                             |
- 14.Iteration, error =    0.00029                             |
- 15.Iteration, error =    0.00020                             |
- 16.Iteration, error =    0.00013                             |
- 17.Iteration, error =    0.00008                             |
- 18.Iteration, error =    0.00006                             |
- 19.Iteration, error =    0.00006                             |
- 20.Iteration, error =    0.00006                             |
- 21.Iteration, error =    0.00005                             |
- 22.Iteration, error =    0.00003                             |
- 23.Iteration, error =    0.00002                             |
- 24.Iteration, error =    0.00001                             |
-ITERATION CONVERGED AFTER  24 STEPS, FINAL error =  0.79074E-05
- 
- 
-START ITERATION ---------------------> omega = 35.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    1.39264                             |
-  3.Iteration, error =    1.23381                             |
-  4.Iteration, error =    0.85698                             |
-  5.Iteration, error =    0.26511                             |
-  6.Iteration, error =    0.14386                             |
-  7.Iteration, error =    0.03852                             |
-  8.Iteration, error =    0.02726                             |
-  9.Iteration, error =    0.02385                             |
- 10.Iteration, error =    0.02047                             |
- 11.Iteration, error =    0.01674                             |
- 12.Iteration, error =    0.01548                             |
- 13.Iteration, error =    0.01547                             |
- 14.Iteration, error =    0.01486                             |
- 15.Iteration, error =    0.01065                             |
- 16.Iteration, error =    0.00649                             |
- 17.Iteration, error =    0.00468                             |
- 18.Iteration, error =    0.00329                             |
- 19.Iteration, error =    0.00237                             |
- 20.Iteration, error =    0.00145                             |
- 21.Iteration, error =    0.00086                             |
- 22.Iteration, error =    0.00047                             |
- 23.Iteration, error =    0.00034                             |
- 24.Iteration, error =    0.00025                             |
- 25.Iteration, error =    0.00021                             |
- 26.Iteration, error =    0.00020                             |
- 27.Iteration, error =    0.00017                             |
- 28.Iteration, error =    0.00015                             |
- 29.Iteration, error =    0.00013                             |
- 30.Iteration, error =    0.00012                             |
- 31.Iteration, error =    0.00010                             |
- 32.Iteration, error =    0.00006                             |
- 33.Iteration, error =    0.00005                             |
- 34.Iteration, error =    0.00004                             |
- 35.Iteration, error =    0.00004                             |
- 36.Iteration, error =    0.00004                             |
- 37.Iteration, error =    0.00004                             |
- 38.Iteration, error =    0.00004                             |
- 39.Iteration, error =    0.00004                             |
- 40.Iteration, error =    0.00004                             |
- 41.Iteration, error =    0.00004                             |
- 42.Iteration, error =    0.00004                             |
- 43.Iteration, error =    0.00004                             |
- 44.Iteration, error =    0.00003                             |
- 45.Iteration, error =    0.00003                             |
- 46.Iteration, error =    0.00002                             |
- 47.Iteration, error =    0.00002                             |
- 48.Iteration, error =    0.00001                             |
-ITERATION CONVERGED AFTER  48 STEPS, FINAL error =  0.86802E-05
- 
- 
-START ITERATION ---------------------> omega = 40.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error =    1.87328                             |
-  3.Iteration, error =    1.73686                             |
-  4.Iteration, error =    1.34812                             |
-  5.Iteration, error =    1.05143                             |
-  6.Iteration, error =    0.37440                             |
-  7.Iteration, error =    0.20563                             |
-  8.Iteration, error =    0.18067                             |
-  9.Iteration, error =    0.19871                             |
- 10.Iteration, error =    0.17724                             |
- 11.Iteration, error =    0.12527                             |
- 12.Iteration, error =    0.11274                             |
- 13.Iteration, error =    0.08163                             |
- 14.Iteration, error =    0.03495                             |
- 15.Iteration, error =    0.02614                             |
- 16.Iteration, error =    0.02072                             |
- 17.Iteration, error =    0.01074                             |
- 18.Iteration, error =    0.00833                             |
- 19.Iteration, error =    0.00577                             |
- 20.Iteration, error =    0.00470                             |
- 21.Iteration, error =    0.00447                             |
- 22.Iteration, error =    0.00380                             |
- 23.Iteration, error =    0.00218                             |
- 24.Iteration, error =    0.00103                             |
- 25.Iteration, error =    0.00080                             |
- 26.Iteration, error =    0.00061                             |
- 27.Iteration, error =    0.00047                             |
- 28.Iteration, error =    0.00036                             |
- 29.Iteration, error =    0.00032                             |
- 30.Iteration, error =    0.00030                             |
- 31.Iteration, error =    0.00028                             |
- 32.Iteration, error =    0.00027                             |
- 33.Iteration, error =    0.00023                             |
- 34.Iteration, error =    0.00018                             |
- 35.Iteration, error =    0.00017                             |
- 36.Iteration, error =    0.00017                             |
- 37.Iteration, error =    0.00016                             |
- 38.Iteration, error =    0.00011                             |
- 39.Iteration, error =    0.00007                             |
- 40.Iteration, error =    0.00004                             |
- 41.Iteration, error =    0.00003                             |
- 42.Iteration, error =    0.00002                             |
- 43.Iteration, error =    0.00001                             |
-ITERATION CONVERGED AFTER  43 STEPS, FINAL error =  0.85667E-05
+START ITERATIONS ---------------------> omega = 50.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .405673347E+02 |
+  2.Iteration, error =    1.621174621  S(f,w) = .388793379E+02 |
+  3.Iteration, error =    1.619484904  S(f,w) = .344427584E+02 |
+  4.Iteration, error =    1.568910837  S(f,w) = .291974890E+02 |
+  5.Iteration, error =    0.893246079  S(f,w) = .283853247E+02 |
+  6.Iteration, error =    0.645482299  S(f,w) = .282568306E+02 |
+  7.Iteration, error =    0.635014134  S(f,w) = .272525574E+02 |
+  8.Iteration, error =    0.530025698  S(f,w) = .255199634E+02 |
+  9.Iteration, error =    0.354017597  S(f,w) = .254217641E+02 |
+ 10.Iteration, error =    0.276898561  S(f,w) = .259055833E+02 |
+ 11.Iteration, error =    0.238901476  S(f,w) = .259794836E+02 |
+ 12.Iteration, error =    0.198835362  S(f,w) = .260481577E+02 |
+ 13.Iteration, error =    0.127099598  S(f,w) = .263097954E+02 |
+ 14.Iteration, error =    0.060346453  S(f,w) = .263550351E+02 |
+ 15.Iteration, error =    0.036049221  S(f,w) = .263293439E+02 |
+ 16.Iteration, error =    0.013242715  S(f,w) = .262891601E+02 |
+ 17.Iteration, error =    0.005247384  S(f,w) = .262739780E+02 |
+ 18.Iteration, error =    0.001552860  S(f,w) = .262675241E+02 |
+ 19.Iteration, error =    0.000895676  S(f,w) = .262650069E+02 |
+ 20.Iteration, error =    0.000429692  S(f,w) = .262692769E+02 |
+ 21.Iteration, error =    0.000343975  S(f,w) = .262690098E+02 |
+ 22.Iteration, error =    0.000295597  S(f,w) = .262704601E+02 |
+ 23.Iteration, error =    0.000208637  S(f,w) = .262716590E+02 |
+ 24.Iteration, error =    0.000109514  S(f,w) = .262719377E+02 |
+ 25.Iteration, error =    0.000061135  S(f,w) = .262722763E+02 |
+ 26.Iteration, error =    0.000038534  S(f,w) = .262723252E+02 |
+ 27.Iteration, error =    0.000035571  S(f,w) = .262723453E+02 |
+ 28.Iteration, error =    0.000021979  S(f,w) = .262725120E+02 |
+ 29.Iteration, error =    0.000012137  S(f,w) = .262725770E+02 |
+ 30.Iteration, error =    0.000008162  S(f,w) = .262725317E+02 |
+ 31.Iteration, error =    0.000003437  S(f,w) = .262725338E+02 |
+ 32.Iteration, error =    0.000002825  S(f,w) = .262725335E+02 |
+ 33.Iteration, error =    0.000002774  S(f,w) = .262725335E+02 |
+ 34.Iteration, error =    0.000002778  S(f,w) = .262725326E+02 |
+ 35.Iteration, error =    0.000001868  S(f,w) = .262725325E+02 |
+ 36.Iteration, error =    0.000000642  S(f,w) = .262725365E+02 |
+ 37.Iteration, error =    0.000000282  S(f,w) = .262725372E+02 |
+ 38.Iteration, error =    0.000000170  S(f,w) = .262725359E+02 |
+ 39.Iteration, error =    0.000000096  S(f,w) = .262725360E+02 |
+ 40.Iteration, error =    0.000000073  S(f,w) = .262725357E+02 |
+ 41.Iteration, error =    0.000000031  S(f,w) = .262725355E+02 |
+ 42.Iteration, error =    0.000000022  S(f,w) = .262725355E+02 |
+ 43.Iteration, error =    0.000000018  S(f,w) = .262725355E+02 |
+ 44.Iteration, error =    0.000000016  S(f,w) = .262725354E+02 |
+ 45.Iteration, error =    0.000000011  S(f,w) = .262725354E+02 |
+ 46.Iteration, error =    0.000000009  S(f,w) = .262725354E+02 |
+ 47.Iteration, error =    0.000000005  S(f,w) = .262725354E+02 |
+ 48.Iteration, error =    0.000000004  S(f,w) = .262725354E+02 |
+ 49.Iteration, error =    0.000000003  S(f,w) = .262725354E+02 |
+ 50.Iteration, error =    0.000000002  S(f,w) = .262725354E+02 |
+ITERATIONS CONVERGED AFTER  50 STEPS, FINAL error =  0.98668E-09
 

@@ -7,89 +7,86 @@
   *          and separable pairing         *  
   * -------------------------------------- *  
   *      Niksic, Paar, Vretenar, Ring      *  
-  *          31/ 7/2019/01:55:33           *
-  *       Ne  20  N =  10  Z =  10
+  *           6/ 1/2020/15:33:01           *
+  *       _O  16  N =   8  Z =   8
   *                DD-PC1    
   ******************************************  
   1.It. si =   0.000000  E/A =   0.000 R =   0.000 b =   0.000  mix = 0.50
-  2.It. si =  82.192028  E/A =  -7.090 R =   2.934 b =   0.662  mix = 0.50
-  3.It. si =  54.009559  E/A =  -7.203 R =   2.916 b =   0.631  mix = 0.50
-  4.It. si =  26.158853  E/A =  -7.240 R =   2.895 b =   0.596  mix = 0.50
-  5.It. si =   5.621714  E/A =  -7.253 R =   2.875 b =   0.560  mix = 0.50
-  6.It. si =   2.285331  E/A =  -7.254 R =   2.868 b =   0.538  mix = 0.50
-  7.It. si =   0.859683  E/A =  -7.253 R =   2.865 b =   0.528  mix = 0.50
-  8.It. si =   0.273761  E/A =  -7.253 R =   2.863 b =   0.524  mix = 0.50
-  9.It. si =   0.124142  E/A =  -7.253 R =   2.863 b =   0.523  mix = 0.50
- 10.It. si =   0.086423  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 11.It. si =   0.024940  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 12.It. si =   0.008461  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 13.It. si =   0.004345  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 14.It. si =   0.003667  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 15.It. si =   0.002929  E/A =  -7.253 R =   2.862 b =   0.522  mix = 0.50
- 16.It. si =   0.001484  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 17.It. si =   0.000815  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 18.It. si =   0.000651  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 19.It. si =   0.000392  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 20.It. si =   0.000529  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 21.It. si =   0.000049  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 22.It. si =   0.000102  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 23.It. si =   0.000011  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 24.It. si =   0.000007  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- 25.It. si =   0.000004  E/A =  -7.253 R =   2.862 b =   0.521  mix = 0.50
- Ne  20: Iteration converged after  25 steps   si =      0.0000001352
+  11. L-Iteration: - -15.78906996   0.00009927 -15.79195625
+  12. L-Iteration:   -15.79195625  -0.00000142 -15.79191546
+  13. L-Iteration:   -15.79191546   0.00000000 -15.79191550
+  11. L-Iteration:   -14.73510404  -0.00000000 -14.73510393
+  2.It. si = 107.572473  E/A =  -7.320 R =   2.612 b =  -0.000  mix = 0.50
+  3.It. si =  61.701646  E/A =  -7.382 R =   2.606 b =  -0.000  mix = 0.50
+  4.It. si =  21.589783  E/A =  -7.371 R =   2.603 b =  -0.000  mix = 0.50
+  5.It. si =   1.614455  E/A =  -7.368 R =   2.606 b =  -0.000  mix = 0.50
+  6.It. si =   1.452997  E/A =  -7.368 R =   2.608 b =  -0.000  mix = 0.50
+  7.It. si =   1.139024  E/A =  -7.368 R =   2.609 b =  -0.000  mix = 0.50
+  8.It. si =   0.103504  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+  9.It. si =   0.070656  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 10.It. si =   0.147541  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 11.It. si =   0.141341  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 12.It. si =   0.810351  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 13.It. si =   0.031798  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 14.It. si =   0.001784  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 15.It. si =   0.000688  E/A =  -7.368 R =   2.610 b =   0.000  mix = 0.50
+ 16.It. si =   0.000428  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 17.It. si =   0.000278  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 18.It. si =   0.000207  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 19.It. si =   0.000049  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 20.It. si =   0.000038  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 21.It. si =   0.000005  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ 22.It. si =   0.000002  E/A =  -7.368 R =   2.610 b =  -0.000  mix = 0.50
+ _O  16: Iteration converged after  22 steps   si =      0.0000004793
  ****** END ITER ************************************
-                                               
-                                               
-                                               
-  *******************************************  
-  *      Relativistic Quasiparticle RPA     *  
-  *           Simplex-y Basis               *  
-  *                                         *  
-  *   Finite Amplitude Method Calculation   *  
-  *         with Density-Dependent          *  
-  *          Point-Coupling Force           *  
-  *         and Separable Pairing           *  
-  * --------------------------------------- *  
-  *                                         *  
-  *           A.Bjelcic, T.Niksic           *  
-  *                                         *  
-  *******************************************  
-                                               
-Initializing FAM.
+                                                
+                                                
+                                                
+  ********************************************  
+  *       Relativistic Quasiparticle RPA     *  
+  *            Simplex-y Basis               *  
+  *                                          *  
+  *   Finite Amplitude Method Calculation    *  
+  *          with Density-Dependent          *  
+  *  Meson-Exchange or Point-Coupling Force  *  
+  *          and Separable Pairing           *  
+  * ---------------------------------------- *  
+  *                                          *  
+  *            A.Bjelcic, T.Niksic           *  
+  *                                          *  
+  ********************************************  
+                                                
+Initializing QFAM submodule.
  
-START ITERATION ---------------------> omega = 20.000[MeV/hbar]
-  1.Iteration, error = **********                             |
-  2.Iteration, error = **********                             |
-  3.Iteration, error =    9.97325                             |
-  4.Iteration, error =    3.35019                             |
-  5.Iteration, error =    2.85039                             |
-  6.Iteration, error =    1.63908                             |
-  7.Iteration, error =    1.36890                             |
-  8.Iteration, error =    0.17181                             |
-  9.Iteration, error =    0.13846                             |
- 10.Iteration, error =    0.07982                             |
- 11.Iteration, error =    0.07477                             |
- 12.Iteration, error =    0.07124                             |
- 13.Iteration, error =    0.03986                             |
- 14.Iteration, error =    0.02013                             |
- 15.Iteration, error =    0.01646                             |
- 16.Iteration, error =    0.01320                             |
- 17.Iteration, error =    0.01242                             |
- 18.Iteration, error =    0.00791                             |
- 19.Iteration, error =    0.00633                             |
- 20.Iteration, error =    0.00592                             |
- 21.Iteration, error =    0.00515                             |
- 22.Iteration, error =    0.00174                             |
- 23.Iteration, error =    0.00132                             |
- 24.Iteration, error =    0.00110                             |
- 25.Iteration, error =    0.00059                             |
- 26.Iteration, error =    0.00039                             |
- 27.Iteration, error =    0.00025                             |
- 28.Iteration, error =    0.00014                             |
- 29.Iteration, error =    0.00008                             |
- 30.Iteration, error =    0.00006                             |
- 31.Iteration, error =    0.00004                             |
- 32.Iteration, error =    0.00002                             |
- 33.Iteration, error =    0.00001                             |
-ITERATION CONVERGED AFTER  33 STEPS, FINAL error =  0.78985E-05
+START ITERATIONS ---------------------> omega = 20.000[MeV/hbar]
+  1.Iteration, error = **************  S(f,w) = .684874269E+00 |
+  2.Iteration, error = **************  S(f,w) = .601315413E+00 |
+  3.Iteration, error =    8.354307653  S(f,w) = .405055057E+00 |
+  4.Iteration, error =    1.246783759  S(f,w) = .269625805E+00 |
+  5.Iteration, error =    0.180648767  S(f,w) = .322331864E+00 |
+  6.Iteration, error =    0.032633503  S(f,w) = .304403001E+00 |
+  7.Iteration, error =    0.015195696  S(f,w) = .301668078E+00 |
+  8.Iteration, error =    0.010102891  S(f,w) = .310509592E+00 |
+  9.Iteration, error =    0.003089340  S(f,w) = .304926674E+00 |
+ 10.Iteration, error =    0.000933819  S(f,w) = .305214894E+00 |
+ 11.Iteration, error =    0.000342940  S(f,w) = .305443758E+00 |
+ 12.Iteration, error =    0.000166126  S(f,w) = .305318282E+00 |
+ 13.Iteration, error =    0.000097744  S(f,w) = .305306478E+00 |
+ 14.Iteration, error =    0.000058412  S(f,w) = .305308378E+00 |
+ 15.Iteration, error =    0.000064012  S(f,w) = .305301515E+00 |
+ 16.Iteration, error =    0.000031693  S(f,w) = .305324773E+00 |
+ 17.Iteration, error =    0.000009683  S(f,w) = .305321526E+00 |
+ 18.Iteration, error =    0.000009200  S(f,w) = .305321686E+00 |
+ 19.Iteration, error =    0.000008746  S(f,w) = .305320322E+00 |
+ 20.Iteration, error =    0.000007148  S(f,w) = .305320257E+00 |
+ 21.Iteration, error =    0.000006961  S(f,w) = .305320069E+00 |
+ 22.Iteration, error =    0.000002631  S(f,w) = .305320357E+00 |
+ 23.Iteration, error =    0.000001214  S(f,w) = .305320553E+00 |
+ 24.Iteration, error =    0.000000288  S(f,w) = .305320455E+00 |
+ 25.Iteration, error =    0.000000093  S(f,w) = .305320451E+00 |
+ 26.Iteration, error =    0.000000062  S(f,w) = .305320453E+00 |
+ 27.Iteration, error =    0.000000032  S(f,w) = .305320450E+00 |
+ 28.Iteration, error =    0.000000010  S(f,w) = .305320449E+00 |
+ 29.Iteration, error =    0.000000002  S(f,w) = .305320449E+00 |
+ITERATIONS CONVERGED AFTER  29 STEPS, FINAL error =  0.75911E-09
 

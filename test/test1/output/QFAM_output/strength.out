@@ -1,21 +1,23 @@
 S(f,omega) = -1/pi * Im[Tr[hermconj(f)*drho(omega)]]  [fm^6/MeV]
-Fully self-consistent response
- 20Ne,  6 shells, DD-PC1    
+Fully self-consistent response with tolerance = 0.1E-08
+ 20Ne,  8 shells, beta0 =   0.550, DD-ME2    
 Electromagnetism included in calculation
 Pairing included in calculation
-Isoscalar excitation
+Isovector excitation
 J = 3
 K = 1
-gamma_smear =   1.000 [MeV]
-NGH = 48, NGL = 48
- 
+gamma_smear =   0.500 [MeV]
+NGH = 50, NGL = 50
+
 omega[MeV/hbar]                     S(f,omega)
- 
-        5.00000                  71.3440858795
-       10.00000                  96.9931850662
-       15.00000                 254.5268494619
-       20.00000                  33.7788735922
-       25.00000                  23.8120244497
-       30.00000                  17.3469725992
-       35.00000                 100.8724539270
-       40.00000                  71.0950601661
+
+        5.00000                   0.6316784720
+       10.00000                   2.4297291266
+       15.00000                   8.8419510154
+       20.00000                 147.9321633005
+       25.00000                  52.3141071697
+       30.00000                  30.3444953190
+       35.00000                 125.4331580973
+       40.00000                  68.0289446575
+       45.00000                  52.9383880609
+       50.00000                  26.2724943040
