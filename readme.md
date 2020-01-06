@@ -153,7 +153,7 @@ the induced and ground state (vector) density for selected energy. The values pr
 <code>rhov.out</code> file are suitable for visualizing the oscillation of time
 dependent density. An example of animation easily obtainable from <code>rhov.out</code>
 file can be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
-An example of response function easily obtainable from <code>strength.out</code> file can
+An example of response function profile easily obtainable from <code>strength.out</code> file can
 be found <a href="http://web.studenti.math.pmf.unizg.hr/~abjelcic/anim.zip">here</a>.
 
 
