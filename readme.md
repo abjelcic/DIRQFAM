@@ -189,7 +189,7 @@ written in FORTRAN77 (lack of dynamic allocation).
 
 
 # Performance benchmark
-Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK.
+Benchmark was done on Intel<sup>®</sup> NUC Kit NUC8i7HVK with OpenBLAS on single-thread.
 
 Test was performed on isoscalar octupole J = 3 excitation of <sup>20</sup>Ne nucleus with
 very dense Gaussian mesh: <code>NGH = 48</code>, <code>NGL = 48</code>.
