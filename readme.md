@@ -3,9 +3,11 @@
 within the relativistic self-consistent mean-field framework:
 the program DIRQFAM</i>.
 
-The corresponding <code>DIRQFAM</code> paper [1]  (DD-PC1) can
+The corresponding <code>DIRQFAM</code>
+<a href="https://www.sciencedirect.com/science/article/pii/S0010465520300345">paper</a> [1]  (DD-PC1) can
 be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
-The corresponding <code>DIRQFAM</code> paper [2]  (DD-ME2) can
+The corresponding <code>DIRQFAM</code>
+paper [2]  (DD-ME2) can
 be found at the following <a href="https://arxiv.org/">link (arXiv)</a>.<br>
 
 Tested versions of the <code>DIRQFAM</code> code are located at
