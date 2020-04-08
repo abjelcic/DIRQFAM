@@ -4,58 +4,29 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE v_matrix;
+      USE u_matrix;
+      USE nnz_blocks;
+      USE quadrature;
+      USE wbasis;
+      USE fmatrix;
+      USE f02f20matrix;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       CHARACTER*2 nucnam;
       common /nucnuc/ amas, nneu, npro, nmas, nucnam;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
-
-      COMPLEX*16 u;
-      common /u_matrix/ u( NBSX , NBSX , NBX , 2 );
-
-      LOGICAL dh_nnz, dDelta_nnz, dkappa_nnz, f_nnz;
-      common /nnz_blocks/ dh_nnz    ( NBX , NBX ),
-     &                    dDelta_nnz( NBX , NBX ),
-     &                    dkappa_nnz( NBX , NBX ),
-     &                    f_nnz     ( NBX , NBX );
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
-
-      COMPLEX*16 f1_JK, f2_JK;
-      common /f_matrix/ f1_JK( NTX , NTX , 2 ),
-     &                  f2_JK( NTX , NTX , 2 );
-
-      COMPLEX*16 f20, f02;
-      common /f02_f20_matrix/ f20( NTX , NTX , 2 ),
-     &                        f02( NTX , NTX , 2 );
-
 
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 Temp( NTX , NTX );
-      REAL*8 f( -NGH:NGH , 1:NGL , 2 , 0:J_MAX , 0:J_MAX );
-      REAL*8 fac_iso(2);
+      DOUBLE PRECISION f( -NGH:NGH , 1:NGL , 2 , 0:J_MAX , 0:J_MAX );
+      DOUBLE PRECISION fac_iso(2);
+      DOUBLE COMPLEX Temp( NTX , NTX );
 
 
 
@@ -128,7 +99,7 @@ c-----Initializing multipole operators in coordinate space
 
                   pi = 3.14159265358979324D0;
 
-                  fac00 = + 1.000D0 ! sometimes 1/sqrt(4*pi) is used
+                  fac00 = + 1.000D0!* DSQRT( 0.25D0 / pi );
                   fac10 = + 0.500D0 * DSQRT(   3.D0 / pi );
                   fac11 = - 0.500D0 * DSQRT(   3.D0 / pi );
                   fac20 = + 0.250D0 * DSQRT(   5.D0 / pi );

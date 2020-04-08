@@ -4,25 +4,16 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE simplex;
+      USE blokap;
+      USE bloosc;
+      USE quaosc;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      CHARACTER tb*6;
-      CHARACTER tt*8;
       common /basnnn/ n0f, n0b;
-      common /blokap/ nb, kb(NBX), mb(NBX), tb(NBX);
-      common /bloosc/ ia(NBX,2), id(NBX,2);
-      common /quaosc/ nt, nz(NTX), nr(NTX), ml(NTX),
-     &                    ms(NTX), np(NTX), tt(NTX);
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
 
 
 

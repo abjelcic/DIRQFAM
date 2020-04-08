@@ -4,26 +4,14 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam_iter;
+      USE fam;
+      USE dh;
+      USE dDelta;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      INTEGER*4 tape_strength, tape_rhov;
-      common /out_tapes/ tape_strength, tape_rhov;
-
-      COMPLEX*16 dh_1, dh_2;
-      common /delta_h/ dh_1( NTX , NTX , 2 ),
-     &                 dh_2( NTX , NTX , 2 );
-
-      COMPLEX*16 dDelta_pl, dDelta_mi;
-      common /dDelta/ dDelta_pl( NTX , NTX , 2 ),
-     &                dDelta_mi( NTX , NTX , 2 );
 
 
 
@@ -32,6 +20,17 @@ c======================================================================c
       write(6,*) '****** BEGIN start_fam() ***************************';
       write(6,*) '';
       endif
+
+
+
+
+
+
+#ifdef DEBUG
+      tol = 1.D-9;  ! Self-consistency tolerance
+#else
+      tol = 1.D-5;  ! Self-consistency tolerance
+#endif
 
 
 

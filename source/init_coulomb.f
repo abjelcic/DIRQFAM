@@ -4,28 +4,17 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE quadrature;
+      USE fam_green;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /fam_green/ G1( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
-     &                   G2( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
-     &                   G3( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL );
-                        !G (     z'   ,  r'   ,     z    ,  r    )
 
 
-
-      REAL*8 I_K;
+      DOUBLE PRECISION I_K;
       hbc   = 197.328284D0;
       alpha = 1.D0 / 137.03602D0;
 
@@ -69,7 +58,7 @@ c======================================================================c
                       G1(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K-1) );
                       G2(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K+1) );
                       G3(ih2,il2,ih1,il1) = fac * I_K( a , iabs(K+0) );
-
+                     !Gi( z', r',  z,  r)
                   enddo
 
               enddo

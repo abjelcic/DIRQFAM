@@ -4,48 +4,25 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE pairparams;
+      USE nnz_blocks;
+      USE Wpairing;
+      USE dDelta;
+      USE dkappa;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /TMR_param/ G_pairing, a_pairing;
-
-      LOGICAL dh_nnz, dDelta_nnz, dkappa_nnz, f_nnz;
-      common /nnz_blocks/ dh_nnz    ( NBX , NBX ),
-     &                    dDelta_nnz( NBX , NBX ),
-     &                    dkappa_nnz( NBX , NBX ),
-     &                    f_nnz     ( NBX , NBX );
-
-      common /W_pairing/ W( NWMAX );
-
-      COMPLEX*16 dDelta_pl, dDelta_mi;
-      common /dDelta/ dDelta_pl( NTX , NTX , 2 ),
-     &                dDelta_mi( NTX , NTX , 2 );
-
-      COMPLEX*16 dkappa_pl, dkappa_mi;
-      common /delta_kappa/ dkappa_pl( NTX , NTX , 2 ),
-     &                     dkappa_mi( NTX , NTX , 2 );
 
 
-
-      COMPLEX*16 P_pl( 0:2*N0FX , 0:2*N0FX , 2 );
-      COMPLEX*16 P_mi( 0:2*N0FX , 0:2*N0FX , 2 );
+      DOUBLE COMPLEX P_pl( 0:2*N0FX , 0:2*N0FX , 2 );
+      DOUBLE COMPLEX P_mi( 0:2*N0FX , 0:2*N0FX , 2 );
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 z, z1, z2;
+      DOUBLE COMPLEX z, z1, z2;
 
 
 

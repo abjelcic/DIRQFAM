@@ -4,51 +4,18 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE simplex;
+      USE fam;
+      USE ddpc1ddme2;
+      USE pairparams;
+      USE u_energy;
+      USE v_energy;
+      USE fam_energies;
+      USE nnz_blocks;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      INTEGER*4 tape_strength, tape_rhov;
-      common /out_tapes/ tape_strength, tape_rhov;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      REAL*8 m_sig, m_ome, m_rho;
-      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
-     &                      a_v , b_v , c_v , d_v ,
-     &                      a_tv, b_tv, c_tv, d_tv,
-     &                      del_s,
-     &
-     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
-     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
-     &                      a_rho,                      g0_rho, m_rho,
-     &
-     &                      rho_sat;
-
-      common /TMR_param/ G_pairing, a_pairing;
-
-      common /v_energy/ E_fam_v( NBSX , NBX , 2 );
-
-      common /u_energy/ E_fam_u( NBSX , NBX , 2 );
-
-      common /fam_energies/ E_fam( NTX , 2 );
-
-      LOGICAL dh_nnz, dDelta_nnz, dkappa_nnz, f_nnz;
-      common /nnz_blocks/ dh_nnz    ( NBX , NBX ),
-     &                    dDelta_nnz( NBX , NBX ),
-     &                    dkappa_nnz( NBX , NBX ),
-     &                    f_nnz     ( NBX , NBX );
 
 
 

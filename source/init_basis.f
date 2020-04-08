@@ -4,49 +4,25 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE quadrature;
+      USE basis;
+      USE wbasis;
+      USE PHI;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      CHARACTER parname*10;
-      common /partyp/ parname;
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /basis/ phi_z( -NGH:NGH , NTX ),
-     &              dphi_z( -NGH:NGH , NTX ),
-     &               phi_r(    1:NGL , NTX ),
-     &              dphi_r(    1:NGL , NTX );
-
-      common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
-
-      common /PHI/ PHI_U  (    NTX , KTRUNC ),
-     &             PHI_SVt( KTRUNC , NCOORD ),
-     &             k_PHI;
 
 
-
-      REAL*8 xgh(2*NGH), wgh(2*NGH);
-      REAL*8 xgl(1*NGL), wgl(1*NGL);
-
-      REAL*8 PHI  ( NTX , NCOORD );
+      DOUBLE PRECISION xgh(2*NGH), wgh(2*NGH);
+      DOUBLE PRECISION xgl(1*NGL), wgl(1*NGL);
+      DOUBLE PRECISION PHI_tmp( NTX , NCOORD );
 
 
 
@@ -198,7 +174,7 @@ c-----Calculation of PHI_U, PHI_SVt, k_PHI
                   if( ih .eq. 0 ) CYCLE;
 
                   ihl = ihl+1;
-                  PHI(i,ihl) = phi_z(ih,i)*phi_r(il,i);
+                  PHI_tmp(i,ihl) = phi_z(ih,i)*phi_r(il,i);
 
               enddo
           enddo
@@ -206,7 +182,7 @@ c-----Calculation of PHI_U, PHI_SVt, k_PHI
       call lowrank_approx(  N_total , NCOORD ,
      &                      1.D-12  ,
      &                      KTRUNC  , k_PHI  ,
-     &                      PHI     , NTX    ,
+     &                      PHI_tmp , NTX    ,
      &                      PHI_U   , NTX    ,
      &                      PHI_SVt , KTRUNC   );
 
@@ -265,21 +241,24 @@ c======================================================================c
       IMPLICIT NONE;
       LOGICAL CHECK;
 
-      INTEGER*4 M, N, K, RANK, LDA, LDAU, LDASVt, NWORK, i, j, INFO;
-      REAL*8 TOL, normf1, normf2, error;
-      REAL*8 A    ( LDA    , N );
-      REAL*8 A_cpy( M      , N );
-      REAL*8 A_U  ( LDAU   , K );
-      REAL*8 A_SVt( LDASVt , N );
+      INTEGER M, N, K, RANK, LDA, LDAU, LDASVt, NWORK, i, j, INFO;
+      DOUBLE PRECISION TOL, normf1, normf2, error;
+      DOUBLE PRECISION A    ( LDA    , N );
+      DOUBLE PRECISION A_cpy( M      , N );
+      DOUBLE PRECISION A_U  ( LDAU   , K );
+      DOUBLE PRECISION A_SVt( LDASVt , N );
 
-      REAL*8 S ( min(M,N) );
-      REAL*8 U ( M , min(M,N) );
-      REAL*8 VT( min(M,N) , N );
+      DOUBLE PRECISION S ( min(M,N)     );
+      DOUBLE PRECISION U ( M , min(M,N) );
+      DOUBLE PRECISION VT( min(M,N) , N );
 
-      REAL*8     WORK( 10000*M );
-      INTEGER*4 IWORK( 12*min(M,N) );
+      DOUBLE PRECISION WORK( 10000*M     );
+      INTEGER         IWORK( 12*min(M,N) );
       NWORK = 10000*M;
       CHECK = .false.;
+#ifdef DEBUG
+      CHECK = .true.;
+#endif
 
 
 
@@ -306,7 +285,7 @@ c======================================================================c
      &                'V' ,
      &                  M ,         N ,
      &                  A ,       LDA ,
-     &                TOL ,   1.D+100 ,
+     &                TOL ,    1.D+10 ,
      &                  0 ,         0 ,
      &               RANK ,         S ,
      &                  U ,         M ,
@@ -320,7 +299,7 @@ c======================================================================c
      &                'V' ,
      &                  M ,         N ,
      &                  A ,       LDA ,
-     &                TOL ,   1.D+100 ,
+     &                TOL ,    1.D+10 ,
      &                  0 ,         0 ,
      &               RANK ,         S ,
      &                  U ,         M ,

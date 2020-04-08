@@ -4,36 +4,16 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE fam_energies;
+      USE f02f20matrix;
+      USE h02h20matrix;
+      USE xyfam;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /fam_energies/ E_fam( NTX , 2 );
-
-      COMPLEX*16 f20, f02;
-      common /f02_f20_matrix/ f20( NTX , NTX , 2 ),
-     &                        f02( NTX , NTX , 2 );
-
-      COMPLEX*16 h20, h02;
-      common /h20h02/ h20( NTX , NTX , 2 ),
-     &                h02( NTX , NTX , 2 );
-
-      COMPLEX*16 x_fam, y_fam;
-      common /xy_fam/ x_fam( NTX , NTX , 2 ),
-     &                y_fam( NTX , NTX , 2 );
 
 
 

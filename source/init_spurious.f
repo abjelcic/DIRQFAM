@@ -4,58 +4,30 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE v_matrix;
+      USE u_matrix;
+      USE quadrature;
+      USE basis;
+      USE spurious;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       CHARACTER*2 nucnam;
       common /nucnuc/ amas, nneu, npro, nmas, nucnam;
       common /basnnn/ n0f, n0b;
-      common /baspar/ hom, hb0, b0;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
-
-      COMPLEX*16 u;
-      common /u_matrix/ u( NBSX , NBSX , NBX , 2 );
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /basis/ phi_z( -NGH:NGH , NTX ),
-     &              dphi_z( -NGH:NGH , NTX ),
-     &               phi_r(    1:NGL , NTX ),
-     &              dphi_r(    1:NGL , NTX );
-
-      COMPLEX*16 r20, p20, RcmPcm_commutator, lamR, lamP;
-      common /spurious/ r20( NTX , NTX , 2 ),
-     &                  p20( NTX , NTX , 2 ),
-     &                  RcmPcm_commutator(2),
-     &                  lamR, lamP;
 
 
 
       CHARACTER fg1, fg2;
-
-      COMPLEX*16 rcm( NTX , NTX ),
-     &           pcm( NTX , NTX ),
-     &           Tmp( NTX , NTX );
-      LOGICAL cm_nnz( NTX , NTX );
-      COMPLEX*16 trace;
+      DOUBLE COMPLEX rcm( NTX , NTX ),
+     &               pcm( NTX , NTX ),
+     &               Tmp( NTX , NTX );
+      LOGICAL     cm_nnz( NTX , NTX );
+      DOUBLE COMPLEX trace;
 
 
 
@@ -570,10 +542,11 @@ c-----Calculation of <Phi| [Rcm,Pcm] |Phi> = 2*Tr[ hermconj(r20)*p20 ]
           enddo
 
           RcmPcm_commutator(it) = 2.D0 * trace;
-
-          !RcmPcm_commutator(1)+RcmPcm_commutator(2) is approximately +i
       enddo
-
+#ifdef DEBUG
+      write(6,*) '[Rcm,Pcm] = ',
+     &           RcmPcm_commutator(1) + RcmPcm_commutator(2);
+#endif
 
 
 

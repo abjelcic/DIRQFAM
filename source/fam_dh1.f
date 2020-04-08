@@ -4,50 +4,30 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE wbasis;
+      USE dpot;
+      USE dh;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /wbasis/ wPhi( 1:NGH , 1:NGL , NTX );
-
-      COMPLEX*16 dVpS, dVmS, dSig_z, dSig_r, dSig_p;
-      common /fam_pot/ dVpS  ( -NGH:NGH , 1:NGL , 2 ),
-     &                 dVmS  ( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_z( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_r( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_p( -NGH:NGH , 1:NGL , 2 );
-
-      COMPLEX*16 dh_1, dh_2;
-      common /delta_h/ dh_1( NTX , NTX , 2 ),
-     &                 dh_2( NTX , NTX , 2 );
 
 
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 z;
-      COMPLEX*16 dVpS_odd  ( 1:NGH , 1:NGL , 2 ),
-     &           dVpS_evn  ( 1:NGH , 1:NGL , 2 ),
-     &           dVmS_odd  ( 1:NGH , 1:NGL , 2 ),
-     &           dVmS_evn  ( 1:NGH , 1:NGL , 2 ),
-     &           dSig_z_odd( 1:NGH , 1:NGL , 2 ),
-     &           dSig_z_evn( 1:NGH , 1:NGL , 2 ),
-     &           dSig_r_odd( 1:NGH , 1:NGL , 2 ),
-     &           dSig_r_evn( 1:NGH , 1:NGL , 2 ),
-     &           dSig_p_odd( 1:NGH , 1:NGL , 2 ),
-     &           dSig_p_evn( 1:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX z;
+      DOUBLE COMPLEX dVpS_odd  ( 1:NGH , 1:NGL , 2 ),
+     &               dVpS_evn  ( 1:NGH , 1:NGL , 2 ),
+     &               dVmS_odd  ( 1:NGH , 1:NGL , 2 ),
+     &               dVmS_evn  ( 1:NGH , 1:NGL , 2 ),
+     &               dSig_z_odd( 1:NGH , 1:NGL , 2 ),
+     &               dSig_z_evn( 1:NGH , 1:NGL , 2 ),
+     &               dSig_r_odd( 1:NGH , 1:NGL , 2 ),
+     &               dSig_r_evn( 1:NGH , 1:NGL , 2 ),
+     &               dSig_p_odd( 1:NGH , 1:NGL , 2 ),
+     &               dSig_p_evn( 1:NGH , 1:NGL , 2 );
 
 
 

@@ -4,70 +4,27 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE ddpc1ddme2;
+      USE gs_dens;
+      USE mesmat;
+      USE ddens;
+      USE dcurr;
+      USE dmesons;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      REAL*8 m_sig, m_ome, m_rho;
-      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
-     &                      a_v , b_v , c_v , d_v ,
-     &                      a_tv, b_tv, c_tv, d_tv,
-     &                      del_s,
-     &
-     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
-     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
-     &                      a_rho,                      g0_rho, m_rho,
-     &
-     &                      rho_sat;
-
-      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS( -NGH:NGH , 1:NGL     );
-
-      common /mesmat/ Psig( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                Pome( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                Prho( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                nP( 0:J_MAX+1 );
-
-      COMPLEX*16 drho_v, drho_s;
-      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s( -NGH:NGH , 1:NGL     );
-
-      COMPLEX*16 dj_r, dj_p, dj_z, dj_1, dj_2, dj_3;
-      common /ind_curr/ dj_r( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_p( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_z( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_1( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_3( -NGH:NGH , 1:NGL , 2 );
-
-      COMPLEX*16 dsig  ,
-     &           dome_0, dome_r, dome_p, dome_z,
-     &           drho_0, drho_r, drho_p, drho_z;
-      common /ind_mesons/ dsig  ( -NGH:NGH , 1:NGL ),
-     &                    dome_0( -NGH:NGH , 1:NGL ),
-     &                    dome_r( -NGH:NGH , 1:NGL ),
-     &                    dome_p( -NGH:NGH , 1:NGL ),
-     &                    dome_z( -NGH:NGH , 1:NGL ),
-     &                    drho_0( -NGH:NGH , 1:NGL ),
-     &                    drho_r( -NGH:NGH , 1:NGL ),
-     &                    drho_p( -NGH:NGH , 1:NGL ),
-     &                    drho_z( -NGH:NGH , 1:NGL );
 
 
-
-      COMPLEX*16 s ( -NGH:NGH , 1:NGL );
-      COMPLEX*16 s1( -NGH:NGH , 1:NGL );
-      COMPLEX*16 s2( -NGH:NGH , 1:NGL );
-      COMPLEX*16 s3( -NGH:NGH , 1:NGL );
-      COMPLEX*16 u1( -NGH:NGH , 1:NGL );
-      COMPLEX*16 u2( -NGH:NGH , 1:NGL );
-      COMPLEX*16 u3( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX s ( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX s1( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX s2( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX s3( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX u1( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX u2( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX u3( -NGH:NGH , 1:NGL );
 
       f0(x,a,b,c,d) =   a       * (1+b*(x+d)**2)   / (1+c*(x+d)**2);
       f1(x,a,b,c,d) = 2*a*(b-c) * (x+d)            / (1+c*(x+d)**2)**2;
@@ -257,22 +214,19 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE quadrature;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
 
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      COMPLEX*16 src( -NGH:NGH , 1:NGL );
-      COMPLEX*16 u  ( -NGH:NGH , 1:NGL );
-      INTEGER*4  n;
-      INTEGER*4  LDP;
-      REAL*8     P( LDP , NCOORD );
-      REAL*8    ws(       NCOORD );
-      REAL*8   Pws( LDP          );
-      REAL*8 PtPws(       NCOORD );
+      DOUBLE COMPLEX src( -NGH:NGH , 1:NGL );
+      DOUBLE COMPLEX u  ( -NGH:NGH , 1:NGL );
+      INTEGER n;
+      INTEGER LDP;
+      DOUBLE PRECISION     P( LDP , NCOORD );
+      DOUBLE PRECISION    ws(       NCOORD );
+      DOUBLE PRECISION   Pws( LDP          );
+      DOUBLE PRECISION PtPws(       NCOORD );
 
 
 

@@ -4,46 +4,31 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE gfvmod;
+      USE fam;
+      USE simplex;
+      USE pairparams;
+      USE Wpairing;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
-      common /gfviv / iv ( -IGFV : IGFV ); ! iv(n)  = (-1)^n
-      common /gfvfi / fi (   0   : IGFV ); ! fi(n)  = 1/n!
-      common /gfvwf / wf (   0   : IGFV ); ! wf(n)  = sqrt(n!)
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /TMR_param/ G_pairing, a_pairing;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /W_pairing/ W( NWMAX );
 
 
 
-      parameter( NZMAX = N0FX   );
-      parameter( NRMAX = N0FX/2 );
-      parameter( MLMAX = N0FX   );
-
-      REAL*8 Vz( 0:NZMAX , 0:NZMAX , 0:2*NZMAX );
-      REAL*8 Vr( 0:NRMAX , -MLMAX:MLMAX ,
-     &           0:NRMAX , -MLMAX:MLMAX ,
-     &           0:(2*NRMAX+MLMAX)       );
+      DOUBLE PRECISION Vz( 0: N0FX , 0:N0FX , 0:2*N0FX );
+      DOUBLE PRECISION Vr( 0:(N0FX/2) , -N0FX:N0FX ,
+     &                     0:(N0FX/2) , -N0FX:N0FX ,
+     &                     0:(2*(N0FX/2)+N0FX)         );
 
       CHARACTER fg1, fg2;
       pi = 3.14159265358979324D0;
+      NZMAX = N0FX;
+      NRMAX = N0FX/2;
+      MLMAX = N0FX;
 
 
 
@@ -130,7 +115,7 @@ c======================================================================c
                           endif
                           x = x / ( a2 + b0*b0*bp*bp )**DBLE(nr+1);
 
-                          call assert(NRR.le.2*NRMAX+MLMAX,'Overflow');
+                          call assert(NRR.le.2*NRMAX+MLMAX,'OutOfBnd');
                           Vr( nr1 , ml1 , nr2 , ml2 , NRR ) = x;
 
                       enddo
@@ -178,14 +163,14 @@ c======================================================================c
                      do Nz = 0 , nz1+nz2
                         if( mod(Nz,2) .ne. mod(nz1+nz2,2) ) CYCLE;
 
-                        call assert( nz1.le.NZMAX        , 'Overflow' );
-                        call assert( nz2.le.NZMAX        , 'Overflow' );
-                        call assert( nr1.le.NRMAX        , 'Overflow' );
-                        call assert( nr2.le.NRMAX        , 'Overflow' );
-                        call assert( abs(ml1).le.MLMAX   , 'Overflow' );
-                        call assert( abs(ml2).le.MLMAX   , 'Overflow' );
-                        call assert( Nz.le.2*NZMAX       , 'Overflow' );
-                        call assert( Nr.le.2*NRMAX+MLMAX , 'Overflow' );
+                        call assert( nz1.le.NZMAX        , 'OutOfBnd' );
+                        call assert( nz2.le.NZMAX        , 'OutOfBnd' );
+                        call assert( nr1.le.NRMAX        , 'OutOfBnd' );
+                        call assert( nr2.le.NRMAX        , 'OutOfBnd' );
+                        call assert( abs(ml1).le.MLMAX   , 'OutOfBnd' );
+                        call assert( abs(ml2).le.MLMAX   , 'OutOfBnd' );
+                        call assert( Nz.le.2*NZMAX       , 'OutOfBnd' );
+                        call assert( Nr.le.2*NRMAX+MLMAX , 'OutOfBnd' );
 
                         il = il + 1;
                         W(il) = fac * Vz( nz1 , nz2 , Nz )

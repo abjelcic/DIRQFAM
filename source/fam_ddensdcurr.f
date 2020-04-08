@@ -4,57 +4,28 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE PHI;
+      USE nnz_blocks;
+      USE drho;
+      USE ddens;
+      USE dcurr;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /PHI/ PHI_U  (    NTX , KTRUNC ),
-     &             PHI_SVt( KTRUNC , NCOORD ),
-     &             k_PHI;
-
-      LOGICAL dh_nnz, dDelta_nnz, dkappa_nnz, f_nnz;
-      common /nnz_blocks/ dh_nnz    ( NBX , NBX ),
-     &                    dDelta_nnz( NBX , NBX ),
-     &                    dkappa_nnz( NBX , NBX ),
-     &                    f_nnz     ( NBX , NBX );
-
-      COMPLEX*16 drho_1, drho_2;
-      common /delta_rho/ drho_1( NTX , NTX , 2 ),
-     &                   drho_2( NTX , NTX , 2 );
-
-      COMPLEX*16 drho_v, drho_s;
-      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s( -NGH:NGH , 1:NGL     );
-
-      COMPLEX*16 dj_r, dj_p, dj_z, dj_1, dj_2, dj_3;
-      common /ind_curr/ dj_r( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_p( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_z( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_1( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_3( -NGH:NGH , 1:NGL , 2 );
 
 
+      DOUBLE PRECISION Ar( NTX , NTX );
+      DOUBLE PRECISION Ai( NTX , NTX );
 
-      REAL*8 Ar( NTX , NTX );
-      REAL*8 Ai( NTX , NTX );
-      REAL*8 AUX1(    NTX , KTRUNC );
-      REAL*8 AUX2( KTRUNC , KTRUNC );
-      COMPLEX*16 D( NCOORD );
-      COMPLEX*16 z;
+      DOUBLE PRECISION AUX1(    NTX , KTRUNC );
+      DOUBLE PRECISION AUX2( KTRUNC , KTRUNC );
+
+      DOUBLE COMPLEX D( NCOORD );
+      DOUBLE COMPLEX z;
       CHARACTER fg1, fg2;
       pi = 3.14159265358979324D0;
 
@@ -506,58 +477,24 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE quadrature;
+      USE ddens;
+      USE dcurr;
+      USE dlaplace;
+      USE famlaplacianmod;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       common /baspar/ hom, hb0, b0;
       common /defbas/ beta0, q, bp, bz;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      COMPLEX*16 drho_v, drho_s;
-      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s( -NGH:NGH , 1:NGL     );
-
-      COMPLEX*16 dj_r, dj_p, dj_z, dj_1, dj_2, dj_3;
-      common /ind_curr/ dj_r( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_p( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_z( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_1( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_3( -NGH:NGH , 1:NGL , 2 );
-
-      COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
-      common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
-     &                 ldrho_s ( -NGH:NGH , 1:NGL ),
-     &                 ldj_1p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_2p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_3p  ( -NGH:NGH , 1:NGL );
-
 
 
       LOGICAL first_call /.true./;
-
-      parameter( NSH   = 2*(N0FX+1)                             );
-      parameter( NSIZE = ( (NSH+1)*(NSH+3) + 1 - MOD(NSH,2) )/4 );
-
-      INTEGER*4 NZZ( NSIZE );
-      INTEGER*4 NRR( NSIZE );
-
-      REAL*8 phiz ( -NGH:NGH , 0:(NSH)               );
-      REAL*8 phirK(    1:NGL , 0:(NSH/2) , 0:J_MAX+1 );
-
-      COMPLEX*16 c( NSIZE );
-
-      SAVE first_call, NZZ, NRR, phiz, phirK;
+      SAVE first_call;
 
 
 
@@ -892,26 +829,26 @@ c======================================================================c
       ! [out]: D is complex vector od length M
 
       IMPLICIT NONE;
-      EXTERNAL ddot;
-      REAL*8   ddot;
+      EXTERNAL         ddot;
+      DOUBLE PRECISION ddot;
 
-      INTEGER*4 N, M, K, NB;
-      INTEGER*4 LDAR, LDAI, LDAnnz, LDU, LDV, LDAUX1, LDAUX2;
-      INTEGER*4 ia_blk( NB );
-      INTEGER*4 id_blk( NB );
-      REAL*8 AR( LDAR , N );
-      REAL*8 AI( LDAI , N );
-      REAL*8  U(  LDU , K );
-      REAL*8  V(  LDV , M );
-      REAL*8 AUX1( LDAUX1 , K );
-      REAL*8 AUX2( LDAUX2 , K );
+      INTEGER N, M, K, NB;
+      INTEGER LDAR, LDAI, LDAnnz, LDU, LDV, LDAUX1, LDAUX2;
+      INTEGER ia_blk( NB );
+      INTEGER id_blk( NB );
+      DOUBLE PRECISION AR( LDAR , N );
+      DOUBLE PRECISION AI( LDAI , N );
+      DOUBLE PRECISION  U(  LDU , K );
+      DOUBLE PRECISION  V(  LDV , M );
+      DOUBLE PRECISION AUX1( LDAUX1 , K );
+      DOUBLE PRECISION AUX2( LDAUX2 , K );
       LOGICAL Annz( LDAnnz , NB );
-      COMPLEX*16 D( M );
+      DOUBLE COMPLEX D( M );
 
 
 
-      REAL*8 Y( LDV );
-      INTEGER*4 i, ib, jb, i0, j0;
+      DOUBLE PRECISION Y( LDV );
+      INTEGER i, ib, jb, i0, j0;
 
       D = COMPLEX( 0.D0 , 0.D0 );
 

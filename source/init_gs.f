@@ -4,51 +4,22 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fields; !from ground state code
+      USE simplex;
+      USE v_matrix;
+      USE ddpc1ddme2;
+      USE basis;
+      USE gs_dens;
+      USE gs_mesons;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fields/ phi(MG,4);
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
-
-      REAL*8 m_sig, m_ome, m_rho;
-      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
-     &                      a_v , b_v , c_v , d_v ,
-     &                      a_tv, b_tv, c_tv, d_tv,
-     &                      del_s,
-     &
-     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
-     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
-     &                      a_rho,                      g0_rho, m_rho,
-     &
-     &                      rho_sat;
-
-      common /basis/ phi_z( -NGH:NGH , NTX ),
-     &              dphi_z( -NGH:NGH , NTX ),
-     &               phi_r(    1:NGL , NTX ),
-     &              dphi_r(    1:NGL , NTX );
-
-      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS( -NGH:NGH , 1:NGL     );
-
-      common /gs_mesons/ sig_GS( -NGH:NGH , 1:NGL ),
-     &                   ome_GS( -NGH:NGH , 1:NGL ),
-     &                   rho_GS( -NGH:NGH , 1:NGL );
 
 
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 dens_mat( NBSX , NBSX , NBX , 2 );
+      DOUBLE COMPLEX dens_mat( NBSX , NBSX , NBX , 2 );
       hbc = 197.328284D0;
       pi  = 3.14159265358979324D0;
 

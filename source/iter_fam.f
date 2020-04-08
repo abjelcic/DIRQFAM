@@ -4,22 +4,12 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE fam_iter;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /fam_iter/ error, tol, iter, iter_max;
-#ifdef DEBUG
-      DATA tol /1.D-9/;
-#else
-      DATA tol /1.D-5/;
-#endif
 
 
 
@@ -36,7 +26,7 @@ c======================================================================c
       format2   = '(6x,a,1e14.9,1x,a)';
 #endif
 
-      tol      = tol;    ! Self-consistency tolerance
+      tol      = tol;    ! In order to change tolerance, see start_fam.f
       iter     = 0;      ! Index of current iteration
       iter_max = 999;    ! Maximum number of iterations
       error    = 1.D+99; ! Error in current iteration
@@ -74,7 +64,7 @@ c======================================================================c
 c-----Main QFAM iteration for fixed energy
       do iter = 1 , iter_max
 
-          write( 6 , format1 , advance = 'no' )
+          write(6,format1,advance='no')
      &    iter , '.Iteration, error = ' , error;
           call flush(6);
 
@@ -93,7 +83,7 @@ c-----Main QFAM iteration for fixed energy
           Sp = fam_strength( .false. , 2 );
 
 
-          write( 6 , format2 , advance = 'yes' )
+          write(6,format2,advance='yes')
      &    'S(f,w) = ' , Sn + Sp , '|';
           call flush(6);
 

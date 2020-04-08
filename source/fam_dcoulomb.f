@@ -4,37 +4,18 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE fam_green;
+      USE dlaplace;
+      USE dcoul;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /fam_green/ G1( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
-     &                   G2( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL ),
-     &                   G3( -NGH:NGH , 1:NGL , -NGH:NGH , 1:NGL );
-                        !G (     z'   ,  r'   ,     z    ,  r    )
-
-      COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
-      common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
-     &                 ldrho_s ( -NGH:NGH , 1:NGL ),
-     &                 ldj_1p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_2p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_3p  ( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 dVCou_0, dVCou_r, dVCou_p, dVCou_z;
-      common /fam_coul/ dVCou_0( -NGH:NGH , 1:NGL ),
-     &                  dVCou_r( -NGH:NGH , 1:NGL ),
-     &                  dVCou_p( -NGH:NGH , 1:NGL ),
-     &                  dVCou_z( -NGH:NGH , 1:NGL );
 
 
-
-      COMPLEX*16 acc0, acc1, acc2, acc3;
+      DOUBLE COMPLEX acc0, acc1, acc2, acc3;
 
 
 

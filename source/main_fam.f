@@ -4,9 +4,9 @@ c======================================================================c
 
 c======================================================================c
 
-      implicit REAL*8    (a-h,o-z)
-      implicit INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       CHARACTER parname*10;
@@ -60,6 +60,9 @@ c======================================================================c
 
 
 
+c-----Allocates arrays used in QFAM submodule
+      call allocqfam();
+
 c-----Constructs the simplex-y basis quantum numbers
       call base_simplex( .false. );
 
@@ -82,6 +85,9 @@ c-----Initializes QFAM submodule
 
 c-----Executes QFAM submodule
       call start_fam( .false. );
+
+c-----Deallocates arrays used in QFAM submodule
+      call deallocqfam();
 
 
 

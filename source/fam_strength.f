@@ -4,29 +4,18 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE simplex;
+      USE fmatrix;
+      USE drho;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 f1_JK, f2_JK;
-      common /f_matrix/ f1_JK( NTX , NTX , 2 ),
-     &                  f2_JK( NTX , NTX , 2 );
-
-      COMPLEX*16 drho_1, drho_2;
-      common /delta_rho/ drho_1( NTX , NTX , 2 ),
-     &                   drho_2( NTX , NTX , 2 );
+      INTEGER it;
 
 
 
-      COMPLEX*16 trace;
+      DOUBLE COMPLEX trace;
 
 
 

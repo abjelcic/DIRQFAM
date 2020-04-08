@@ -1,64 +1,710 @@
 c----------------------------------------------------------------------c
 c     DIRHBZ code downloaded directly from CPC program library.        c
 c                                                                      c
-c     File 'dirhb.par' is renamed to 'dirqfam.par'.                    c
-c     File 'dirhb.dat' is renamed to 'dirqfam.dat'.                    c
-c     All implementations of BLAS/LAPACK subroutines are deleted.      c
-c     All other minor changes are labeled with "!abjelcic" mark.       c
+c     File 'dirhb.par' is casted to 'dirqfampar.mod' Fortran module.   c
+c                                                                      c
+c     Input file 'dirhb.dat' is renamed to 'dirqfam.dat'.              c
+c                                                                      c
+c     Some unused subroutines in DIRHBZ code are deleted.              c
+c                                                                      c
+c     Minor changes are labeled with 'ab' mark.                        c
+c                                                                      c
+c     All static commons and local arrays with sizes previously        c
+c     statically determined by 'dirhb.par' are recasted to             c
+c     appropriate Fortran modules which are dynamically allocated      c
+c     in the beginning of program execution.                           c
+c                                                                      c
+c     Plotting subroutine in DIRHBZ code is not called since QFAM      c
+c     submodule will print the density anyway.                         c
 c----------------------------------------------------------------------c
 
 
 
-c=======================================================================c
-c=======================================================================c-----!abjelcic
-c=======================================================================c
-      subroutine check_dirqfampar()                                     c
-                                                                        c
-      implicit REAL*8 (a-h,o-z);                                        c
-      include 'dirqfam.par'                                             c
-                                                                        c
-      INTEGER*4 tape;                                                   c
-      INTEGER*4 n0f_new, n0b_new;                                       c
-      INTEGER*4 NGH_new, NGL_new;                                       c
-      INTEGER*4 J_multipole_new, K_multipole_new;                       c
-                                                                        c
-      tape = 100;                                                       c
-      open( tape , file = 'dirqfam.dat' , status = 'old' );             c
-      read(tape,'(10x,2i5)') n0f_new, n0b_new;                          c
-      read(tape,*);read(tape,*);read(tape,*);read(tape,*);read(tape,*); c
-      read(tape,*);read(tape,*);read(tape,*);read(tape,*);read(tape,*); c
-      read(tape,*);read(tape,*);read(tape,*);read(tape,*);read(tape,*); c
-      read(tape,*);read(tape,*);read(tape,*);read(tape,*);read(tape,*); c
-      read(tape,*);                                                     c
-      read(tape,*);                                                     c
-      read(tape,'(18x,i9)') NGH_new;                                    c
-      read(tape,'(18x,i9)') NGL_new;                                    c
-      read(tape,*);                                                     c
-      read(tape,'(18x,i9)') J_multipole_new;                            c
-      read(tape,'(18x,i9)') K_multipole_new;                            c
-      close(tape);                                                      c
-                                                                        c
-      if( n0f_new .ne. N0FX ) then                                      c
-          stop 'Error: dirqfam.par! Please make prep + make run again.';c
-      endif                                                             c
-      if( NGH_new .ne. NGH ) then                                       c
-          stop 'Error: dirqfam.par! Please make prep + make run again.';c
-      endif                                                             c
-      if( NGL_new .ne. NGL ) then                                       c
-          stop 'Error: dirqfam.par! Please make prep + make run again.';c
-      endif                                                             c
-      if( J_multipole_new .ne. JCHECK ) then                            c
-          stop 'Error: dirqfam.par! Please make prep + make run again.';c
-      endif                                                             c
-      if( K_multipole_new .ne. KCHECK ) then                            c
-          stop 'Error: dirqfam.par! Please make prep + make run again.';c
-      endif                                                             c
-                                                                        c
-      return;                                                           c
-      end;                                                              c
-c=======================================================================c
-c=======================================================================c-----!abjelcic
-c=======================================================================c
+
+c======================================================================c
+c
+c     PROGRAM DIRHB-axial
+c
+c======================================================================c
+c     Relativistic Hartree-Bogoliubov theory in a axially symmetric basis
+c     Main part of the code
+c----------------------------------------------------------------------c
+c
+c-------------------------------------
+      program DIRHBZ
+
+      implicit real*8 (a-h,o-z)
+
+      !ab
+      common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
+      !ab
+
+
+      !ab
+      call calcdim();
+      call allocdirhbz();
+      !ab
+c
+c---- sets data
+      call default(.false.)
+c
+c---- reads in data
+      call reader(.true.)
+c
+c---- force-parameters
+      call forces(.true.)
+c
+c---- Gauss-Hermite mesh points
+      call gaush( 2.D0 ,.false.)
+      call gausl(.false.)
+c
+c---- oscillator basis for single particle states
+      call base(.false.)
+c
+c---- preparations
+      call prep(.false.)
+c
+c---- wavefunctions at Gauss-Meshpoints
+      call gaupol(.false.)
+c
+c---- initialization of the potentials
+      call inout(1,.false.)
+c
+c---- initialization of the pairing field
+      call dinout(1,.false.)
+      call start(.false.)
+c
+c---- single-particle matix elements
+      call singf(.false.)
+c
+c---- preparation of pairing matrix elements
+      call singd(.false.)
+c
+c---- coulomb and meson propagators
+      call greecou(.false.)
+      call greemes(.false.)
+c
+c---- iteration
+      call iter(.true.)
+c
+c---- transformation to the canonical basis
+      call canon(.true.)
+c
+c---- center of mass correction
+      call centmas(.false.)
+c
+c---- results
+      call resu(.true.)
+c
+
+!ab   call plot(.false.)
+
+c
+c---- punching of potentials to tape  dis.wel
+      call inout(2,.false.)
+      call dinout(2,.false.)
+
+      !ab
+      close(l6);
+      !ab (close dirhb.out file)
+
+
+      !ab
+c-----FAM submodule
+      call main_fam( .false. );
+      !ab
+
+      !ab
+      call deallocdirhbz();
+      !ab
+
+!ab   stop ' FINAL STOP OF DIRHBZ'
+c-end-DIZ
+      end
+
+
+
+
+
+      !ab
+c======================================================================c
+
+      subroutine calcdim()
+
+c======================================================================c
+
+      use dirqfampar;
+      implicit none;
+
+      integer tape;
+      integer nn0f, nn0b;
+      integer NNGH, NNGL;
+      integer JJ_multipole, KK_multipole;
+      integer nf, ng;
+      integer i, j;
+      integer nz, nr, ml;
+      character, dimension(:), allocatable :: fg_spx;
+      integer,   dimension(:), allocatable :: nz_spx;
+      integer,   dimension(:), allocatable :: nr_spx;
+      integer,   dimension(:), allocatable :: ml_spx;
+      integer NNBSX;
+      integer broyd_m, broyd_n;
+      character fg1, fg2;
+      integer   nz1, nz2, nr1, nr2, ml1, ml2;
+      integer NNWMAX;
+      integer NRR, NZZ;
+      integer NNCOORD, KKTRUNC;
+      integer NNMESMAX, JJ_MAX, NNHMAX;
+      integer NNTX, KKX, MMVX, MMVTX;
+      integer dimf, dimg, suma, lam, N;
+
+
+
+
+
+
+c-----Reading parameters which determine dimensions of arrays/matrices
+      tape = 100;
+      open( tape , file = 'dirqfam.dat' , status = 'old' );
+      read(tape,'(10x,2i5)') nn0f, nn0b;
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,*);
+      read(tape,'(18x,i9)') NNGH;
+      read(tape,'(18x,i9)') NNGL;
+      read(tape,*);
+      read(tape,'(18x,i9)') JJ_multipole;
+      read(tape,'(18x,i9)') KK_multipole;
+      close(tape);
+
+      call assert( MOD(nn0f,2).eq.0  , 'n0f has to be even number'   );
+      call assert( MOD(nn0b,2).eq.0  , 'n0b has to be even number'   );
+      call assert( NNGH.ge.30        , 'NGH has to be at least 30'   );
+      call assert( NNGL.ge.30        , 'NGL has to be at least 30'   );
+      call assert( NNGH.lt.100       , 'NGH has to be less than 100' );
+      call assert( NNGL.lt.100       , 'NGL has to be less than 100' );
+
+
+
+
+
+
+c-----Construction of quantum numbers
+      nf = ((nn0f+1)*(nn0f+2)*(nn0f+3))/6;
+      ng = ((nn0f+2)*(nn0f+3)*(nn0f+4))/6;
+      allocate( fg_spx(nf+ng) );
+      allocate( nz_spx(nf+ng) );
+      allocate( nr_spx(nf+ng) );
+      allocate( ml_spx(nf+ng) );
+      i = 0;
+      do nz = 0 , nn0f
+          do nr = 0 , nn0f/2
+              do ml = -nn0f , nn0f
+                  if( nz+2*nr+abs(ml) .le. nn0f ) then
+                      i = i + 1;
+                      fg_spx(i) = 'f';
+                      nz_spx(i) = nz;
+                      nr_spx(i) = nr;
+                      ml_spx(i) = ml;
+                  endif
+              enddo
+          enddo
+      enddo
+      do nz = 0 , nn0f+1
+          do nr = 0 , (nn0f+1)/2
+              do ml = -(nn0f+1) , nn0f+1
+                  if( nz+2*nr+abs(ml) .le. nn0f+1 ) then
+                      i = i + 1;
+                      fg_spx(i) = 'g';
+                      nz_spx(i) = nz;
+                      nr_spx(i) = nr;
+                      ml_spx(i) = ml;
+                  endif
+              enddo
+          enddo
+      enddo
+      call assert( nf+ng.eq.i , 'nf+ng =/= i' );
+
+
+
+
+
+
+c-----Calculation of maximal block dimension (NBSX) of the U,V matrices
+c-----(in fact, this is the dimension of the omega^pi = 1/2^+ block)
+      NNBSX = ((nn0f+2)*(nn0f+3))/2;
+
+
+
+
+
+
+c-----Calculating Broyden's vector length
+      broyd_m = 35;
+      broyd_n = 0;
+      ! dh_1 matrix
+      do i = 1 , nf+ng
+          fg1 = fg_spx(i);
+          ml1 = ml_spx(i);
+          do j = i , nf+ng
+              fg2 = fg_spx(j);
+              ml2 = ml_spx(j);
+              if( fg1 .eq. fg2 ) then
+                  if( abs(ml1-ml2) .eq. KK_multipole ) then
+                      broyd_n = broyd_n + 1;
+                  endif
+              endif
+              if( fg1 .ne. fg2 ) then
+                  if( abs(ml1-ml2) .eq. KK_multipole ) then
+                      broyd_n = broyd_n + 1;
+                  endif
+                  if( abs(ml1+ml2+1) .eq. KK_multipole ) then
+                      broyd_n = broyd_n + 1;
+                  endif
+              endif
+          enddo
+      enddo
+      ! dDelta_pl, dDelta_mi
+      do i = 1 , nf+ng
+          fg1 = fg_spx(i);
+          ml1 = ml_spx(i);
+          do j = i , nf+ng
+              fg2 = fg_spx(j);
+              ml2 = ml_spx(j);
+              if( fg1.ne.'f' .or. fg2.ne.'f'    ) CYCLE;
+              if( abs(ml1-ml2) .ne. KK_multipole ) CYCLE;
+              broyd_n = broyd_n + 1; !dDelta_pl
+              broyd_n = broyd_n + 1; !dDelta_mi
+          enddo
+      enddo
+      broyd_n = 2*broyd_n; !protons/neutrons
+      broyd_n = 2*broyd_n; !real/imaginary
+
+
+
+
+
+
+c-----Calculating NWMAX
+      NNWMAX = 0;
+      do i = 1 , nf+ng
+          fg1 = fg_spx(i);
+          nz1 = nz_spx(i);
+          nr1 = nr_spx(i);
+          ml1 = ml_spx(i);
+
+          do j = i , nf+ng
+              fg2 = fg_spx(j);
+              nz2 = nz_spx(j);
+              nr2 = nr_spx(j);
+              ml2 = ml_spx(j);
+
+              if( fg1.ne.'f' .or. fg2.ne.'f'    ) CYCLE;
+              if( abs(ml1-ml2) .ne. KK_multipole ) CYCLE;
+
+              do NRR = 0 , nr1+nr2+(abs(ml1)+abs(ml2)-KK_multipole)/2
+                  do NZZ = 0 , nz1+nz2
+                      if( mod(NZZ,2) .ne. mod(nz1+nz2,2) ) CYCLE;
+
+                      NNWMAX = NNWMAX + 1;
+
+                  enddo
+              enddo
+
+          enddo
+      enddo
+
+
+
+
+
+
+c-----Setting KTRUNC and NCOORD
+      NNCOORD = (2*NNGH)*NNGL;
+      KKTRUNC = NNBSX + 10;
+
+
+
+
+
+
+c-----Setting NMESMAX shells and number of nz+2*nr+K <= NMESMAX pairs
+      NNMESMAX = nn0b;
+      JJ_MAX = 3;
+      call assert( NNMESMAX-(JJ_MAX+1).gt.0 , 'n0b too small' );
+      NNHMAX = ( (NNMESMAX+1)*(NNMESMAX+3) + 1 - MOD(NNMESMAX,2) )/4;
+
+
+
+
+
+
+c-----Calculating NTX, KX, MVX, MVTX
+      NNTX = (nn0f+2)*(nn0f+3)*(2*nn0f+5)/6;
+      KKX  = (nn0f+2)*(nn0f+3)*(nn0f+4)/6;
+      ! f-component
+      dimf = 0;
+      ! Positive parity
+      do i = 1 , nn0f+1
+          suma = 0;
+          do lam = i-1 , i
+              do N = lam+mod(lam,2) , nn0f , 2
+                 suma = suma + (N-lam)/2 + 1;
+              enddo
+          enddo
+          dimf = dimf + (suma*(suma+1))/2;
+      enddo
+      ! Negative parity
+      do i = 1 , nn0f+1
+          suma = 0;
+          do lam = i-1 , i
+              do N = lam+mod(lam+1,2) , nn0f , 2
+                  suma = suma + (N-lam)/2 + 1;
+              enddo
+          enddo
+          dimf = dimf + (suma*(suma+1))/2;
+      enddo
+      MMVX = dimf;
+      ! g-component
+      dimg = 0;
+      ! Positive parity
+      do i = 1 , (nn0f+1) + 1
+          suma = 0;
+          do lam = i-1 , i
+              do N = lam+mod(lam,2) , (nn0f+1) , 2
+                  suma = suma + (N-lam)/2 + 1;
+              enddo
+          enddo
+          dimg = dimg + (suma*(suma+1))/2;
+      enddo
+      ! Negative parity
+      do i = 1 , (nn0f+1)+1
+          suma = 0;
+          do lam = i-1 , i
+              do N = lam+mod(lam+1,2) , (nn0f+1) , 2
+                  suma = suma + (N-lam)/2 + 1;
+              enddo
+          enddo
+          dimg = dimg + (suma*(suma+1))/2;
+      enddo
+      MMVTX = dimf + dimg;
+
+
+
+
+
+
+c-----Setting dirqfampar module
+      IGFV       = 100;
+
+      RMAX       = 15.D0;;
+      MR         = 301;
+
+      QMAX       = 6.D0;
+      MQ         = 49;
+
+      NGH        = NNGH;
+      NGL        = NNGL;
+      NGLEG      = 18;
+
+      N0FX       = nn0f;
+      nxx        = N0FX/2;
+
+      NBX        = 2*N0FX+3;
+
+      NTX        = NNTX;
+
+      KX         = KKX;
+
+      NZX        =  N0FX+1;
+
+      NRX        = N0FX/2;
+
+      MLX        = N0FX+1;
+
+      NFX        = (N0FX/2+1)**2;
+
+      NGX        = (N0FX/2+1)*(N0FX/2+2);
+
+      NDX        = NGX;
+
+      N0BX       = nn0b;
+
+      nbxx       = N0BX/2;
+      NOX        = ((nbxx+1)*(nbxx+2))/2;
+
+      NOX1       = ((N0FX+1)*(N0FX+2))/2;
+
+      NGH2       = NGH+NGH;
+      NB2X       = NBX+NBX;
+      NHX        = NFX+NGX;
+      NDDX       = NDX*NDX;
+      NHBX       = NHX+NHX;
+      NHBQX      = NHBX*NHBX;
+      NFFX       = NFX*NFX;
+      NFGX       = NFX*NGX;
+      NHHX       = NHX*NHX;
+      MG         = (NGH+1)*(NGL+1);
+      N02        = 2*N0FX;
+      NNNX       = (N0FX+1)*(N0FX+1);
+
+      MVX        = MMVX;
+      MVTX       = MMVTX;
+
+      NBSX       = NNBSX;
+      J_MAX      = JJ_MAX;
+      NFAM_BROYD = broyd_n;
+      MFAM_BROYD = broyd_m;
+      NWMAX      = NNWMAX;
+      KTRUNC     = KKTRUNC;
+      NCOORD     = NNCOORD;
+      NMESMAX    = NNMESMAX;
+      NHMAX      = NNHMAX;
+
+
+
+
+
+
+      deallocate( fg_spx );
+      deallocate( nz_spx );
+      deallocate( nr_spx );
+      deallocate( ml_spx );
+
+      end
+
+c======================================================================c
+
+      subroutine allocdirhbz()
+
+c======================================================================c
+
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use bosqua;
+      use vvvikf;
+      use deldel;
+      use gamgam;
+      use broyde;
+      use canonmod;
+      use blodir;
+      use eeecan;
+      use blocan;
+      use waveuv;
+      use centmasmod;
+      use gaussl;
+      use herpol;
+      use lagpol;
+      use coulmb;
+      use procou;
+      use gaussh;
+      use constr;
+      use couplf;
+      use deltamod;
+      use rokaos;
+      use tmrwnn;
+      use densitmod;
+      use dens;
+      use rhorho;
+      use gaucor;
+      use ptenso;
+      use dirhbmod;
+      use gfvmod;
+      use gaushmod;
+      use ekinmod;
+      use single;
+      use eparmod;
+      use fields;
+      use fieldmod;
+      use propag;
+      use gordonmod;
+      use greemesmod;
+      use potpot;
+      use bospol;
+      use plotmod;
+      use singdmod;
+      use vvnpmod;
+      use single2;
+
+      implicit none;
+
+      call alloc_blokap();
+      call alloc_bloosc();
+      call alloc_quaosc();
+      call alloc_bosqua();
+      call alloc_vvvikf();
+      call alloc_deldel();
+      call alloc_gamgam();
+      call alloc_broyde();
+      call alloc_canonmod();
+      call alloc_blodir();
+      call alloc_eeecan();
+      call alloc_blocan();
+      call alloc_waveuv();
+      call alloc_centmasmod();
+      call alloc_gaussl();
+      call alloc_herpol();
+      call alloc_lagpol();
+      call alloc_coulmb();
+      call alloc_procou();
+      call alloc_gaussh();
+      call alloc_constr();
+      call alloc_couplf();
+      call alloc_deltamod();
+      call alloc_rokaos();
+      call alloc_tmrwnn();
+      call alloc_densitmod();
+      call alloc_dens();
+      call alloc_rhorho();
+      call alloc_gaucor();
+      call alloc_ptenso();
+      call alloc_dirhbmod();
+      call alloc_gfvmod();
+      call alloc_gaushmod();
+      call alloc_ekinmod();
+      call alloc_single();
+      call alloc_eparmod();
+      call alloc_fields();
+      call alloc_fieldmod();
+      call alloc_propag();
+      call alloc_gordonmod();
+      call alloc_greemesmod();
+      call alloc_potpot();
+      call alloc_bospol();
+      call alloc_plotmod();
+      call alloc_singdmod();
+      call alloc_vvnpmod();
+      call alloc_single2();
+
+      end
+
+c======================================================================c
+
+      subroutine deallocdirhbz()
+
+c======================================================================c
+
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use bosqua;
+      use vvvikf;
+      use deldel;
+      use gamgam;
+      use broyde;
+      use canonmod;
+      use blodir;
+      use eeecan;
+      use blocan;
+      use waveuv;
+      use centmasmod;
+      use gaussl;
+      use herpol;
+      use lagpol;
+      use coulmb;
+      use procou;
+      use gaussh;
+      use constr;
+      use couplf;
+      use deltamod;
+      use rokaos;
+      use tmrwnn;
+      use densitmod;
+      use dens;
+      use rhorho;
+      use gaucor;
+      use ptenso;
+      use dirhbmod;
+      use gfvmod;
+      use gaushmod;
+      use ekinmod;
+      use single;
+      use eparmod;
+      use fields;
+      use fieldmod;
+      use propag;
+      use gordonmod;
+      use greemesmod;
+      use potpot;
+      use bospol;
+      use plotmod;
+      use singdmod;
+      use vvnpmod;
+      use single2;
+
+      implicit none;
+
+      call dealloc_blokap();
+      call dealloc_bloosc();
+      call dealloc_quaosc();
+      call dealloc_bosqua();
+      call dealloc_vvvikf();
+      call dealloc_deldel();
+      call dealloc_gamgam();
+      call dealloc_broyde();
+      call dealloc_canonmod();
+      call dealloc_blodir();
+      call dealloc_eeecan();
+      call dealloc_blocan();
+      call dealloc_waveuv();
+      call dealloc_centmasmod();
+      call dealloc_gaussl();
+      call dealloc_herpol();
+      call dealloc_lagpol();
+      call dealloc_coulmb();
+      call dealloc_procou();
+      call dealloc_gaussh();
+      call dealloc_constr();
+      call dealloc_couplf();
+      call dealloc_deltamod();
+      call dealloc_rokaos();
+      call dealloc_tmrwnn();
+      call dealloc_densitmod();
+      call dealloc_dens();
+      call dealloc_rhorho();
+      call dealloc_gaucor();
+      call dealloc_ptenso();
+      call dealloc_dirhbmod();
+      call dealloc_gfvmod();
+      call dealloc_gaushmod();
+      call dealloc_ekinmod();
+      call dealloc_single();
+      call dealloc_eparmod();
+      call dealloc_fields();
+      call dealloc_fieldmod();
+      call dealloc_propag();
+      call dealloc_gordonmod();
+      call dealloc_greemesmod();
+      call dealloc_potpot();
+      call dealloc_bospol();
+      call dealloc_plotmod();
+      call dealloc_singdmod();
+      call dealloc_vvnpmod();
+      call dealloc_single2();
+
+      end
+      !ab
+
 
 
 
@@ -81,27 +727,34 @@ c     ID(ib,1): dimension large components of block b
 c     ID(ib,2): dimension small components of block b
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use bosqua;
+      use vvvikf;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       character tp*1,tis*1,tit*8,tl*1                           ! textex
-      character nucnam*2                                        ! nucnuc
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character nucnam*2 (not even used...)                     ! nucnuc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
 c
 c
       common /basnnn/ n0f,n0b
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /bosqua/ nzb(NOX),nrb(NOX),NO
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /bosqua/ nzb(NOX),nrb(NOX),NO
       common /zdimos/ nzm,nrm,mlm
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
 c
       if (lpr) then
       write(l6,*) '****** BEGIN BASE **********************************'
@@ -145,6 +798,9 @@ c
 c        loop over large and small components
          do ifg = 1,2
 	        ia(ib,ifg) = il
+	        !ab
+	        ip = 0;
+            !ab
             if (ifg.eq.1) ip = ipf
             if (ifg.eq.2) ip = ipg
 c
@@ -195,55 +851,60 @@ c                 read*                               ! remove
       enddo   ! k
 
 
+
+
+      !ab
 c=======================================================================c
-c=======================================================================c-----!abjelcic
 c=======================================================================c
-                                                                        c
-      il = il + 1;                                                      c
-                                                                        c
-      ib     = ib + 1;                                                  c
-      kb(ib) = -( n0f + 1 );                                            c
-      mb(ib) = 2;                                                       c
-      write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '-';               c
-                                                                        c
-      id(ib,1) = 0;                                                     c
-      id(ib,2) = 1;                                                     c
-      ia(ib,1) = il - 1;                                                c
-      ia(ib,2) = il - 1;                                                c
-      nz(il)   = 0;                                                     c
-      nr(il)   = 0;                                                     c
-      ml(il)   = n0f + mod(n0f,2);                                      c
-      ms(il)   = 2*mod(n0f,2) - 1;                                      c
-      np(il)   = 2;                                                     c
-      write(tt(il),100) nz(il) , nr(il) , ml(il);                       c
-                                                                        c
-                                                                        c
-      il = il + 1;                                                      c
-                                                                        c
-      ib     = ib + 1;                                                  c
-      kb(ib) = -( 2*mod(n0f,2) - 1 )*( n0f + 2 );                       c
-      mb(ib) = 2;                                                       c
-      if ( kb(ib) .gt. 0 ) then                                         c
-          write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '+';           c
-      else                                                              c
-          write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '-';           c
-      endif                                                             c
-                                                                        c
-                                                                        c
-      id(ib,1) = 0;                                                     c
-      id(ib,2) = 1;                                                     c
-      ia(ib,1) = il - 1;                                                c
-      ia(ib,2) = il - 1;                                                c
-      nz(il)   = 0;                                                     c
-      nr(il)   = 0;                                                     c
-      ml(il)   = n0f + 1;                                               c
-      ms(il)   = 1                                                      c
-      np(il)   = 2;                                                     c
-      write(tt(il),100) nz(il) , nr(il) , ml(il);                       c
-                                                                        c
 c=======================================================================c
-c=======================================================================c-----!abjelcic
+
+      il = il + 1;
+
+      ib     = ib + 1;
+      kb(ib) = -( n0f + 1 );
+      mb(ib) = 2;
+      write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '-';
+
+      id(ib,1) = 0;
+      id(ib,2) = 1;
+      ia(ib,1) = il - 1;
+      ia(ib,2) = il - 1;
+      nz(il)   = 0;
+      nr(il)   = 0;
+      ml(il)   = n0f + mod(n0f,2);
+      ms(il)   = 2*mod(n0f,2) - 1;
+      np(il)   = 2;
+      write(tt(il),100) nz(il) , nr(il) , ml(il);
+
+
+      il = il + 1;
+
+      ib     = ib + 1;
+      kb(ib) = -( 2*mod(n0f,2) - 1 )*( n0f + 2 );
+      mb(ib) = 2;
+      if ( kb(ib) .gt. 0 ) then
+          write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '+';
+      else
+          write(tb(ib),'(i2,2h/2,a1)') 2*abs(kb(ib))-1 , '-';
+      endif
+
+
+      id(ib,1) = 0;
+      id(ib,2) = 1;
+      ia(ib,1) = il - 1;
+      ia(ib,2) = il - 1;
+      nz(il)   = 0;
+      nr(il)   = 0;
+      ml(il)   = n0f + 1;
+      ms(il)   = 1
+      np(il)   = 2;
+      write(tt(il),100) nz(il) , nr(il) , ml(il);
+
 c=======================================================================c
+c=======================================================================c
+c=======================================================================c
+      !ab
+
 
 
       nb = ib
@@ -352,7 +1013,7 @@ c
       endif
 c
   100 format('[',3i2,']')
-  101 format(4i2)
+!ab 101 format(4i2)
   102 format(i4,a,i2,a,i2,a,i2,a,i2,a,i2,3h/2 ,a)
   103 format(a,2i10)
   104 format(i5,a,i3,a,i3,a,i3)
@@ -367,35 +1028,42 @@ c======================================================================c
       subroutine broyden(lpr)
 
 c======================================================================c
+      use dirqfampar;
+      use bloosc;
+      use blokap;
+      use deldel;
+      use gamgam;
+      use broyde;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
-      character tb*6                                           ! blokap
+!ab   character tb*6                                           ! blokap
 c
       ! broyden iteration sizes
-      parameter (nn = 2*MVTX+2*MVX+2+1)
-      parameter (mm = 7)
+!ab   parameter (nn = 2*MVTX+2*MVX+2+1)
+!ab   parameter (mm = 7)
 c
       common /baspar/ hom,hb0,b0
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /bloosc/ ia(nbx,2),id(nbx,2)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(nbx,2),id(nbx,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
       common /physco/ hbc,alphi,r0
-      common /deldel/ de(nhhx,nb2x)
-      common /gamgam/ hh(nhhx,nb2x)
+!ab   common /deldel/ de(nhhx,nb2x)
+!ab   common /gamgam/ hh(nhhx,nb2x)
       common /fermi / ala(2),tz(2)
       common /con_b2/ betac,q0c,cquad,c0,alaq,calcq0,icstr
       common /pair  / del(2),spk(2),spk0(2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
-      common /broyde/ bbeta(mm,mm),df(nn,mm),dv(nn,mm),
-     &                bwork(mm),curv(nn),bw0,ibwork(mm)
-      common /broyde1/ vin(nn)
-      common /broyde2/ ibroyd
-      dimension vou(nn)
+!ab   common /broyde/ bbeta(mm,mm),df(nn,mm),dv(nn,mm),
+!ab  &                bwork(mm),curv(nn),bw0,ibwork(mm)
+!ab   common /broyde1/ vin(nn)
+!ab   common /broyde2/ ibroyd
+!ab   dimension vou(nn)
       data bmix /0.7d0/
 c
       if (lpr) then
@@ -567,7 +1235,7 @@ c            write(*,100) 'broyden mixing: mm =', iuse, 'c=',curvature
 c            write(*,100) 'linear  mixing: mm =', iuse, 'c=',curvature
          endif
       endif
- 100  format(10x,a,i2,2x,a,f16.8)
+!ab 100  format(10x,a,i2,2x,a,f16.8)
       ! broyden's mixing procedure ends here
 
       ! set the new matrix elements
@@ -624,34 +1292,45 @@ c
 c     transforms to the canonical basis
 c     version for RHB
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use canonmod;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use gamgam;
+      use deldel;
+      use eeecan;
+      use blocan;
+      use quaosc;
+      use waveuv;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      logical lpr,lpr1
+!ab   logical lpr,lpr1
+      logical lpr;
 c
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character tp*1,tis*1,tit*8,tl*1                           ! textex
 c
-      dimension aa(NHHX),dd(NHHX),v2(NHX),z(NHX),eb(NHX),h(NHX),d(NHX)
+!ab   dimension aa(NHHX),dd(NHHX),v2(NHX),z(NHX),eb(NHX),h(NHX),d(NHX)
 c
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /gamgam/ hh(NHHX,NB2X)
-      common /deldel/ de(NHHX,NB2X)
-      common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
-     &                fgcan(NHX,KX,4),ibkcan(KX,4)
-c=======================================================================c-----!abjelcic
-      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
-c=======================================================================c-----!abjelcic
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /gamgam/ hh(NHHX,NB2X)
+!ab   common /deldel/ de(NHHX,NB2X)
+!ab   common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
+!ab  &                fgcan(NHX,KX,4),ibkcan(KX,4)
+!ab   common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
       common /mathco/ zero,one,two,half,third,pi
       common /fermi / ala(2),tz(2)
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
+!ab   common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
 
       data ash/100.d0/
 c
@@ -784,6 +1463,9 @@ c------- printout for particles
             d1 = decan(k,it)
 c           search for the main oscillator component
             smax = zero
+            !ab
+            imax = 1;
+            !ab
             do i = 1,nf
                s = abs(fgcan(i,k,it))
                if (s.gt.smax) then
@@ -907,40 +1589,51 @@ c
       subroutine centmas(lpr)
 c
 c======================================================================c
+      use dirqfampar;
+      use centmasmod;
+      use blodir;
+      use bloosc;
+      use blokap;
+      use gaussl;
+      use gfvmod;
+      use herpol;
+      use lagpol;
+      use quaosc;
+      use eeecan;
+      use blocan;
+
       implicit real*8(a-h,o-z)
 c
-      include 'dirqfam.par'
-      parameter (MG4 = 4*MG)
+!ab   include 'dirqfam.par'
+!ab   parameter (MG4 = 4*MG)
 c
       logical lpr,lpar
 c
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character nucnam*2                                        ! nucnuc
 
-      dimension wc(MG4,KX),dz(MG4,KX),dr(MG4,KX)
+!ab   dimension wc(MG4,KX),dz(MG4,KX),dr(MG4,KX)
 c
       common /baspar/ hom,hb0,b0
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
       common /centma/ cmas(3)
       common /defbas/ beta0,q,bp,bz
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfviv / iv(-IGFV:IGFV)
-      common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
       common /mathco/ zero,one,two,half,third,pi
       common /physco/ hbc,alphi,r0
       common /masses/ amu,ames(4)
       common /nucnuc/ amas,npr(3),nucnam
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
-     &                fgcan(NHX,KX,4),ibkcan(KX,4)
-c=======================================================================c-----!abjelcic
-      common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
-c=======================================================================c-----!abjelcic
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /eeecan/ eecan(KX,4),decan(KX,4),vvcan(KX,4),
+!ab  &                fgcan(NHX,KX,4),ibkcan(KX,4)
+!ab   common /blocan/ kacan(nbx,4),kdcan(nbx,4),nkcan(4)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 
 c
@@ -1274,16 +1967,20 @@ c
 c     calculation of the Coulomb field
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use coulmb;
+      use procou;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /procou/ ggc(MG,MG)
+!ab   common /procou/ ggc(MG,MG)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       if (icou.eq.0) return
@@ -1320,15 +2017,20 @@ c
 C     calculation of the Coulomb-propagator
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use procou;
+      use gaussh;
+      use gaussl;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      common /procou/ ggc(MG,MG)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /procou/ ggc(MG,MG)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
@@ -1413,18 +2115,23 @@ c   variable wanted value               v_Q
 c   initial  wanted value               v_Q = w_Q
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use constr;
+      use gaussh;
+      use gaussl;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       common /baspar/ hom,hb0,b0
-      common /constr/ vc(MG,2)
+!ab   common /constr/ vc(MG,2)
       common /con_b2/ betac,q0c,cquad,c0,alaq,calcq0,icstr
       common /con_b2a/ fac0
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
       common /mathco/ zero,one,two,half,third,pi
       common /physco/ hbc,alphi,r0
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
@@ -1463,7 +2170,7 @@ c
       if (lpr) then
       write(l6,*) '****** END CSTRPOT *********************************'
       read*
-      l6 = lx
+!ab   l6 = lx
       endif
 c
       return
@@ -1505,7 +2212,9 @@ c
       endif
 c
       write(6   ,100) ii,t,ic,w,d,v,x,si
-      write(lstr,100) ii,t,ic,w,d,v,x,si
+
+!ab   write(lstr,100) ii,t,ic,w,d,v,x,si
+
 c     read*
   100 format(i4,2x,a,i3,5f10.6,f16.6)
 c
@@ -1524,17 +2233,22 @@ c
 c     Default for Relativistic Mean Field spherical
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use constr;
+      use couplf;
+      use broyde;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       character tp*1,tis*1,tit*8,tl*1                   ! textex
 
       common /baspar/ hom,hb0,b0
-      common /constr/ vc(MG,2)
-      common /couplf/ ff(MG,4,2)
+!ab   common /constr/ vc(MG,2)
+!ab   common /couplf/ ff(MG,4,2)
       common /couplg/ ggmes(4),lmes(4)
       common /dforce/ a_m(4),b_m(4),c_m(4),d_m(4),dsat
       common /fermi / ala(2),tz(2)
@@ -1546,7 +2260,7 @@ c
       common /physco/ hbc,alphi,r0
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /broyde2/ ibroyd
+!ab   common /broyde2/ ibroyd
 c
 
 
@@ -1588,24 +2302,25 @@ c======================================================================c
 
 
 
-
+      !ab
 c=======================================================================c
-c=======================================================================c-----!abjelcic
 c=======================================================================c
-      intape = 123;                                                     c
-      open( intape , file = 'dirqfam.dat' , status = 'old' );           c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , '(18x,i9)' ) icou;                                 c
-      close( intape );                                                  c
 c=======================================================================c
-c=======================================================================c-----!abjelcic
+      intape = 123;
+      open( intape , file = 'dirqfam.dat' , status = 'old' );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , '(18x,i9)' ) icou;
+      close( intape );
 c=======================================================================c
+c=======================================================================c
+c=======================================================================c
+      !ab
 
 
 c======================================================================c
@@ -1703,9 +2418,11 @@ c======================================================================c
       blockdata block1
 
 c======================================================================c
+      use dirqfampar;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 
       character tp*1,tis*1,tit*8,tl*1                   ! textex
       common /physco/ hbc,alphi,r0
@@ -1732,28 +2449,38 @@ c     calculats the pairing field
 c     for separable pairing: Tian,Ma,Ring, PRB 676, 44 (2009)
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use deltamod;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use deldel;
+      use rokaos;
+      use vvvikf;
+      use tmrwnn;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical  lpr
 c
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character tp*1,tis*1,tit*8,tl*1                           ! textex
 c
-      dimension pnn(NNNX)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /quaosc/ nt,nnn(NTX,5),tt(NTX)
-      common /deldel/ de(NHHX,NB2X)
+!ab   dimension pnn(NNNX)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /quaosc/ nt,nnn(NTX,5),tt(NTX)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /pair  / del(2),spk(2),spk0(2)
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
-      common /tmrwnn/ wnn(MVX,NNNX),nnmax
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /tmrwnn/ wnn(MVX,NNNX),nnmax
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
       common /tmrpar/ gl(2),ga
 
@@ -1820,7 +2547,7 @@ c
       return
 C-end-DELTA
       end
-c=====================================================================c
+c======================================================================c
 
       subroutine densit(lpr)
 
@@ -1829,37 +2556,53 @@ C
 c     calculates the densities in r-space at Gauss-meshpoints
 C
 c---------1---------2---------3---------4---------5---------6---------7-
+      use dirqfampar;
+      use densitmod;
+      use blokap;
+      use bloosc;
+      use coulmb;
+      use dens;
+      use gaucor;
+      use gaussh;
+      use gaussl;
+      use gfvmod;
+      use herpol;
+      use lagpol;
+      use quaosc;
+      use rhorho;
+      use rokaos;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       character tp*1,tis*1,tit*8,tl*1                           ! textex
       character nucnam*2                                        ! nucnuc
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
 c
       dimension rsh(2)
-      dimension drs(MG,2),drv(MG,2)
+!ab   dimension drs(MG,2),drv(MG,2)
 c
       common /baspar/ hom,hb0,b0
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /defbas/ beta0,q,bp,bz
-      common /dens  / ro(MG,4),dro(MG,4)
-      common /gaucor/ ww(MG)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfviv / iv(-IGFV:IGFV)
-      common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
+!ab   common /dens  / ro(MG,4),dro(MG,4)
+!ab   common /gaucor/ ww(MG)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
       common /mathco/ zero,one,two,half,third,pi
       common /nucnuc/ amas,npr(3),nucnam
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /rhorho/ rs(MG,2),rv(MG,2)
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /rhorho/ rs(MG,2),rv(MG,2)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
 c
@@ -2010,7 +2753,7 @@ c
       return
 C-end-DENSIT
       end
-c=====================================================================c
+c======================================================================c
 
       subroutine denssh(it,lpr)
 
@@ -2019,26 +2762,34 @@ C
 c     calculates the densities in oscillator basis
 C
 c---------1---------2---------3---------4---------5---------6---------7-
+      use dirqfampar;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use rokaos;
+      use waveuv;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character tp*1,tis*1,tit*8,tl*1                           ! textex
 c
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /pair  / del(2),spk(2),spk0(2)
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
+!ab   common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
 c
       if (lpr) then
       write(l6,*) ' ****** BEGIN DENSSH *******************************'
@@ -2133,25 +2884,33 @@ c     IS = 1 : reads pairing field Delta from tape
 c     IS = 2 : writes pairing field Delta to tape
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use deldel;
+      use ptenso;
+      use vvvikf;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
       logical lpr
 c
-      character tt*8                                            ! quaosc
-      character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
 c
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /deldel/ de(NHHX,NB2X)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /initia/ inin,inink
-      common /ptenso/ aka(MVX,2),dkd(MVX,2)
+!ab   common /ptenso/ aka(MVX,2),dkd(MVX,2)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
 c
       if (is.eq.1.and.inink.ne.0) return
 
@@ -2166,10 +2925,14 @@ c======================================================================c
       if (is.eq.1) then
          call mzero(NHHX,NHHX,NB2X,de)
 
-c=======================================================================c-----!abjelcic
-         open( laka , file = './output/GS_output/dirhb.del' ,           c
-     &         status = 'unknown' , form = 'unformatted' );             c
-c=======================================================================c-----!abjelcic
+
+      !ab
+c=======================================================================c
+         open( laka , file = './output/GS_output/dirhb.del' ,
+     &         status = 'unknown' , form = 'unformatted' );
+c=======================================================================c
+      !ab
+
 
          read(laka) mv0
          if (mv0.ne.mv) stop 'in DINOUT: mv wrong'
@@ -2196,10 +2959,15 @@ c==== writing of the pairing potential
 c======================================================================c
       elseif (is.eq.2) then
 
-c=======================================================================c-----!abjelcic
-         open( laka , file = './output/GS_output/dirhb.del' ,           c
-     &         status = 'unknown' , form = 'unformatted' );             c
-c=======================================================================c-----!abjelcic
+
+
+      !ab
+c=======================================================================c
+         open( laka , file = './output/GS_output/dirhb.del' ,
+     &         status = 'unknown' , form = 'unformatted' );
+c=======================================================================c
+      !ab
+
 
          rewind(laka)
          write(laka) mv
@@ -2246,41 +3014,56 @@ c     IT    = 1 for neutrons
 c     IT    = 2 for protons
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use dirhbmod;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use deldel;
+      use gamgam;
+      use quaosc;
+      use waveuv;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr,lprl
 c
       character*1 bbb
-      character*8 tbb(NHBX)
+!ab   character*8 tbb(NHBX)
       character tp*1,tis*1,tit*8,tl*1                           ! textex
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character nucnam*2                                        ! nucnuc
 c
-      dimension hb(NHBQX),e(NHBX),ez(NHBX)
+!ab   dimension hb(NHBQX),e(NHBX),ez(NHBX)
 c
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /deldel/ de(NHHX,NB2X)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /fermi / ala(2),tz(2)
-      common /gamgam/ hh(NHHX,NB2X)
+!ab   common /gamgam/ hh(NHHX,NB2X)
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /mathco/ zero,one,two,half,third,pi
       common /nucnuc/ amas,npr(3),nucnam
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /quaosc/ nt,nnn(NTX,5),tt(NTX)
+!ab   common /quaosc/ nt,nnn(NTX,5),tt(NTX)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
+!ab   common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
 c
       data maxl/200/,epsl/1.d-8/,bbb/'-'/,lprl/.false./
 c
       if (lpr) then
       write(l6,*) ' ****** BEGIN DIRHB ********************************'
       endif
+
+      !ab
+      dd    = 0.d0;
+      sn    = 0.d0;
+      !ab
 
       dl    = 100.d0
       xh    = ala(it) + dl
@@ -2499,26 +3282,29 @@ c     wg(n)  =  sqrt(gamma(n+1/2))
 c     wgi(n) =  1/sqrt(gamma(n+1/2))
 C
 C-----------------------------------------------------------------------
+      use dirqfampar;
+      use gfvmod;
+
       implicit double precision (a-h,o-z)
 c
-      parameter (IGFV = 100)
+!ab   parameter (IGFV = 100)
 c
-      common /gfviv / iv(-IGFV:IGFV)
-      common /gfvsq / sq(0:IGFV)
-      common /gfvsqi/ sqi(0:IGFV)
-      common /gfvsqh/ sqh(0:IGFV)
-      common /gfvshi/ shi(0:IGFV)
-      common /gfvfak/ fak(0:IGFV)
-      common /gfvfad/ fad(0:IGFV)
-      common /gfvfi / fi(0:IGFV)
-      common /gfvfdi/ fdi(0:IGFV)
-      common /gfvwf / wf(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
-      common /gfvwfd/ wfd(0:IGFV)
-      common /gfvgm2/ gm2(0:IGFV)
-      common /gfvgmi/ gmi(0:IGFV)
-      common /gfvwg / wg(0:IGFV)
-      common /gfvwgi/ wgi(0:IGFV)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvsqi/ sqi(0:IGFV)
+!ab   common /gfvsqh/ sqh(0:IGFV)
+!ab   common /gfvshi/ shi(0:IGFV)
+!ab   common /gfvfak/ fak(0:IGFV)
+!ab   common /gfvfad/ fad(0:IGFV)
+!ab   common /gfvfi / fi(0:IGFV)
+!ab   common /gfvfdi/ fdi(0:IGFV)
+!ab   common /gfvwf / wf(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
+!ab   common /gfvwfd/ wfd(0:IGFV)
+!ab   common /gfvgm2/ gm2(0:IGFV)
+!ab   common /gfvgmi/ gmi(0:IGFV)
+!ab   common /gfvwg / wg(0:IGFV)
+!ab   common /gfvwgi/ wgi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
 c
 c---- mathemathical constants
@@ -2584,11 +3370,14 @@ c======================================================================c
 C     THE ARRAY OF BINOMIAL COEFFICIENTS
 C     BIN(I,J)= = I!/J!/(I-J)!
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use gfvmod;
+
       implicit double precision (a-h,o-z)
 c
-      parameter (IGFV = 100)
+!ab   parameter (IGFV = 100)
 c
-      common /bin0/ bin(0:IGFV,0:IGFV)
+!ab   common /bin0/ bin(0:IGFV,0:IGFV)
 c
       do i = 0,IGFV
          do k = 0,IGFV
@@ -2699,15 +3488,19 @@ c     possible alternative
 c     \int_-\infty^+\infty  f(z) dz             =   \sum_i f(xh(i)) wh(i)
 c
 c----------------------------------------------------------------------
+      use dirqfampar;
+      use gaushmod;
+      use gaussh;
+
       implicit double precision (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      dimension x(2*NGH),w(2*NGH)
+!ab   dimension x(2*NGH),w(2*NGH)
 c
-      common /gaussh/ xh(0:NGH),wh(0:NGH),xb(0:NGH)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),xb(0:NGH)
       common /basnnn/ n0f,n0b
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
@@ -2751,6 +3544,9 @@ c======================================================================c
       INTEGER i,its,j,m
       DOUBLE PRECISION p1,p2,p3,pp,z,z1
       m=(n+1)/2
+      !ab
+      z = 0.d0;
+      !ab
       do 13 i=1,m
         if(i.eq.1)then
           z=sqrt(float(2*n+1))-1.85575*(2*n+1)**(-.16667)
@@ -2801,13 +3597,16 @@ c     \int_0^\infty f(x) exp(-x) de     =   \sum_i f(xl(i)) pl(i)
 c     \int_0^\infty f(x) dx             =   \sum_i f(xl(i)) wl(i)
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use gaussl;
+
       implicit double precision (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      common /gaussl/ xl(0:ngl),wl(0:ngl),sxl(0:ngl),rb(0:ngl)
+!ab   common /gaussl/ xl(0:ngl),wl(0:ngl),sxl(0:ngl),rb(0:ngl)
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
@@ -2827,8 +3626,8 @@ c    3           .20323159266D-03,  .83650558568D-05,  .16684938765D-06,
 c    4           .13423910305D-08,  .30616016350D-11,  .81480774674D-15/
 c
 c
-      if (lpr) then
       lx = l6
+      if (lpr) then
       l6 = 6
       write(l6,*) '****** BEGIN GAUSL ********************************'
       endif
@@ -3087,6 +3886,10 @@ C
 C
       data tollim/1.d-10/,one/1.d0/,zero/0.d0/
 C
+      !ab
+      cp = -1;
+      !ab
+
       ifl=1
       p=zero
       do 10 i=1,n
@@ -3319,7 +4122,8 @@ ccc   ordnen der eigenwerte
       k=j
       p=d(j)
   410 continue
-  420 if (k.eq.i) goto 400
+      if (k.eq.i) goto 400
+!ab 420 if (k.eq.i) goto 400
       d(k)=d(i)
       d(i)=p
       do 425 j=1,n
@@ -3331,6 +4135,9 @@ c
 c     signum
       do k = 1,n
          s = 0.0d0
+         !ab
+         im = 1;
+         !ab
          do i = 1,n
             h = abs(x(i,k))
             if (h.gt.s) then
@@ -3461,7 +4268,6 @@ c
 c-end-MATRANSA
       end
 c=====================================================================c
-
       subroutine matransb(ma,n,aa,dd,dad,z)
 
 c======================================================================c
@@ -3497,119 +4303,8 @@ c
       return
 c-end-MATRANSB
       end
-c======================================================================c
-
-      real*8 function osc1(n,z)
 
 c======================================================================c
-c
-c     calculates the one-dimensional osczillator function
-c
-c----------------------------------------------------------------------c
-      implicit real*8 (a-h,o-z)
-c
-      common /mathco/ zero,one,two,half,third,pi
-      common /gfvsq / sq(0:100)             ! sq(n)  = sqrt(n)
-      common /gfvsqi/ sqi(0:100)            ! sqi(n) = 1/sqrt(n)
-c
-      s0 = pi**(-0.25d0)*exp(-half*z*z)
-      s1 = zero
-      do i = 1,n
-         s2 = s1
-         s1 = s0
-         s0 = sqi(i)*(sq(2)*z*s1-sq(i-1)*s2)
-      enddo   ! i
-    1 osc1 = s0
-c
-      return
-c-end-OSC1
-      end
-c======================================================================c
-
-      real*8 function osc2(n,m,r)
-
-c======================================================================c
-c
-c     calculates the radial wavefunctions for the zylindrical oscillator
-c     the are given as:
-c
-c     osc2(n,m,r) = N_(n,m)*sqrt(2) *  r^|m| * L_n^|m|(r*r) * exp(-r*r/2)
-c
-c     N_(n,m) = sqrt( n! / (n+|m|)! )
-c
-c----------------------------------------------------------------------c
-      implicit real*8 (a-h,o-z)
-c
-      common /mathco/ zero,one,two,half,third,pi
-      common /gfvsq / sq(0:100)                    !     sqrt(n)
-      common /gfvsqi/ sqi(0:100)                   !     1/sqrt(n)
-      common /gfvwfi/ wfi(0:100)                   !     1/sqrt(n!)
-c
-      if (m.lt.0) stop 'in OSC2:  m < 0'
-c
-      x  = r*r
-      w0 = sq(2)*exp(-half*x) * r**m
-      s0 = w0*wfi(m)
-      s1 = zero
-      do i = 1,n
-         s2 = s1
-         s1 = s0
-         s0 = ((i+i+m-1-x)*s1-sq(i-1)*sq(i-1+m)*s2)*sqi(i)*sqi(i+m)
-      enddo   ! i
-      osc2 = s0
-c
-      return
-c-end-OSZ2
-      end
-c======================================================================c
-
-      real*8 function osc3(n,l,r)
-
-c======================================================================c
-c
-c     calculates radial functions for the spherical oscillator R_nl(x)
-c
-c     phi(r,Omega) = b^(-3/2) * R_nl(r) * Y_ljm(Omega);   n=0,1,2,....
-c
-c     R_nl(r) = N_nl * r**l * L^(l+1/2)_n(r*r) * exp(-r*r/2)
-c
-c     N_nl    = sqrt(2 * n!/(n+l+1/2)!)     and    r in units of b
-c
-c     R_nl is normalized in such way that the norm integral reads
-c
-c     \int dr r**2 R_nl(r)^2 = 1
-c
-c----------------------------------------------------------------------c
-      implicit real*8 (a-h,o-z)
-c
-      common /gfvsq / sq(0:100)     !   sq(n)  = sqrt(n)
-      common /gfvsqi/ sqi(0:100)    !   sqi(n) = 1/sqrt(n)
-      common /gfvsqh/ sqh(0:100)    !   sqh(n) = sqrt(n+1/2)
-      common /gfvshi/ shi(0:100)    !   shi(n) = 1/sqrt(n+1/2)
-      common /gfvwgi/ wgi(0:100)    !   wgi(n) = 1/sqrt(gamma(n+1/2))
-      common /mathco/ zero,one,two,half,third,pi
-c
-      rr = r*r
-      if (l.eq.0) then
-	 rl = one
-      else
-	 rl = r**l
-      endif
-      s0 = sq(2)*wgi(l+1)*rl*exp(-half*rr)
-      s1 = zero
-      do i = 1,n
-         s2 = s1
-         s1 = s0
-         s0 = ((2*i-half+l-rr)*s1 - sq(i-1)*sqh(i-1+l)*s2) *
-     &        sqi(i)*shi(i+l)
-      enddo
-      osc3 = s0    ! = R_nl(r)
-c
-      return
-c-end-OSC3
-      end
-c======================================================================c
-c
       subroutine intpol(n,v,vh)
 c
 c======================================================================c
@@ -3928,9 +4623,14 @@ c
 c     calculates expectation values
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use gaussh;
+      use gaussl;
+      use rhorho;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
       character nucnam*2                                        ! nucnuc
@@ -3946,15 +4646,15 @@ c
       common /con_b2/ betac,q0c,cquad,c0,alaq,calcq0,icstr
       common /con_b2a/ fac0
       common /fermi / ala(2),tz(2)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
       common /nucnuc/ amas,npr(3),nucnam
       common /pair  / del(2),spk(2),spk0(2)
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
-      common /rhorho/ rs(MG,2),rv(MG,2)
+!ab   common /rhorho/ rs(MG,2),rv(MG,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       ihl(ih,il) = 1+ih + il*(NGH+1)
@@ -4159,7 +4859,10 @@ c
 c     center of mass correction
       if (icm.lt.2) then
       write(l6,200) ' E-cm  3/4*hom .......',cmas
-      elseif (icm.eq.2.and.ii.eq.0) then
+      !ab
+      elseif( icm.eq.2 ) then
+      !ab(ii is not even defined...)
+!ab   elseif ( icm.eq.2 .and. ii.eq.0 ) then
       write(l6,200) ' E-cm <P**2>/2M ......',cmas
       endif
 c
@@ -4199,23 +4902,31 @@ c
 c     calculates the kinetic energy
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use ekinmod;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use rokaos;
+      use single;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
-      dimension h0(NHHX)
+!ab   dimension h0(NHHX)
 c
       common /baspar/ hom,hb0,b0
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /physco/ hbc,alphi,r0
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
-      common /single/ sp(NFGX,NBX)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /single/ sp(NFGX,NBX)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       ek = zero
@@ -4259,23 +4970,31 @@ c
 c     calculates the particle energy
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use eparmod;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use gamgam;
+      use rokaos;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
-      dimension ro(NHHX)
+!ab   dimension ro(NHHX)
 c
       common /baspar/ hom,hb0,b0
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /gamgam/ hh(NHHX,NB2X)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /gamgam/ hh(NHHX,NB2X)
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
       common /physco/ hbc,alphi,r0
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       ep = zero
@@ -4300,17 +5019,23 @@ c
 c     calculates the pairing energy for TMR pairing
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use deldel;
+      use rokaos;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /deldel/ de(NHHX,NB2X)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /mathco/ zero,one,two,half,third,pi
       common /physco/ hbc,alphi,r0
-      common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
+!ab   common /rokaos/ rosh(NHHX,NB2X),aka(MVX,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /tmrpar/ gl(2),ga
 c
@@ -4342,22 +5067,30 @@ c
 c     calculates  field energies
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use coulmb;
+      use couplf;
+      use dens;
+      use fields;
+      use gaucor;
+      use rhorho;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       dimension emes(4)
 c
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /coupld/ ddmes(4)
-      common /couplf/ ff(MG,4,2)
+!ab   common /couplf/ ff(MG,4,2)
       common /couplg/ ggmes(4),lmes(4)
-      common /dens  / ro(MG,4),dro(MG,4)
-      common /fields/ phi(MG,4)
-      common /gaucor/ ww(MG)
+!ab   common /dens  / ro(MG,4),dro(MG,4)
+!ab   common /fields/ phi(MG,4)
+!ab   common /gaucor/ ww(MG)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /rhorho/ rs(MG,2),rv(MG,2)
+!ab   common /rhorho/ rs(MG,2),rv(MG,2)
       common /physco/ hbc,alphi,r0
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
@@ -4368,7 +5101,7 @@ c======================================================================c
 c---- meson-fields
       if (ipc.eq.0) then
          er = zero
-	 do m = 1,4
+         do m = 1,4
             s = zero
             do i = 1,MG
                s  = s  + ggmes(m)*ff(i,m,1)*phi(i,m)*ro(i,m)*ww(i)
@@ -4431,19 +5164,26 @@ c                    del(i) = phi(i,3)*ggdel/gdel
 c                    rho(i) = phi(i,4)*ggrho/grho
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use fieldmod;
+      use couplf;
+      use dens;
+      use fields;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      logical lpr,lprs
+!ab   logical lpr,lprs
+      logical lpr;
 c
-      dimension gm(4),so(MG),ph(MG)
+!ab   dimension gm(4),so(MG),ph(MG)
 c
-      common /couplf/ ff(MG,4,2)
+!ab   common /couplf/ ff(MG,4,2)
       common /couplg/ ggmes(4),lmes(4)
       common /couplm/ gmes(4)
-      common /dens  / ro(MG,4),dro(MG,4)
-      common /fields/ phi(MG,4)
+!ab   common /dens  / ro(MG,4),dro(MG,4)
+!ab   common /fields/ phi(MG,4)
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
@@ -4498,17 +5238,24 @@ c     so:   source
 c     phi:  meson field
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use gordonmod;
+      use bosqua;
+      use gaucor;
+      use propag;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      dimension so(MG),phi(MG)
-      dimension rn(NOX),sn(NOX)
+      dimension so(*), phi(*);
+!ab   dimension so(MG),phi(MG)
+!ab   dimension rn(NOX),sn(NOX)
 c
-      common /bosqua/ nzb(NOX),nrb(NOX),NO
-      common /gaucor/ ww(MG)
+!ab   common /bosqua/ nzb(NOX),nrb(NOX),NO
+!ab   common /gaucor/ ww(MG)
       common /mathco/ zero,one,two,half,third,pi
-      common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
+!ab   common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
 c
@@ -4561,21 +5308,29 @@ c            2:   omega
 c            3:   rho
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use greemesmod;
+      use propag;
+      use bosqua;
+      use gaussh;
+      use gaussl;
+      use gfvmod;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      dimension dd(NOX,NOX),gi(NOX,NOX)
+!ab   dimension dd(NOX,NOX),gi(NOX,NOX)
       common /defbas/ beta0,q,bp,bz
       common /baspar/ hom,hb0,b0
-      common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
-      common /bosqua/ nzb(NOX),nrb(NOX),NO
+!ab   common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
+!ab   common /bosqua/ nzb(NOX),nrb(NOX),NO
       common /couplg/ ggmes(4),lmes(4)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfvsq / sq(0:IGFV)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfvsq / sq(0:IGFV)
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
@@ -4695,13 +5450,13 @@ c=====================================================================c
          amsig  =  550.12380d0            ! MeV
          amome  =  783.d0                 ! MeV
          amdel  =    1.d-10
-	 amrho  =  763.d0                 ! MeV
+	     amrho  =  763.d0                 ! MeV
          gsig   =   10.5396d0
          gome   =   13.0189d0
          gdel   =   zero
-	 grho   =    3.6836d0
+	     grho   =    3.6836d0
          b_s    =    1.0943d0
-	 c_s    =    1.7057d0
+	     c_s    =    1.7057d0
          c_v    =    1.4620d0
          a_tv   =    0.5647d0
          dsat   =    0.152d0
@@ -4724,8 +5479,8 @@ c
          d_ts   =    zero
 c
          ipc    =  0
-	 icm    =  2
-	 idd    =  2
+	     icm    =  2
+	     idd    =  2
 c===============================================================
        elseif (parname.eq.'DD-PC1') then
 c---------------------------------------------------------------
@@ -4813,30 +5568,36 @@ c      ga    = 0.644204936     ! fm
 c
 
 
+
+
+      !ab
 c=======================================================================c
-c=======================================================================c-----!abjelcic
 c=======================================================================c
-      intape = 555;                                                     c
-      open( intape , file = 'dirqfam.dat' , status = 'old' );           c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );read( intape , * );read( intape , * );         c
-      read( intape , * );                                               c
-      read( intape , '(18x,i9)' ) i_pairing;                            c
-                                                                        c
-      if( i_pairing .eq. 0 ) then                                       c
-          gl(1) = 0.D0;                                                 c
-          gl(2) = 0.D0;                                                 c
-      endif                                                             c
-                                                                        c
-      close(intape);                                                    c
 c=======================================================================c
-c=======================================================================c-----!abjelcic
+      intape = 555;
+      open( intape , file = 'dirqfam.dat' , status = 'old' );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );read( intape , * );read( intape , * );
+      read( intape , * );
+      read( intape , '(18x,i9)' ) i_pairing;
+
+      if( i_pairing .eq. 0 ) then
+          gl(1) = 0.D0;
+          gl(2) = 0.D0;
+      endif
+
+      close(intape);
 c=======================================================================c
+c=======================================================================c
+c=======================================================================c
+      !ab
+
+
 
 
 
@@ -4859,10 +5620,11 @@ c
 c     prints parameters of the Lagrangian
 c
 c---------------------------------------------------------------------c
+      use dirqfampar;
 c
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
 c
       character parname*10                     ! common partyp
@@ -4929,21 +5691,28 @@ c
 c     calculats the Dirac-Matrix in the Hartee-equation
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use gamgam;
+      use potpot;
+      use single;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
       common /baspar/ hom,hb0,b0
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /gamgam/ hh(NHHX,NB2X)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /gamgam/ hh(NHHX,NB2X)
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
       common /physco/ hbc,alphi,r0
-      common /potpot/ vps(MG,2),vms(MG,2)
-      common /single/ sp(NFGX,NBX)
+!ab   common /potpot/ vps(MG,2),vms(MG,2)
+!ab   common /single/ sp(NFGX,NBX)
 c
       emcc2 = 2*amu*hbc
       f = hbc/b0
@@ -5069,23 +5838,33 @@ c     QHB(nz,i) = psi_nz(zz) / (b0*bz)^(1/2)
 c     QLB(nr,i) = psi_(nr,L=0)(rr) / ( sqrt(2*pi) * b0*bp)
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use bospol;
+      use bosqua;
+      use gaussh;
+      use gaussl;
+      use gfvmod;
+      use herpol;
+      use lagpol;
+      use propag;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      common /bospol/  qhb(0:N0BX,0:NGH),qlb(0:N0BX,0:NGL)
+!ab   common /bospol/  qhb(0:N0BX,0:NGH),qlb(0:N0BX,0:NGL)
       common /basnnn/ n0f,n0b
-      common /bosqua/ nzb(NOX),nrb(NOX),NO
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfvsq / sq(0:IGFV)
-      common /gfvsqi/ sqi(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
-      common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
-      common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
+!ab   common /bosqua/ nzb(NOX),nrb(NOX),NO
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvsqi/ sqi(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
+!ab   common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
+!ab   common /propag/ gg(NOX,NOX,4),psi(NOX,MG)
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /zdimos/ nzm,nrm,mlm
@@ -5275,14 +6054,18 @@ c     and
 c        fmes(x,2)       their derivatives
 c
 c======================================================================c
+      use dirqfampar;
+      use couplf;
+      use dens;
+
       implicit real*8(a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 
-      common /couplf/ ff(MG,4,2)
-      common /dens  / ro(MG,4),dro(MG,4)
+!ab   common /couplf/ ff(MG,4,2)
+!ab   common /dens  / ro(MG,4),dro(MG,4)
       common /couplg/ ggmes(4),lmes(4)
       common /dforce/ a_m(4),b_m(4),c_m(4),d_m(4),dsat
       common /mathco/ zero,one,two,half,third,pi
@@ -5352,13 +6135,16 @@ c          1  reads  fields from tape
 c          2  writes fields to tape
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use potpot;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
       character*2 nucnam
 c
-      dimension tz1(2)
+!ab   dimension tz1(2) (not even used...)
 c
       common /fermi / ala(2),tz(2)
       common /con_b2/ betac,q0c,cquad,c0,alaq,calcq0,icstr
@@ -5366,7 +6152,7 @@ c
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /mathco/ zero,one,two,half,third,pi
       common /nucnuc/ amas,npr(3),nucnam
-      common /potpot/ vps(MG,2),vms(MG,2)
+!ab   common /potpot/ vps(MG,2),vms(MG,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       if (is.eq.1.and.inin.ne.0) return
@@ -5379,10 +6165,14 @@ c
 c---- reading of meson fields from tape:
       if (is.eq.1) then
 
-c=======================================================================c-----!abjelcic
-         open( lwin , file = './output/GS_output/dirhb.wel' ,           c
-     &         status = 'old' , form = 'unformatted' );                 c
-c=======================================================================c-----!abjelcic
+
+      !ab
+c=======================================================================c
+         open( lwin , file = './output/GS_output/dirhb.wel' ,
+     &         status = 'old' , form = 'unformatted' );
+c=======================================================================c
+      !ab
+
 
          read(lwin) ng0
          if (ng0.ne.MG) stop 'in INOUT: ngauss wrong'
@@ -5396,10 +6186,14 @@ c
 c---- writes fields to tape
       if (is.ge.2) then
 
-c=======================================================================c-----!abjelcic
-         open( lwou , file = './output/GS_output/dirhb.wel',            c
-     &         status = 'unknown' , form = 'unformatted' );             c
-c=======================================================================c-----!abjelcic
+
+      !ab
+c=======================================================================c
+         open( lwou , file = './output/GS_output/dirhb.wel',
+     &         status = 'unknown' , form = 'unformatted' );
+c=======================================================================c
+      !ab
+
 
          write(lwou) MG
          write(lwou) ala,alaq
@@ -5430,10 +6224,15 @@ c
 c----------------------------------------------------------------------c
       implicit real*8 (a-h,o-z)
 c
-      logical lpr,lprx
+!ab   logical lpr,lprx
+      logical lpr;
       character*2 nucnam
       character*14 text3
-      character*27 text1,text2
+!ab   character*27 text1,text2
+      !ab
+      character*30 text1;
+      character*28 text2;
+      !ab
 c
       common /erwar / ea,rms,betg,gamg
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
@@ -5540,103 +6339,6 @@ c
 c-end-ITER
       end
 
-c======================================================================c
-c
-c     PROGRAM DIRHB-axial
-c
-c======================================================================c
-c     Relativistic Hartree-Bogoliubov theory in a axially symmetric basis
-c     Main part of the code
-c----------------------------------------------------------------------c
-c
-c-------------------------------------
-      implicit real*8 (a-h,o-z)
-      common /mathco/ zero,one,two,half,third,pi
-
-c=======================================================================c-----!abjelcic
-      call check_dirqfampar()                                           c
-c=======================================================================c-----!abjelcic
-
-c
-c-------------------------------------
-c
-c
-c---- sets data
-      call default(.false.)
-c
-c---- reads in data
-      call reader(.true.)
-c
-c---- force-parameters
-      call forces(.true.)
-c
-c---- Gauss-Hermite mesh points
-      call gaush(two,.false.)
-      call gausl(.false.)
-c
-c---- oscillator basis for single particle states
-      call base(.false.)
-c
-c---- preparations
-      call prep(.false.)
-c
-c---- wavefunctions at Gauss-Meshpoints
-      call gaupol(.false.)
-c
-c---- initialization of the potentials
-      call inout(1,.false.)
-c
-c---- initialization of the pairing field
-      call dinout(1,.false.)
-      call start(.false.)
-c
-c---- single-particle matix elements
-      call singf(.false.)
-c
-c---- preparation of pairing matrix elements
-      call singd(.false.)
-c
-c---- coulomb and meson propagators
-      call greecou(.false.)
-      call greemes(.false.)
-c
-c---- iteration
-      call iter(.true.)
-c
-c---- transformation to the canonical basis
-      call canon(.true.)
-c
-c---- center of mass correction
-      call centmas(.false.)
-c
-c---- results
-      call resu(.true.)
-c=======================================================================c-----!abjelcic
-      !call plot(.false.)                                               c
-c=======================================================================c-----!abjelcic
-c
-c---- punching of potentials to tape  dis.wel
-      call inout(2,.false.)
-      call dinout(2,.false.)
-
-c=======================================================================c-----!abjelcic
-c-----FAM submodule                                                     c
-      call main_fam( .false. );                                         c
-c=======================================================================c-----!abjelcic
-
-c=======================================================================c-----!abjelcic
-      !stop ' FINAL STOP OF DIRHBZ'                                     c
-c=======================================================================c-----!abjelcic
-c-end-DIZ
-      end
-
-
-
-
-
-
-
-
 c=====================================================================c
 
       subroutine plot(lpr)
@@ -5646,22 +6348,27 @@ C
 C     prepares plot of densities in coordinate space
 C
 c---------------------------------------------------------------------c
+      use dirqfampar;
+      use plotmod;
+      use dens;
+      use gaussh;
+      use gaussl;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
       logical lpr
 c
-      dimension pn(nox1),zp(0:NGL,0:NGH,3)
+!ab   dimension pn(NOX1),zp(0:NGL,0:NGH,3)
 c
       common /baspar/ hom,hb0,b0
       common /defbas/ beta0,q,bp,bz
-      common /dens/ ro(0:ngh,0:ngl,4),dro(0:ngh,0:ngl,4)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /dens/ ro(0:ngh,0:ngl,4),dro(0:ngh,0:ngl,4)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
-      common /potpot/ vps(0:NGH,0:NGL,2),vms(0:NGH,0:NGL,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
 c
@@ -5678,18 +6385,23 @@ c     plot step in (fm)
 
 c---- plot for densities:
 
-c=======================================================================c-----!abjelcic
+
+      !ab
+c=======================================================================c
       open( lplo , file = './output/GS_output/dirhb.plo',
      &      status = 'unknown' );
-c=======================================================================c-----!abjelcic
+c=======================================================================c
+      !ab
 
 
-      call splin2(rb,zb,NGL,NGH,ro(0,0,2),zp)
+!ab   call splin2(rb,zb,NGL,NGH,ro(0,0,2),zp)
+      call splin2(rb,zb,NGL,NGH,ro(1,2),zp);
       r=0.d0
       do ir=0,mxplr
          z=-8.d0
          do iz=0,mxplz
-            call splint2(r,abs(z),NGL,NGH,rb,zb,ro(0,0,2),zp,rv)
+!ab         call splint2(r,abs(z),NGL,NGH,rb,zb,ro(0,0,2),zp,rv)
+            call splint2(r,abs(z),NGL,NGH,rb,zb,ro(1,2),zp,rv);
             write(lplo,100) r,z,rv
             z=z+stplz
          enddo
@@ -5714,28 +6426,36 @@ c
 c     CALCULATION OF THE POTENTIALS AT GAUSS-MESHPOINTS
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use constr;
+      use coulmb;
+      use couplf;
+      use dens;
+      use fields;
+      use potpot;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       dimension glt(4)
 c
       common /baspar/ hom,hb0,b0
-      common /constr/ vc(MG,2)
+!ab   common /constr/ vc(MG,2)
       common /con_b2/ betac,q0c,cquad,c0,alaq,calcq0,icstr
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /coupld/ ddmes(4)
-      common /couplf/ ff(MG,4,2)
+!ab   common /couplf/ ff(MG,4,2)
       common /couplg/ ggmes(4),lmes(4)
-      common /dens  / ro(MG,4),dro(MG,4)
-      common /fields/ phi(MG,4)
+!ab   common /dens  / ro(MG,4),dro(MG,4)
+!ab   common /fields/ phi(MG,4)
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
-      common /potpot/ vps(MG,2),vms(MG,2)
+!ab   common /potpot/ vps(MG,2),vms(MG,2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 
       if (lpr) then
@@ -5815,18 +6535,23 @@ c     i0   initial point for the quantum number array
 c     n    dimension
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use quaosc;
+      use herpol;
+      use lagpol;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      character tt*8                                            ! quaosc
+!ab   character tt*8                                            ! quaosc
 c
       dimension aa(nh,nh),v(0:NGH,0:NGL)
 c
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
       common /mathco/ zero,one,two,half,third,pi
-      common /herpol/ qh(0:nzx,0:NGH),qh1(0:nzx,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
+!ab   common /herpol/ qh(0:nzx,0:NGH),qh1(0:nzx,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL),ql1(0:2*NRX,0:MLX,0:NGL)
 c
       do i2 = 1,n
          nz2 = nz(i0+i2)
@@ -5868,22 +6593,29 @@ c
 c     preparations
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use gaucor;
+      use gaussh;
+      use gaussl;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       character tp*1,tis*1,tit*8,tl*1                           ! textex
       character nucnam*2                                        ! nucnuc
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
       common /baspar/ hom,hb0,b0
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /defbas/ beta0,q,bp,bz
-      common /gaucor/ ww(MG)
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gaucor/ ww(MG)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
       common /iterat/ si,siold,epsi,xmix,xmix0,xmax,maxi,ii,inxt,iaut
       common /masses/ amu,ames(4)
       common /mathco/ zero,one,two,half,third,pi
@@ -5958,8 +6690,8 @@ c---- is the configuration space large enough ?
 c
 c
   100 format(a,4f10.6)
-  101 format(a,2i4)
-  103 format(a,4f10.3)
+!ab 101 format(a,2i4)
+!ab 103 format(a,4f10.3)
 c
       if (lpr) then
       write(l6,*) '****** END PREP ************************************'
@@ -5974,9 +6706,11 @@ c======================================================================c
       subroutine reader(lpr)
 
 c======================================================================c
+      use dirqfampar;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
       character parname*10                                      ! partyp
@@ -6004,10 +6738,14 @@ c
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       open(lin,file='dirqfam.dat',status='old')
-c=======================================================================c-----!abjelcic
+
+
+      !ab
+c=======================================================================c
       open( l6 , file = './output/GS_output/dirhb.out' ,
      &      status = 'unknown' );
-c=======================================================================c-----!abjelcic
+c=======================================================================c
+      !ab
 
 c
       call date_and_time( date, time, zone, values )
@@ -6057,8 +6795,8 @@ c------------------------------------------------------------
       read(lin,'(10x,f10.4) ') cquad
 
 
-  104 format(10x,4i3)
-  117 format(a,4i3)
+!ab 104 format(10x,4i3)
+!ab 117 format(a,4i3)
 
       close(lin)
 
@@ -6131,29 +6869,38 @@ c======================================================================c
       subroutine resu(lpr)
 
 c======================================================================c
+      use dirqfampar;
+      use blodir;
+      use blokap;
+      use bloosc;
+      use coulmb;
+      use fields;
+      use quaosc;
+      use waveuv;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
       character tp*1,tis*1,tit*8,tl*1                           ! textex
-      character tb*6                                            ! blokap
-      character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
       character tph*1
 c
-      common /blodir/ ka(NBX,4),kd(NBX,4)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /blodir/ ka(NBX,4),kd(NBX,4)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /fermi / ala(2),tz(2)
-      common /fields/ phi(MG,4)
+!ab   common /fields/ phi(MG,4)
       common /mathco/ zero,one,two,half,third,pi
       common /optopt/ itx,icm,icou,ipc,inl,idd
-      common /quaosc/ nt,nnn(NTX,5),tt(NTX)
+!ab   common /quaosc/ nt,nnn(NTX,5),tt(NTX)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /textex/ tp(2),tis(2),tit(2),tl(0:30)
-      common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
+!ab   common /waveuv/ fguv(NHBX,KX,4),equ(KX,4)
 
       data emaxqp/80.d0/
 
@@ -6215,24 +6962,31 @@ c     calculates matrix elements V_nz and V_nr' for TMR-pairing
 c     in the axially deformed oscillator basis
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use singdmod;
+      use blokap;
+      use bloosc;
+      use tmrwnn;
+      use vvvikf;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
-      dimension pnosc(0:N0FX),vnz(1:MVX,0:N0FX),vnr(1:MVX,0:N0FX)
-      dimension wn(MVX)
+!ab   dimension pnosc(0:N0FX),vnz(1:MVX,0:N0FX),vnr(1:MVX,0:N0FX)
+!ab   dimension wn(MVX)
 c
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /tmrpar/ gl(2),ga
-      common /tmrwnn/ wnn(MVX,NNNX),nnmax
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /tmrwnn/ wnn(MVX,NNNX),nnmax
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
 c
       data eps/1.d-20/
 c
@@ -6307,28 +7061,35 @@ c
 c     calculates matrix elements V_nz for TMR-pairing
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use gfvmod;
+      use quaosc;
+      use vvvikf;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tt*8                                            ! quaosc
-      character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
 c
       dimension pnosc(0:N0FX),vnz(1:MVX,0:N0FX)
 c
       common /basnnn/ n0f,n0b
       common /baspar/ hom,hb0,b0
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /defbas/ beta0,q,bp,bz
-      common /gfvsq / sq(0:IGFV)
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /tmrpar/ gl(2),ga
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
 c
       data eps/1.d-20/
 c
@@ -6366,7 +7127,7 @@ c   talmos1 is Eq. 17 from the paper
             enddo   ! nn
          endif
 c
-   10 enddo   ! n1
+      enddo   ! n1
       enddo   ! n2
       enddo   ! ib
       call icheck_n1nen2(il,mv,'in VPAIR: mv wrong')
@@ -6416,15 +7177,18 @@ c======================================================================c
       subroutine pnoscz(nm,a,b,pnosc)
 
 c======================================================================c
+      use dirqfampar;
+      use gfvmod;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       dimension pnosc(0:nm)
 c
       common /baspar/ hom,hb0,b0
-      common /gfvsq / sq(0:IGFV)
-      common /gfvwf / wf(0:IGFV)
-      common /gfvfi / fi(0:IGFV)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvwf / wf(0:IGFV)
+!ab   common /gfvfi / fi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
       common /tmrpar/ gl(2),ga
 c
@@ -6454,29 +7218,38 @@ c
 c     matrix elements V_np (perpendicular direction) for TMR-pairing
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use vvnpmod;
+      use blokap;
+      use bloosc;
+      use gfvmod;
+      use quaosc;
+      use vvvikf;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tt*8                                            ! quaosc
-      character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
 c
-      dimension pnosc(0:N0FX),vn(1:MVX,0:N0FX)
+!ab   dimension pnosc(0:N0FX)
+      dimension vn(1:MVX,0:N0FX)
       dimension pnocz(0:N0FX)
 c
       common /basnnn/ n0f,n0b
       common /baspar/ hom,hb0,b0
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /defbas/ beta0,q,bp,bz
-      common /gfvsq / sq(0:IGFV)
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
       common /mathco/ zero,one,two,half,third,pi
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
       common /tmrpar/ gl(2),ga
-      common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
+!ab   common /vvvikf/ mv,ipos(NBX),nib(MVX),nni(2,MVX)
 c
       data eps/1.d-20/
 c
@@ -6484,6 +7257,7 @@ c
       write(l6,*) '****** BEGIN VVNP **********************************'
       endif
 c
+
       b0p  = b0*bp
 c
       call pnoscp(n0f,sqrt(ga),b0p,pnosc)
@@ -6560,18 +7334,21 @@ c======================================================================c
       subroutine pnoscp(nm,a,b,pnosc)
 
 c======================================================================c
+      use dirqfampar;
+      use gfvmod;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       dimension pnosc(0:nm)
 c
       common /basnnn/ n0f,n0b
       common /baspar/ hom,hb0,b0
       common /defbas/ beta0,q,bp,bz
-      common /gfvsq / sq(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
-      common /rmesh / rm(MR),wr(MR)
+!ab   common /rmesh / rm(MR),wr(MR)
 c
       call icheck_n1len2(nm,n0f,' in PNOSCP: nm too large')
 c
@@ -6590,14 +7367,14 @@ c         pnosc(n) = s/(8*pi*br*alpha**2)
           pnosc(n) = f1*f2/2/pi
       enddo    ! n
 c
-  100 format(a,i3,3f10.6)
+!ab 100 format(a,i3,3f10.6)
 c
       return
 c-end-PNOSCP
       end
 c=======================================================================c
 c
-	function talmos1(n1,n2,n3,n4)
+      real*8 function talmos1(n1,n2,n3,n4)
 c
 c=======================================================================c
 c
@@ -6606,15 +7383,17 @@ c
 c	quantum number n_i start from zero: n = 0,1,2,....
 c
 c-----------------------------------------------------------------------c
-c
+      use dirqfampar;
+      use gfvmod;
+
       implicit real *8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      common /gfviv / iv(-IGFV:IGFV)
-      common /gfvwf / wf(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
-      common /bin0  / bin(0:IGFV,0:IGFV)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /gfvwf / wf(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
+!ab   common /bin0  / bin(0:IGFV,0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
 c
       talmos1 = zero
@@ -6654,15 +7433,18 @@ c     wf(n)  =  sqrt(n!)
 c     wfi(n) =  1/sqrt(n!)
 C
 C-----------------------------------------------------------------------c
+      use dirqfampar;
+      use gfvmod;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-      common /gfviv / iv(-IGFV:IGFV)
-      common /gfvfak/ fak(0:IGFV)
-      common /gfvfi / fi(0:IGFV)
-      common /gfvwf / wf(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /gfvfak/ fak(0:IGFV)
+!ab   common /gfvfi / fi(0:IGFV)
+!ab   common /gfvwf / wf(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
 c
       im2 = -im1
@@ -6779,19 +7561,25 @@ c     calculates single particle matrix elements for Fermions
 c     in the zylindrical oscillator basis
 c
 c----------------------------------------------------------------------c
+      use dirqfampar;
+      use bloosc;
+      use blokap;
+      use single;
+      use single2;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tb*6                                            ! blokap
+!ab   character tb*6                                            ! blokap
 c
-      common /bloosc/ ia(NBX,2),id(NBX,2)
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
-      common /single/ sp(nfgx,NBX)
-      common /single2/ sprr(NDDX,2*NBX)
+!ab   common /single/ sp(nfgx,NBX)
+!ab   common /single2/ sprr(NDDX,2*NBX)
 c
       if (lpr) then
       write(l6,*) ' ****** BEGIN SINGF ********************************'
@@ -6820,28 +7608,37 @@ c=====================================================================c
       subroutine sigp(nf,ng,ib,aa,lpr)
 
 c=====================================================================c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use gaussl;
+      use gfvmod;
+      use herpol;
+      use lagpol;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tt*8                                            ! quaosc
-      character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
 c
       dimension aa(ng,nf)
 c
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /defbas/ beta0,q,bp,bz
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfviv / iv(-IGFV:IGFV)
-      common /gfvsq / sq(0:IGFV)
-      common /gfvsqi/ sqi(0:IGFV)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvsqi/ sqi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
-      common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:mlx,0:NGL)
+!ab   common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:mlx,0:NGL)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       fz  = one/bz
@@ -6888,7 +7685,7 @@ c           s1 ne s2
 c
             nn1 = nz1 + 2*nr1 + iabs(ml1)
             nn2 = nz2 + 2*nr2 + iabs(ml2)
-  101    enddo   ! i1
+         enddo   ! i1
 c        check for matrix elements connecting N->N+1
          i = 0
          do i1 = 1,ng
@@ -6916,31 +7713,40 @@ c=====================================================================c
       subroutine sigrr(nd,idd,ib,aa,lpr)
 
 c=====================================================================c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use quaosc;
+      use gaussl;
+      use gfvmod;
+      use herpol;
+      use lagpol;
+
       implicit real*8 (a-h,o-z)
 c
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
-      character tt*8                                            ! quaosc
-      character tb*6                                            ! blokap
+!ab   character tt*8                                            ! quaosc
+!ab   character tb*6                                            ! blokap
 c
       dimension aa(nd,nd)
 c
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /defbas/ beta0,q,bp,bz
       common /baspar/ hom,hb0,b0
-      common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfviv / iv(-IGFV:IGFV)
-      common /gfvsq / sq(0:IGFV)
-      common /gfvsqi/ sqi(0:IGFV)
-      common /gfvwf / wf(0:IGFV)
-      common /gfvwfi/ wfi(0:IGFV)
+!ab   common /quaosc/ nt,nz(NTX),nr(NTX),ml(NTX),ms(NTX),np(NTX),tt(NTX)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfviv / iv(-IGFV:IGFV)
+!ab   common /gfvsq / sq(0:IGFV)
+!ab   common /gfvsqi/ sqi(0:IGFV)
+!ab   common /gfvwf / wf(0:IGFV)
+!ab   common /gfvwfi/ wfi(0:IGFV)
       common /mathco/ zero,one,two,half,third,pi
-      common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
-      common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:mlx,0:NGL)
+!ab   common /herpol/ qh(0:NZX,0:NGH),qh1(0:NZX,0:NGH)
+!ab   common /lagpol/ ql(0:2*NRX,0:mlx,0:NGL),ql1(0:2*NRX,0:mlx,0:NGL)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
       k   = iabs(kb(ib))
@@ -6973,14 +7779,18 @@ c           s1 = s2
                   if (nz1.eq.nz2)   szz = (nz1+0.5d0)
                endif
                if (nz1.eq.nz2) then
-c=======================================================================c-----!abjelcic
-                  if (nr1.eq.nr2+1) then                                c
-                      srp = -DSQRT(DBLE(nr1*(nr1+ml1)));                c
-                  endif                                                 c
-                  if (nr1.eq.nr2-1) then                                c
-                      srp = -DSQRT(DBLE((nr1+1)*(nr1+ml1+1)));          c
-                  endif                                                 c
-c=======================================================================c-----!abjelcic
+
+               !ab
+c=======================================================================c
+                  if (nr1.eq.nr2+1) then
+                      srp = -DSQRT(DBLE(nr1*(nr1+ml1)));
+                  endif
+                  if (nr1.eq.nr2-1) then
+                      srp = -DSQRT(DBLE((nr1+1)*(nr1+ml1+1)));
+                  endif
+c=======================================================================c
+               !ab
+
                   if (nr1.eq.nr2)   srp = (nr1+1)
                endif
             endif
@@ -6988,15 +7798,17 @@ c=======================================================================c-----!a
 c
             nn1 = nz1 + 2*nr1 + iabs(ml1)
             nn2 = nz2 + 2*nr2 + iabs(ml2)
-  101    enddo   ! i1
+         enddo   ! i1
 
       enddo   ! i2
 c
+
       if (lpr) then
-         write(l6,'(//,a)') tb(ib)
-         call aprint(1,3,6,ng,ng,nf,aa,tt(i0g+1),tt(i0f+1),'Sigma * P')
-         read*
+!ab      write(l6,'(//,a)') tb(ib)
+!ab      call aprint(1,3,6,ng,ng,nf,aa,tt(i0g+1),tt(i0f+1),'Sigma * P')
+!ab      read*
       endif
+
 c
       return
 c-end-SIGR
@@ -7018,10 +7830,12 @@ c****************************************************************
 c
       subroutine splint2(xx,yy,m,n,x,y,z,zp,ef)
 c
+      use dirqfampar;
+
       implicit real*8(a-h,o-z)
-	  include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-	  dimension x(0:m),y(0:n),z(0:m,0:n),zp(0:m,0:n,3)
+      dimension x(0:m),y(0:n),z(0:m,0:n),zp(0:m,0:n,3)
 c
 c---- find the location of (xx,yy) ------------------------
 c
@@ -7078,10 +7892,12 @@ c****************************************************************
 c
       subroutine splin2(x,y,m,n,z,zp)
 c
+      use dirqfampar;
+
       implicit real*8(a-h,o-z)
-	  include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
-	  dimension x(0:m),y(0:n),z(0:m,0:n),zp(0:m,0:n,3)
+      dimension x(0:m),y(0:n),z(0:m,0:n),zp(0:m,0:n,3)
       dimension temp1(0:m),temp2(0:n)
 c
 c------- do spline for r_perp direction -------------------
@@ -7153,7 +7969,7 @@ c
 c
       implicit real*8(a-h,o-z)
 c
-	  dimension  x(0:m),tem(0:m)
+      dimension  x(0:m),tem(0:m)
 c
       t0= (tem(1)-tem(0))/(x(1)-x(0))
       t1=(tem(2)-tem(1))/(x(2)-x(1))
@@ -7327,8 +8143,10 @@ c======================================================================c
 c
 c     initializes potentials (inin=1) and pairing tensor (inink=1)
 c----------------------------------------------------------------------c
+      use dirqfampar;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 
       logical lpr
       common /initia/ inin,inink
@@ -7342,8 +8160,16 @@ c----------------------------------------------------------------------c
 c======================================================================c
       subroutine startpot(lpr)
 c======================================================================c
+      use dirqfampar;
+      use coulmb;
+      use gaussh;
+      use gaussl;
+      use gfvmod;
+      use potpot;
+      use deldel;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
 c
@@ -7353,19 +8179,19 @@ c
       dimension rrv(2),rls(2),vp(2),vls(2)
 c
       common /baspar/ hom,hb0,b0
-      common /coulmb/ cou(MG),drvp(MG)
+!ab   common /coulmb/ cou(MG),drvp(MG)
       common /defbas/ beta0,q,bp,bz
       common /defini/ betai
-      common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
-      common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
-      common /gfvsq / sq(0:IGFV)
+!ab   common /gaussh/ xh(0:NGH),wh(0:NGH),zb(0:NGH)
+!ab   common /gaussl/ xl(0:NGL),wl(0:NGL),sxl(0:NGL),rb(0:NGL)
+!ab   common /gfvsq / sq(0:IGFV)
       common /initia/ inin,inink
       common /mathco/ zero,one,two,half,third,pi
       common /nucnuc/ amas,npr(3),nucnam
       common /optopt/ itx,icm,icou,ipc,inl,idd
       common /physco/ hbc,alphi,r0
-      common /potpot/ vps(MG,2),vms(MG,2)
-      common /deldel/ de(NHHX,NB2X)
+!ab   common /potpot/ vps(MG,2),vms(MG,2)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /pair  / del(2),spk(2),spk0(2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 c
@@ -7465,16 +8291,21 @@ c-end STARTPOT
 c======================================================================c
       subroutine startdel(lpr)
 c======================================================================c
+      use dirqfampar;
+      use blokap;
+      use bloosc;
+      use deldel;
+
       implicit real*8 (a-h,o-z)
-      include 'dirqfam.par'
+!ab   include 'dirqfam.par'
 c
       logical lpr
-      character tb*6
+!ab   character tb*6
 
-      common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
-      common /bloosc/ ia(NBX,2),id(NBX,2)
+!ab   common /blokap/ nb,kb(NBX),mb(NBX),tb(NBX)
+!ab   common /bloosc/ ia(NBX,2),id(NBX,2)
       common /mathco/ zero,one,two,half,third,pi
-      common /deldel/ de(NHHX,NB2X)
+!ab   common /deldel/ de(NHHX,NB2X)
       common /pair  / del(2),spk(2),spk0(2)
       common /tapes / l6,lin,lou,lwin,lwou,lplo,laka,lvpp
 

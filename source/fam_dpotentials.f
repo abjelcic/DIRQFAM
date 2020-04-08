@@ -4,100 +4,45 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE ddpc1ddme2;
+      USE gs_dens;
+      USE gs_mesons;
+      USE ddens;
+      USE dcurr;
+      USE dlaplace;
+      USE dmesons;
+      USE dcoul;
+      USE dpot;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      CHARACTER parname*10;
+      CHARACTER*10 parname;
       common /partyp/ parname;
 
-      REAL*8 m_sig, m_ome, m_rho;
-      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
-     &                      a_v , b_v , c_v , d_v ,
-     &                      a_tv, b_tv, c_tv, d_tv,
-     &                      del_s,
-     &
-     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
-     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
-     &                      a_rho,                      g0_rho, m_rho,
-     &
-     &                      rho_sat;
-
-      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS( -NGH:NGH , 1:NGL     );
-
-      common /gs_mesons/ sig_GS( -NGH:NGH , 1:NGL ),
-     &                   ome_GS( -NGH:NGH , 1:NGL ),
-     &                   rho_GS( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 drho_v, drho_s;
-      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s( -NGH:NGH , 1:NGL     );
-
-      COMPLEX*16 dj_r, dj_p, dj_z, dj_1, dj_2, dj_3;
-      common /ind_curr/ dj_r( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_p( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_z( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_1( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_2( -NGH:NGH , 1:NGL , 2 ),
-     &                  dj_3( -NGH:NGH , 1:NGL , 2 );
-
-      COMPLEX*16 ldrho_vp, ldrho_s, ldj_1p, ldj_2p, ldj_3p;
-      common /laplace/ ldrho_vp( -NGH:NGH , 1:NGL ),
-     &                 ldrho_s ( -NGH:NGH , 1:NGL ),
-     &                 ldj_1p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_2p  ( -NGH:NGH , 1:NGL ),
-     &                 ldj_3p  ( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 dsig  ,
-     &           dome_0, dome_r, dome_p, dome_z,
-     &           drho_0, drho_r, drho_p, drho_z;
-      common /ind_mesons/ dsig  ( -NGH:NGH , 1:NGL ),
-     &                    dome_0( -NGH:NGH , 1:NGL ),
-     &                    dome_r( -NGH:NGH , 1:NGL ),
-     &                    dome_p( -NGH:NGH , 1:NGL ),
-     &                    dome_z( -NGH:NGH , 1:NGL ),
-     &                    drho_0( -NGH:NGH , 1:NGL ),
-     &                    drho_r( -NGH:NGH , 1:NGL ),
-     &                    drho_p( -NGH:NGH , 1:NGL ),
-     &                    drho_z( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 dVCou_0, dVCou_r, dVCou_p, dVCou_z;
-      common /fam_coul/ dVCou_0( -NGH:NGH , 1:NGL ),
-     &                  dVCou_r( -NGH:NGH , 1:NGL ),
-     &                  dVCou_p( -NGH:NGH , 1:NGL ),
-     &                  dVCou_z( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 dVpS, dVmS, dSig_z, dSig_r, dSig_p;
-      common /fam_pot/ dVpS  ( -NGH:NGH , 1:NGL , 2 ),
-     &                 dVmS  ( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_z( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_r( -NGH:NGH , 1:NGL , 2 ),
-     &                 dSig_p( -NGH:NGH , 1:NGL , 2 );
 
 
+      DOUBLE COMPLEX Sig0  ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX Sig0_R( -NGH:NGH , 1:NGL     );
+      DOUBLE COMPLEX Sig_s ( -NGH:NGH , 1:NGL     );
+      DOUBLE COMPLEX Sig_z ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX Sig_r ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX Sig_p ( -NGH:NGH , 1:NGL , 2 );
 
-      COMPLEX*16 Sig0  ( -NGH:NGH , 1:NGL , 2 );
-      COMPLEX*16 Sig0_R( -NGH:NGH , 1:NGL     );
-      COMPLEX*16 Sig_s ( -NGH:NGH , 1:NGL     );
-      COMPLEX*16 Sig_z ( -NGH:NGH , 1:NGL , 2 );
-      COMPLEX*16 Sig_r ( -NGH:NGH , 1:NGL , 2 );
-      COMPLEX*16 Sig_p ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION a0_s ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a1_s ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a2_s ( -NGH:NGH , 1:NGL );
 
-      REAL*8 a0_s ( -NGH:NGH , 1:NGL );
-      REAL*8 a1_s ( -NGH:NGH , 1:NGL );
-      REAL*8 a2_s ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a0_v ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a1_v ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a2_v ( -NGH:NGH , 1:NGL );
 
-      REAL*8 a0_v ( -NGH:NGH , 1:NGL );
-      REAL*8 a1_v ( -NGH:NGH , 1:NGL );
-      REAL*8 a2_v ( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a0_tv( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a1_tv( -NGH:NGH , 1:NGL );
+      DOUBLE PRECISION a2_tv( -NGH:NGH , 1:NGL );
 
-      REAL*8 a0_tv( -NGH:NGH , 1:NGL );
-      REAL*8 a1_tv( -NGH:NGH , 1:NGL );
-      REAL*8 a2_tv( -NGH:NGH , 1:NGL );
-
-      COMPLEX*16 z, w, drhos, drhov, drhotv, ldrhos;
+      DOUBLE COMPLEX z, w, drhos, drhov, drhotv, ldrhos;
 
       a0(x,a,b,c,d) =              a + (b+c*x)*DEXP(-d*x);
       a1(x,a,b,c,d) =        ( c - d*(b+c*x) )*DEXP(-d*x);

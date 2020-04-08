@@ -4,42 +4,21 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE simplex;
+      USE u_matrix;
+      USE v_matrix;
+      USE drho;
+      USE xyfam;
+      USE nnz_blocks;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
-
-      COMPLEX*16 u;
-      common /u_matrix/ u( NBSX , NBSX , NBX , 2 );
-
-      LOGICAL dh_nnz, dDelta_nnz, dkappa_nnz, f_nnz;
-      common /nnz_blocks/ dh_nnz    ( NBX , NBX ),
-     &                    dDelta_nnz( NBX , NBX ),
-     &                    dkappa_nnz( NBX , NBX ),
-     &                    f_nnz     ( NBX , NBX );
-
-      COMPLEX*16 drho_1, drho_2;
-      common /delta_rho/ drho_1( NTX , NTX , 2 ),
-     &                   drho_2( NTX , NTX , 2 );
-
-      COMPLEX*16 x_fam, y_fam;
-      common /xy_fam/ x_fam( NTX , NTX , 2 ),
-     &                y_fam( NTX , NTX , 2 );
 
 
-
-      COMPLEX*16 z_tmp;
-      COMPLEX*16 Temp( NTX , NTX );
+      DOUBLE COMPLEX z_tmp;
+      DOUBLE COMPLEX Temp( NTX , NTX );
 
 
 

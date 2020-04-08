@@ -4,34 +4,25 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE simplex;
+      USE v_matrix;
+      USE herpol;
+      USE lagpol;
+      USE gaucor;
+      USE gaussh;
+      USE gaussl;
+      USE dens;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      common /herpol/ qh(0:NZX,0:NGH), qh1(0:NZX,0:NGH);
-      common /lagpol/ ql(0:2*NRX,0:MLX,0:NGL), ql1(0:2*NRX,0:MLX,0:NGL);
-      common /gaucor/ ww(MG);
-      common /gaussh/ xh(0:NGH), wh(0:NGH), zb(0:NGH);
-      common /gaussl/ xl(0:NGL), wl(0:NGL), sxl(0:NGL), rb(0:NGL);
-      common /dens/   ro(MG,4), dro(MG,4);
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      COMPLEX*16 v;
-      common /v_matrix/ v( NBSX , NBSX , NBX , 2 );
 
 
 
       CHARACTER fg1, fg2;
-      COMPLEX*16 dens_mat( NBSX , NBSX , NBX , 2 );
-      REAL*8 RHO_v(MG,2);
-      REAL*8 RHO_s(MG,2);
+      DOUBLE COMPLEX dens_mat( NBSX , NBSX , NBX , 2 );
+      DOUBLE PRECISION RHO_v(MG,2);
+      DOUBLE PRECISION RHO_s(MG,2);
 
 
 

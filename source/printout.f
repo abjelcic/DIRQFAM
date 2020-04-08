@@ -4,29 +4,14 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE quadrature;
+      USE gs_dens;
+      USE ddens;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
-
-      INTEGER*4 tape_strength, tape_rhov;
-      common /out_tapes/ tape_strength, tape_rhov;
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /gs_dens/ rhov_GS( -NGH:NGH , 1:NGL , 2 ),
-     &                 rhos_GS( -NGH:NGH , 1:NGL     );
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      COMPLEX*16 drho_v, drho_s;
-      common /ind_dens/ drho_v( -NGH:NGH , 1:NGL , 2 ),
-     &                  drho_s( -NGH:NGH , 1:NGL     );
 
 
 
@@ -101,27 +86,19 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
-      INTEGER*4 tape;
+      USE dirqfampar;
+      USE fam;
+      USE fam_iter;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
+      INTEGER tape;
 
-      CHARACTER parname*10;
+      CHARACTER*10 parname;
+      CHARACTER*2  nucnam;
       common /partyp/ parname;
-
       common /basnnn/ n0f, n0b;
-
-      CHARACTER*2 nucnam;
       common /nucnuc/ amas, nneu, npro, nmas, nucnam;
-
       common /defbas/ beta0, q, bp, bz;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      common /fam_iter/ error, tol, iter, iter_max;
 
 
 
@@ -162,6 +139,8 @@ c======================================================================c
       write(tape,'(a,i1)') 'K = ', K_multipole;
       write(tape,'(a,1f7.3,a)') 'gamma_smear = ', gamma_smear, ' [MeV]';
       write(tape,'(a,i2,a,i2)') 'NGH = ', NGH, ', NGL = ', NGL;
+
+      call flush(tape);
 
 
 

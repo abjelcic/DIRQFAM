@@ -4,9 +4,13 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
+      USE dirqfampar;
+      USE fam;
+      USE ddpc1ddme2;
+      USE quadrature;
+      USE mesmat;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
       LOGICAL lpr;
 
       CHARACTER parname*10;
@@ -15,42 +19,16 @@ c======================================================================c
       common /defbas/ beta0, q, bp, bz;
       common /basnnn/ n0f, n0b;
 
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      REAL*8 m_sig, m_ome, m_rho;
-      common /DDPC1_DDME2/  a_s , b_s , c_s , d_s ,
-     &                      a_v , b_v , c_v , d_v ,
-     &                      a_tv, b_tv, c_tv, d_tv,
-     &                      del_s,
-     &
-     &                      a_sig, b_sig, c_sig, d_sig, g0_sig, m_sig,
-     &                      a_ome, b_ome, c_ome, d_ome, g0_ome, m_ome,
-     &                      a_rho,                      g0_rho, m_rho,
-     &
-     &                      rho_sat;
-
-      common /quadrature/ zb_fam( 1:NGH ), wz( 1:NGH ),
-     &                    rb_fam( 1:NGL ), wr( 1:NGL ),
-     &                    wzwr( 1:NGH , 1:NGL );
-
-      common /mesmat/ Psig( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                Pome( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                Prho( NHMAX , NCOORD , 0:J_MAX+1 ),
-     &                nP( 0:J_MAX+1 );
 
 
+      INTEGER nz_mes( NHMAX , 0:J_MAX+1 );
+      INTEGER nr_mes( NHMAX , 0:J_MAX+1 );
 
-      INTEGER*4 nz_mes( NHMAX , 0:J_MAX+1 );
-      INTEGER*4 nr_mes( NHMAX , 0:J_MAX+1 );
+      DOUBLE PRECISION H   ( NHMAX , NHMAX , 0:J_MAX+1 );
+      DOUBLE PRECISION Htmp( NHMAX , NHMAX             );
 
-      REAL*8 H   ( NHMAX , NHMAX , 0:J_MAX+1 );
-      REAL*8 Htmp( NHMAX , NHMAX );
-
-      REAL*8 phiz ( -NGH:NGH , 0:(NMESMAX)               );
-      REAL*8 phirK(    1:NGL , 0:(NMESMAX/2) , 0:J_MAX+1 );
+      DOUBLE PRECISION phiz ( -NGH:NGH , 0:(NMESMAX)               );
+      DOUBLE PRECISION phirK(    1:NGL , 0:(NMESMAX/2) , 0:J_MAX+1 );
 
       hbc    = 197.328284D0;
       b0_mes = b0 / DSQRT(2.D0);

@@ -4,46 +4,23 @@ c======================================================================c
 
 c======================================================================c
 
-      IMPLICIT REAL*8    (a-h,o-z)
-      IMPLICIT INTEGER*4 (i-n)
-      include 'dirqfam.par'
-      LOGICAL lpr, initialize;
-
-      common /fam/ omega_start, omega_end, delta_omega, omega_print,
-     &             omega, gamma_smear,
-     &             i_calculation_type, i_coulomb, i_pairing,
-     &             J_multipole, K_multipole, ISO;
-
-      CHARACTER fg_spx;
-      common /simplex/ N_total         , N_blocks        ,
-     &                 ia_spx(NBX)     , id_spx(NBX)     ,
-     &                 nf_size(NBX)    , ng_size(NBX)    ,
-     &                 nz_spx(NBSX,NBX), nr_spx(NBSX,NBX),
-     &                 ml_spx(NBSX,NBX), fg_spx(NBSX,NBX);
-
-      common /fam_iter/ error, tol, iter, iter_max;
-
-      COMPLEX*16 dh_1, dh_2;
-      common /delta_h/ dh_1( NTX , NTX , 2 ),
-     &                 dh_2( NTX , NTX , 2 );
-
-      COMPLEX*16 dDelta_pl, dDelta_mi;
-      common /dDelta/ dDelta_pl( NTX , NTX , 2 ),
-     &                dDelta_mi( NTX , NTX , 2 );
+      USE dirqfampar;
+      USE fam;
+      USE simplex;
+      USE fam_iter;
+      USE dh;
+      USE dDelta;
+      USE fambroydenmod;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
+      LOGICAL lpr;
+      LOGICAL initialize;
 
 
-
-      parameter ( nn = NFAM_BROYD );
-      parameter ( mm = MFAM_BROYD );
-      INTEGER*4 ibwork(mm);
-      REAL*8 bbeta(mm,mm), df(nn,mm), dv(nn,mm), bwork(mm), curv(nn);
-      REAL*8 vin(nn);
-      REAL*8 vou(nn);
-      SAVE ibwork, bbeta, df, dv, bwork, curv, bw0, vin;
-      DATA bmix /0.3D0/;
-      DATA xmi  /0.1D0/;
 
       CHARACTER fg1, fg2;
+      DATA bmix /0.3D0/;
+      DATA xmi  /0.1D0/;
 
 
 
