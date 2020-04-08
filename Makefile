@@ -6,31 +6,27 @@ LDFLAGS = -lblas -llapack
 
 OPT = $(PREPROC) -O3 -march=native
 
-DEBUG = $(PREPROC) -Og -g -Wall                              \
-                          -Wno-tabs                          \
-                          -Wno-compare-reals                 \
-                          -Wno-unused-label                  \
-                          -Wno-unused-dummy-argument         \
-                          -Wno-unused-parameter              \
-                          -Wextra                            \
-                          -Wconversion                       \
-                          -Warray-temporaries                \
-                          -Wsurprising                       \
-                          -Wline-truncation                  \
-                          -Wcharacter-truncation             \
-                          -fcheck=all                        \
-                          -fbacktrace                        \
-#                         -ffpe-trap=zero,overflow,underflow \
-#                         -fimplicit-none                    \
-#                         -Wpedantic                         \
+DBG = $(PREPROC) -D DEBUG -Og -g -Wall                              \
+                                 -Wno-tabs                          \
+                                 -Wno-compare-reals                 \
+                                 -Wno-unused-label                  \
+                                 -Wno-unused-dummy-argument         \
+                                 -Wno-unused-parameter              \
+                                 -Wextra                            \
+                                 -Wconversion                       \
+                                 -Warray-temporaries                \
+                                 -Wsurprising                       \
+                                 -Wline-truncation                  \
+                                 -Wcharacter-truncation             \
+                                 -fcheck=all                        \
+                                 -fbacktrace                        \
+#                                -ffpe-trap=zero,overflow,underflow \
+#                                -fimplicit-none                    \
+#                                -Wpedantic                         \
 
-SRCPAR =                        \
+SRCMOD =                        \
 ./source/modules/dirqfampar.f   \
-
-SRCMOD1 =                       \
 ./source/modules/modules_grs.f  \
-
-SRCMOD2 =	                \
 ./source/modules/modules_qfam.f \
 
 SRCGRS =                        \
@@ -68,15 +64,15 @@ SRCFAM =                        \
 ./source/printout.f             \
 ./source/utility_functions.f    \
 
-MODLOC =		        \
+MODLOC =		                \
 -I./source/modules/mods         \
 -J./source/modules/mods         \
 
-run: $(SRCPAR) $(SRCMOD1) $(SRCMOD2) $(SRCGRS) $(SRCFAM)
-	$(FC) $(MODLOC) $(OPT) $(SRCPAR) $(SRCMOD1) $(SRCMOD2) $(SRCGRS) $(SRCFAM) $(LDFLAGS) -o run
+run: $(SRCMOD) $(SRCGRS) $(SRCFAM)
+	$(FC) $(MODLOC) $(OPT) $(SRCMOD) $(SRCGRS) $(SRCFAM) $(LDFLAGS) -o run
 
-dbg: $(SRCPAR) $(SRCMOD1) $(SRCMOD2) $(SRCGRS) $(SRCFAM)
-	$(FC) -D DEBUG $(MODLOC) $(DEBUG) $(SRCPAR) $(SRCMOD1) $(SRCMOD2) $(SRCGRS) $(SRCFAM) $(LDFLAGS) -o dbg
+dbg: $(SRCMOD) $(SRCGRS) $(SRCFAM)
+	$(FC) $(MODLOC) $(DBG) $(SRCMOD) $(SRCGRS) $(SRCFAM) $(LDFLAGS) -o dbg
 
 clear:
-	rm -f *.o run dbg ./source/modules/mods/*.mod
+	rm -f run dbg ./source/modules/mods/*.mod
