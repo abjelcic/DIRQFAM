@@ -132,6 +132,9 @@ c-----Initializing multipole operators in coordinate space
                   f(ih,il,it,3,2) = fac32 * r*r*z;          ! cos(2*phi)
                   f(ih,il,it,3,3) = fac33 * r*r*r;          ! cos(3*phi)
 
+
+                  !f(ih,il,it,1,0) = fac10 * (r*r+z*z)*z;   ! cos(0*phi)
+                  !f(ih,il,it,1,1) = fac11 * (r*r+z*z)*r;   ! cos(1*phi)                  
               enddo
           enddo
       enddo
