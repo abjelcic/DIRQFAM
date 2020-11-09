@@ -171,7 +171,7 @@ c-----Current code does not use this info and it is not necessary
 
 
 
-c-----Test whether the basis has correctly been constructed
+c-----Test whether the basis has been correctly constructed
       if( .true. ) then
 
           if( lpr ) then

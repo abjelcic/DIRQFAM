@@ -64,6 +64,7 @@ c======================================================================c
       USE dcoul;
       USE dpot;
       USE fambroydenmod;
+      USE nuclearlocfunc;
       IMPLICIT NONE;
 
       call alloc_simplex();
@@ -103,6 +104,7 @@ c======================================================================c
       call alloc_dcoul();
       call alloc_dpot();
       call alloc_fambroydenmod();
+      call alloc_nuclearlocfunc();
 
       return;
       end;
@@ -155,6 +157,7 @@ c======================================================================c
       USE dcoul;
       USE dpot;
       USE fambroydenmod;
+      USE nuclearlocfunc;
       IMPLICIT NONE;
 
       call dealloc_simplex();
@@ -194,6 +197,7 @@ c======================================================================c
       call dealloc_dcoul();
       call dealloc_dpot();
       call dealloc_fambroydenmod();
+      call dealloc_nuclearlocfunc();
 
       return;
       end;

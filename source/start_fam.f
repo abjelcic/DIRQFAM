@@ -170,6 +170,10 @@ c-----Calculation for given energy, printing vector density
 
           call print_dens( .false. );
 
+          ! Calculates and prints the localization function
+          call       nuclocfunc( .false. );
+          call print_nuclocfunc( .false. );
+
       endif
 
 

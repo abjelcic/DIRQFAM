@@ -82,6 +82,98 @@ c======================================================================c
 
 c======================================================================c
 
+      subroutine print_nuclocfunc( lpr )
+
+c======================================================================c
+
+      USE dirqfampar;
+      USE fam;
+      USE quadrature;
+      USE nuclearlocfunc;
+      IMPLICIT DOUBLE PRECISION(a-h,o-z)
+      IMPLICIT INTEGER(i-n)
+      LOGICAL lpr;
+
+
+
+      if(lpr) then
+      write(6,*) '';
+      write(6,*) '****** BEGIN print_nuclocfunc() ********************';
+      write(6,*) '';
+      endif
+
+
+
+
+
+
+      do it = 1 , 2
+
+          itape = tape_nuclocfunc;
+
+          if( it .eq. 1 ) then
+              open( itape , file='./output/QFAM_output/neutlocfunc.out',
+     &                      status='unknown'                          );
+          else
+              open( itape , file='./output/QFAM_output/protlocfunc.out',
+     &                      status='unknown'                          );
+          endif
+
+          write(itape,'(a,a)') 'C(r,z,phi,t) = C(r,z) + 2*eta*',
+     &                         'Re[ exp(-i*omega*t) * dC(r,z,phi) ]';
+
+          write(itape,'(a,a,i1,a)') 'dC(r,z,phi) = dC(r,z)',
+     &                              ' * cos(',K_multipole,'*phi)  ';
+
+          call print_header( itape );
+
+          write(itape,'(a,1f7.3,a)') 'omega = ', omega, ' [MeV/hbar]';
+
+
+
+
+          write(itape,'(/,/,4x,a,6x,a,9x,a,19x,a,/)')
+     &     'r[fm]' , 'z[fm]' , 'C0(r,z)' , 'dC(r,z)';
+
+          do il = 1 , NGL
+            do ih = -NGH , +NGH
+              if( ih .eq. 0 ) CYCLE;
+
+              write(itape,'(f10.5,f12.5,E18.7E3,E17.7E3,a,E16.7E3,a)')
+     &        rb_fam(il), DBLE(isign(1,ih))*zb_fam(abs(ih)),
+     &        C0(ih,il,it),
+     &        DREAL( dC(ih,il,it) ),
+     &        '  +',
+     &        DIMAG( dC(ih,il,it) ),
+     &        ' i';
+            enddo
+          enddo
+
+          close(itape);
+
+      enddo
+
+
+
+
+
+
+      if(lpr) then
+      write(6,*) '';
+      write(6,*) '****** END print_nuclocfunc() **********************';
+      write(6,*) '';
+      endif
+
+      return;
+      end;
+
+
+
+
+
+
+c======================================================================c
+
       subroutine print_header( tape )
 
 c======================================================================c

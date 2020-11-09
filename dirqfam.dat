@@ -1,6 +1,6 @@
 n0f, n0b =  12  48             ! Number of osc. shells (even numbers)
-beta0    =   +0.280            ! Deformation of the h.o. basis
-betai    =   +0.280            ! Deformation of the initial W.S. pot
+beta0    =   +0.100            ! Deformation of the h.o. basis
+betai    =   +0.100            ! Deformation of the initial W.S. pot
 inin     =    1    1           ! Initialization from previous run
 Pu 240                         ! Even-even nucleus under consideration
 c---------------------------------------------------------------------
@@ -8,14 +8,14 @@ Init.Gap =    1.000     1.000  ! Initial values of the pairing gaps
 c---------------------------------------------------------------------
 Force    =  DD-ME2             ! Parametrization of the Lagrangian
 c---------------------------------------------------------------------
-icstr    =  0                  ! Constraint calculation (no=0, yes=1)
+icstr    =  1                  ! Constraint calculation (no=0, yes=1)
 betac    = +0.100              ! Constrained expected beta value
-cquad    =  0.100              ! Constraint stiffness constant
+cquad    =  0.010              ! Constraint stiffness constant
 
 
 
 =========================== QFAM INTERFACE ===========================
-Calculation type =   1     | 0 = Free response                       |
+Calculation type =   2     | 0 = Free response                       |
                            | 1 = Fully self-consistent response      |
                            | 2 = Calculation for given energy        |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
@@ -25,7 +25,7 @@ NGH              =  48     | Gauss-Hermite  nodes in z>0 direction   |
 NGL              =  48     | Gauss-Laguerre nodes in r   direction   |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 J multipolarity  =   3     | 0 <= J <= 3                             |
-K multipolarity  =   1     | 0 <= K <= J                             |
+K multipolarity  =   2     | 0 <= K <= J                             |
 Isospin          =   0     | 0 == Isoscalar, 1 == Isovector          |
 Gamma smear      =   0.500 | [MeV]                                   |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
@@ -33,5 +33,5 @@ Omega start      =   1.000 | [MeV/hbar] Energy range parameters,     |
 Omega end        =  30.000 | [MeV/hbar] relevant if calc. type       |
 Delta omega      =   0.250 | [MeV/hbar] is set to 0 or 1             |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-Omega print      =  20.000 | [MeV/hbar] Relevant if calc. type is 2  |
+Omega print      =  10.000 | [MeV/hbar] Relevant if calc. type is 2  |
 =========================== QFAM INTERFACE ===========================

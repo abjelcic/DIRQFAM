@@ -73,16 +73,14 @@ c-----Selection rules test
                           endif
 
                           if( fg1 .ne. fg2 ) then
-                              z = + drho_1(i,j,it) + drho_2(i,j,it)
-     &                            - drho_1(j,i,it) - drho_2(j,i,it);
+                              z = + drho_1(i,j,it) + drho_2(i,j,it);
                               if( ABS(z) .gt. 1.D-10 ) then
                                   if( abs(ml1+ml2+1) .ne. K ) then
                                       write(6,*)'Should be zero: ', z;
                                       stop 'Error: |ml1+ml2+1| =/= K!';
                                   endif
                               endif
-                              z = + drho_1(i,j,it) - drho_2(i,j,it)
-     &                            + drho_1(j,i,it) - drho_2(j,i,it);
+                              z = + drho_1(i,j,it) - drho_2(i,j,it);
                               if( ABS(z) .gt. 1.D-10 ) then
                                   if( abs(ml1-ml2) .ne. K ) then
                                       write(6,*)'Should be zero: ', z;

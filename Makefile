@@ -62,9 +62,10 @@ SRCFAM =                        \
 ./source/fam_spurious.f         \
 ./source/fam_strength.f         \
 ./source/printout.f             \
+./source/nuclocfunc.f           \
 ./source/utility_functions.f    \
 
-MODLOC =		                \
+MODLOC =                        \
 -I./source/modules/mods         \
 -J./source/modules/mods         \
 

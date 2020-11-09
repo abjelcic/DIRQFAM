@@ -157,6 +157,7 @@
 
       integer          tape_strength
       integer          tape_rhov;
+      integer          tape_nuclocfunc;
 
       contains
           subroutine alloc_fam()
@@ -1091,3 +1092,29 @@
           end
 
       end module fambroydenmod
+
+      module nuclearlocfunc
+      implicit none;
+
+      double precision, dimension(:,:,:), allocatable :: C0;
+      double complex,   dimension(:,:,:), allocatable :: dC;
+
+      contains
+          subroutine alloc_nuclearlocfunc()
+          use dirqfampar
+          implicit none;
+
+          allocate( C0(-NGH:NGH,1:NGL,2) );
+          allocate( dC(-NGH:NGH,1:NGL,2) );
+
+          end
+
+          subroutine dealloc_nuclearlocfunc()
+          implicit none;
+
+          deallocate( C0 );
+          deallocate( dC );
+
+          end
+
+      end module nuclearlocfunc

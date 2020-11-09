@@ -78,9 +78,9 @@ c-----Reading QFAM parameters
       read(infam,'(18x,1f9.3)') omega_print;
       close(infam);
 
-      tape_strength = 100;
-      tape_rhov     = 110;
-
+      tape_strength   = 100;
+      tape_rhov       = 110;
+      tape_nuclocfunc = 120;
 
 
 
