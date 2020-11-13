@@ -19,23 +19,23 @@ c======================================================================c
 
 
 
-      DOUBLE PRECISION rhoAVG0            ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   drhoAVG            ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION f0r( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dfr( -NGH:NGH , 1:NGL , 2 );
 
-      DOUBLE PRECISION tauAVG0            ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   dtauAVG            ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION f0z( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dfz( -NGH:NGH , 1:NGL , 2 );
 
-      DOUBLE PRECISION grad2_rhoAVG0      ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   dot_rhoAVG0_drhoAVG( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION g0 ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dg ( -NGH:NGH , 1:NGL , 2 );
 
-      DOUBLE PRECISION dr_rhoAVG0         ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   dr_drhoAVG         ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION h0 ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dh ( -NGH:NGH , 1:NGL , 2 );
 
-      DOUBLE PRECISION dz_rhoAVG0         ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   dz_drhoAVG         ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION F0 ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dF ( -NGH:NGH , 1:NGL , 2 );
 
-      DOUBLE PRECISION f0                 ( -NGH:NGH , 1:NGL , 2 );
-      DOUBLE COMPLEX   df                 ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE PRECISION D0 ( -NGH:NGH , 1:NGL , 2 );
+      DOUBLE COMPLEX   dD ( -NGH:NGH , 1:NGL , 2 );
 
       CHARACTER fg1, fg2;
       DOUBLE COMPLEX rho0( NBSX , NBSX , NBX , 2 );
@@ -73,266 +73,11 @@ c-----Calculation of rho0 matrix
 
 
 
-c-----Calculation of rhoAVG0
-      rhoAVG0 = 0.D0;
-      do it = 1 , 2
-        do il = 1 , NGL
-          do ih = -NGH , +NGH
-            if( ih .eq. 0 ) CYCLE;
-
-
-            do ib = 1 , N_blocks
-              do i = 1 , id_spx(ib)
-                fg1 = fg_spx(i,ib);
-                ml1 = ml_spx(i,ib);
-                do j = 1 , id_spx(ib)
-                  fg2 = fg_spx(j,ib);
-                  ml2 = ml_spx(j,ib);
-
-                  if(         fg1  .ne. fg2 ) CYCLE;
-                  if( abs(ml1-ml2) .ne.  0  ) CYCLE;
-
-
-                  ii = i-1+ia_spx(ib);
-                  jj = j-1+ia_spx(ib);
-
-                  phi1 = phi_z(ih,ii) * phi_r(il,ii);
-                  phi2 = phi_z(ih,jj) * phi_r(il,jj);
-
-                  x = DREAL(rho0(i,j,ib,it)) * phi1*phi2/(2.D0*pi);
-
-                  rhoAVG0(ih,il,it) = rhoAVG0(ih,il,it) + x;
-
-
-                enddo
-              enddo
-            enddo
-
-
-            !call assert(rhoAVG0(ih,il,it).ge.0.D0,'rhoAVG0 negative');
-
-          enddo
-        enddo
-      enddo
-
-
-
-
-
-
-c-----Calculation of drhoAVG
-      drhoAVG = COMPLEX( 0.D0 , 0.D0 );
-      do it = 1 , 2
-        do il = 1 , NGL
-          do ih = -NGH , +NGH
-            if( ih .eq. 0 ) CYCLE;
-
-
-            do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
-                ! Recall that drho_1/2 have nnz pattern as dh_nnz
-                if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
-
-                j0 = ia_spx(ib2);
-                j1 = ia_spx(ib2)+id_spx(ib2)-1;
-                do j = j0 , j1
-                  fg2 = fg_spx(j-j0+1,ib2);
-                  ml2 = ml_spx(j-j0+1,ib2);
-
-                  i0 = ia_spx(ib1);
-                  i1 = ia_spx(ib1)+id_spx(ib1)-1;
-                  do i = i0 , i1
-                    fg1 = fg_spx(i-i0+1,ib1);
-                    ml1 = ml_spx(i-i0+1,ib1);
-
-                    if(         fg1  .ne.         fg2 ) CYCLE;
-                    if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
-
-
-                    phi1 = phi_z(ih,i) * phi_r(il,i);
-                    phi2 = phi_z(ih,j) * phi_r(il,j);
-
-                    z = 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
-                    z = z * phi1 * phi2 / (2.D0*pi);
-
-                    drhoAVG(ih,il,it) = drhoAVG(ih,il,it) + z;
-
-
-                  enddo
-                enddo
-              enddo
-            enddo
-
-
-          enddo
-        enddo
-      enddo
-
-
-
-
-
-
-c-----Calculation of tauAVG0
-      tauAVG0 = 0.D0;
-      do it = 1 , 2
-        do il = 1 , NGL
-          do ih = -NGH , +NGH
-            if( ih .eq. 0 ) CYCLE;
-
-
-            do ib = 1 , N_blocks
-              do i = 1 , id_spx(ib)
-                fg1 = fg_spx(i,ib);
-                ml1 = ml_spx(i,ib);
-                do j = 1 , id_spx(ib)
-                  fg2 = fg_spx(j,ib);
-                  ml2 = ml_spx(j,ib);
-
-                  if( fg1 .eq. fg2 ) CYCLE;
-
-                  ii = i-1+ia_spx(ib);
-                  jj = j-1+ia_spx(ib);
-
-
-                  r      = rb_fam(il);
-
-                   phiz1 =  phi_z(ih,ii)
-                  dphiz1 = dphi_z(ih,ii);
-                   phir1 =  phi_r(il,ii);
-                  dphir1 = dphi_r(il,ii);
-
-                   phiz2 =  phi_z(ih,jj)
-                  dphiz2 = dphi_z(ih,jj);
-                   phir2 =  phi_r(il,jj);
-                  dphir2 = dphi_r(il,jj);
-
-
-                  if( abs(ml1-ml2) .eq. 0 ) then
-                    x = DIMAG(rho0(i,j,ib,it));
-                    x = x * (-0.5D0) * ( phiz1*dphiz2 - phiz2*dphiz1 );
-                    x = x * phir1*phir2;
-                    x = x / (2.D0*pi);
-
-                    tauAVG0(ih,il,it) = tauAVG0(ih,il,it) + x;
-                  endif
-
-                  if( abs(ml1+ml2+1) .eq. 0 ) then
-                    call assert( r.gt.1.D-6 , 'r close to zero' );
-
-                    x = DBLE(ml2-ml1)/r * phir1*phir2;
-                    x = x + dphir1*phir2 - phir1*dphir2;
-                    x = x * (-0.5D0) * phiz1*phiz2;
-                    x = x / (2.D0*pi);
-                    x = x * DREAL(rho0(i,j,ib,it));
-                    if( fg1.eq.'g' .and. fg2.eq.'f' ) then
-                      x = - x;
-                    endif
-
-                    tauAVG0(ih,il,it) = tauAVG0(ih,il,it) + x;
-                  endif
-
-
-                enddo
-              enddo
-            enddo
-
-
-            !call assert(tauAVG0(ih,il,it).ge.0.D0,'tauAVG0 negative');
-
-          enddo
-        enddo
-      enddo
-
-
-
-
-
-
-c-----Calculation of dtauAVG
-      dtauAVG = COMPLEX( 0.D0 , 0.D0 );
-      do it = 1 , 2
-        do il = 1 , NGL
-          do ih = -NGH , +NGH
-            if( ih .eq. 0 ) CYCLE;
-
-
-            do ib2 = 1 , N_blocks
-              do ib1 = 1 , N_blocks
-                ! Recall that drho_1/2 have nnz pattern as dh_nnz
-                if( dh_nnz(ib1,ib2) .eqv. .false. ) CYCLE;
-
-                j0 = ia_spx(ib2);
-                j1 = ia_spx(ib2)+id_spx(ib2)-1;
-                do j = j0 , j1
-                  fg2 = fg_spx(j-j0+1,ib2);
-                  ml2 = ml_spx(j-j0+1,ib2);
-
-                  i0 = ia_spx(ib1);
-                  i1 = ia_spx(ib1)+id_spx(ib1)-1;
-                  do i = i0 , i1
-                    fg1 = fg_spx(i-i0+1,ib1);
-                    ml1 = ml_spx(i-i0+1,ib1);
-
-                    if( fg1 .eq. fg2 ) CYCLE;
-
-
-                    r      = rb_fam(il);
-
-                     phiz1 =  phi_z(ih,i)
-                    dphiz1 = dphi_z(ih,i);
-                     phir1 =  phi_r(il,i);
-                    dphir1 = dphi_r(il,i);
-
-                     phiz2 =  phi_z(ih,j)
-                    dphiz2 = dphi_z(ih,j);
-                     phir2 =  phi_r(il,j);
-                    dphir2 = dphi_r(il,j);
-
-                    if( abs(ml1-ml2) .eq. K_multipole ) then
-                      z = 0.5D0 * (drho_1(i,j,it)-drho_2(i,j,it));
-                      z = z * 0.5D0 * ( phiz1*dphiz2 - phiz2*dphiz1 );
-                      z = z * COMPLEX( 0.D0 , 1.D0 );
-                      z = z * phir1*phir2;
-                      z = z / (2.D0*pi);
-
-                      dtauAVG(ih,il,it) = dtauAVG(ih,il,it) + z;
-                    endif
-
-                    if( abs(ml1+ml2+1) .eq. K_multipole ) then
-                      call assert( r.gt.1.D-6 , 'r close to zero' );
-
-                      z = DBLE(ml2-ml1)/r * phir1*phir2;
-                      z = z + dphir1*phir2 - phir1*dphir2;
-                      z = z * (-0.5D0) * phiz1*phiz2;
-                      z = z / (2.D0*pi);
-                      z = z * 0.5D0 * (drho_1(i,j,it)+drho_2(i,j,it));
-                      if( fg1.eq.'g' .and. fg2.eq.'f' ) then
-                          z = - z;
-                      endif
-
-                       dtauAVG(ih,il,it) = dtauAVG(ih,il,it) + z;
-                    endif
-
-
-                  enddo
-                enddo
-              enddo
-            enddo
-
-
-          enddo
-        enddo
-      enddo
-
-
-
-
-
-
-c-----Calculation of dr_rhoAVG0 and dz_rhoAVG0
-      dr_rhoAVG0 = 0.D0;
-      dz_rhoAVG0 = 0.D0;
+c-----Calculation of f0r, f0z, g0 and h0
+      f0r = 0.D0;
+      f0z = 0.D0;
+      g0  = 0.D0;
+      h0  = 0.D0;
       do it = 1 , 2
         do il = 1 , NGL
           do ih = -NGH , +NGH
@@ -353,6 +98,9 @@ c-----Calculation of dr_rhoAVG0 and dz_rhoAVG0
                   ii = i-1+ia_spx(ib);
                   jj = j-1+ia_spx(ib);
 
+
+                  r = rb_fam(il);
+                  call assert( r.gt.1.D-6 , 'r close to zero' );
 
                    phiz1 =  phi_z(ih,ii)
                   dphiz1 = dphi_z(ih,ii);
@@ -365,16 +113,30 @@ c-----Calculation of dr_rhoAVG0 and dz_rhoAVG0
                   dphir2 = dphi_r(il,jj);
 
                   x = DREAL(rho0(i,j,ib,it));
-                  x = x * ( dphir1*phir2 + phir1*dphir2 );
                   x = x * phiz1*phiz2;
+                  x = x * 0.5D0 * ( dphir1*phir2 + phir1*dphir2 );
                   x = x / (2.D0*pi);
-                  dr_rhoAVG0(ih,il,it) = dr_rhoAVG0(ih,il,it) + x;
+                  f0r(ih,il,it) = f0r(ih,il,it) + x;
 
                   x = DREAL(rho0(i,j,ib,it));
-                  x = x * ( dphiz1*phiz2 + phiz1*dphiz2 );
+                  x = x * 0.5D0 * ( dphiz1*phiz2 + phiz1*dphiz2 );
                   x = x * phir1*phir2;
                   x = x / (2.D0*pi);
-                  dz_rhoAVG0(ih,il,it) = dz_rhoAVG0(ih,il,it) + x;
+                  f0z(ih,il,it) = f0z(ih,il,it) + x;
+
+                  x = DREAL(rho0(i,j,ib,it));
+                  x = x * phiz1*phiz2;
+                  x = x * phir1*phir2;
+                  x = x / (2.D0*pi);
+                  g0(ih,il,it) = g0(ih,il,it) + x;
+
+                  x = DBLE(ml1*ml2)/(r*r);
+                  x = x *  phiz1*phiz2  *  phir1*phir2;
+                  x = x + dphiz1*dphiz2 *  phir1*phir2;
+                  x = x +  phiz1*phiz2  * dphir1*dphir2;
+                  x = x / (2.D0*pi);
+                  x = x * DREAL(rho0(i,j,ib,it));
+                  h0(ih,il,it) = h0(ih,il,it) + x;
 
 
                 enddo
@@ -391,9 +153,11 @@ c-----Calculation of dr_rhoAVG0 and dz_rhoAVG0
 
 
 
-c-----Calculation of dr_drhoAVG and dz_drhoAVG
-      dr_drhoAVG = COMPLEX( 0.D0 , 0.D0 );
-      dz_drhoAVG = COMPLEX( 0.D0 , 0.D0 );
+c-----Calculation of dfr, dfz, dg and dh
+      dfr = COMPLEX( 0.D0 , 0.D0 );
+      dfz = COMPLEX( 0.D0 , 0.D0 );
+      dg  = COMPLEX( 0.D0 , 0.D0 );
+      dh  = COMPLEX( 0.D0 , 0.D0 );
       do it = 1 , 2
         do il = 1 , NGL
           do ih = -NGH , +NGH
@@ -421,6 +185,9 @@ c-----Calculation of dr_drhoAVG and dz_drhoAVG
                     if( abs(ml1-ml2) .ne. K_multipole ) CYCLE;
 
 
+                    r = rb_fam(il);
+                    call assert( r.gt.1.D-6 , 'r close to zero' );
+
                      phiz1 =  phi_z(ih,i)
                     dphiz1 = dphi_z(ih,i);
                      phir1 =  phi_r(il,i);
@@ -431,17 +198,31 @@ c-----Calculation of dr_drhoAVG and dz_drhoAVG
                      phir2 =  phi_r(il,j);
                     dphir2 = dphi_r(il,j);
 
-                    z = 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
-                    z = z * ( dphir1*phir2 + phir1*dphir2 );
-                    z = z * phiz1*phiz2;
-                    z = z / (2.D0*pi);
-                    dr_drhoAVG(ih,il,it) = dr_drhoAVG(ih,il,it) + z;
+                    x = phiz1*phiz2;
+                    x = x * 0.5D0 * ( dphir1*phir2 + phir1*dphir2 );
+                    x = x / (2.D0*pi);
+                    z = x * 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
+                    dfr(ih,il,it) = dfr(ih,il,it) + z;
 
-                    z = 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
-                    z = z * ( dphiz1*phiz2 + phiz1*dphiz2 );
-                    z = z * phir1*phir2;
-                    z = z / (2.D0*pi);
-                    dz_drhoAVG(ih,il,it) = dz_drhoAVG(ih,il,it) + z;
+                    x = 0.5D0 * ( dphiz1*phiz2 + phiz1*dphiz2 );
+                    x = x * phir1*phir2;
+                    x = x / (2.D0*pi);
+                    z = x * 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
+                    dfz(ih,il,it) = dfz(ih,il,it) + z;
+
+                    x = phiz1*phiz2;
+                    x = x * phir1*phir2;
+                    x = x / (2.D0*pi);
+                    z = x * 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
+                    dg(ih,il,it) = dg(ih,il,it) + z;
+
+                    x = DBLE(ml1*ml2)/(r*r);
+                    x = x *  phiz1*phiz2  *  phir1*phir2;
+                    x = x + dphiz1*dphiz2 *  phir1*phir2;
+                    x = x +  phiz1*phiz2  * dphir1*dphir2;
+                    x = x / (2.D0*pi);
+                    z = x * 0.5D0 * ( drho_1(i,j,it) + drho_2(i,j,it) );
+                    dh(ih,il,it) = dh(ih,il,it) + z;
 
 
                   enddo
@@ -459,19 +240,29 @@ c-----Calculation of dr_drhoAVG and dz_drhoAVG
 
 
 
-c-----Calculation of grad2_rhoAVG0 and dot_rhoAVG0_drhoAVG
+c-----Calculation of F0 and dF
       do it = 1 , 2
         do il = 1 , NGL
           do ih = -NGH , +NGH
             if( ih .eq. 0 ) CYCLE;
 
-            x1 = dr_rhoAVG0(ih,il,it);
-            x2 = dz_rhoAVG0(ih,il,it)
 
-            grad2_rhoAVG0(ih,il,it) = x1**2.D0 + x2**2.D0;
+            x            = f0r(ih,il,it)**2.D0 + f0z(ih,il,it)**2.D0;
+            x            = x / g0(ih,il,it);
+            x            = h0(ih,il,it) - x;
+            F0(ih,il,it) = x;
 
-            dot_rhoAVG0_drhoAVG(ih,il,it) = + x1 * dr_drhoAVG(ih,il,it)
-     &                                      + x2 * dz_drhoAVG(ih,il,it);
+
+            x            = f0r(ih,il,it)**2.D0 + f0z(ih,il,it)**2.D0;
+            x            = x / ( g0(ih,il,it)**2.D0 );
+            z            = COMPLEX( 0.D0 , 0.D0 );
+            z            = z + f0r(ih,il,it) * dfr(ih,il,it)
+            z            = z + f0z(ih,il,it) * dfz(ih,il,it);
+            z            = z * ( -2.D0 / g0(ih,il,it) );
+            z            = z + dh(ih,il,it);
+            z            = z + x * dg(ih,il,it);
+            dF(ih,il,it) = z;
+
 
           enddo
         enddo
@@ -482,30 +273,22 @@ c-----Calculation of grad2_rhoAVG0 and dot_rhoAVG0_drhoAVG
 
 
 
-c-----Calculation of f0 and df
+c-----Calculation of D0 and dD
       do it = 1 , 2
         do il = 1 , NGL
           do ih = -NGH , +NGH
             if( ih .eq. 0 ) CYCLE;
 
-            fac    = (3.D0/5.D0) * (6.D0*pi*pi)**(2.D0/3.D0);
-            tau0TF = fac * rhoAVG0(ih,il,it)**(5.D0/3.D0);
 
-            x = rhoAVG0(ih,il,it) * tauAVG0(ih,il,it);
-            x = x - 0.25D0 * grad2_rhoAVG0(ih,il,it);
-            x = x / ( rhoAVG0(ih,il,it) * tau0TF );
-
-            f0(ih,il,it) = x;
+            fac          = (3.D0/5.D0) * (6.D0*pi*pi)**(2.D0/3.D0);
+            tauTF        = fac * ( g0(ih,il,it) )**(5.D0/3.D0);
+            D0(ih,il,it) = F0(ih,il,it) / tauTF;
 
 
-            z =   + drhoAVG(ih,il,it)*tauAVG0(ih,il,it);
-            z = z + dtauAVG(ih,il,it)*rhoAVG0(ih,il,it);
-            z = z * 2.D0;
-            z = z - dot_rhoAVG0_drhoAVG(ih,il,it);
-            z = z / ( 2.D0 * rhoAVG0(ih,il,it) * tau0TF );
-            z = z - (8.D0/3.D0)*x*drhoAVG(ih,il,it)/rhoAVG0(ih,il,it);
-
-            df(ih,il,it) = z;
+            z            = dg(ih,il,it) / g0(ih,il,it);
+            z            = z * (-5.D0/3.D0) * F0(ih,il,it) / tauTF;
+            z            = z + dF(ih,il,it) / tauTF;
+            dD(ih,il,it) = z;
 
 
           enddo
@@ -523,12 +306,13 @@ c-----Calculation of C0 and dC
           do ih = -NGH , +NGH
             if( ih .eq. 0 ) CYCLE;
 
-            C0(ih,il,it) = 1.D0 / ( 1.D0 + f0(ih,il,it)**2.D0 );
+
+            C0(ih,il,it) = 1.D0 / ( 1.D0 + D0(ih,il,it)**2.D0 );
 
 
-            dC(ih,il,it) = - 2.D0 * C0(ih,il,it)**2.D0
-     &                            * f0(ih,il,it)
-     &                            * df(ih,il,it);
+            x            = -2.D0 * D0(ih,il,it);
+            x            = x / ( 1.D0 + D0(ih,il,it)**2.D0 )**2.D0;
+            dC(ih,il,it) = x * dD(ih,il,it);
 
 
           enddo
