@@ -60,7 +60,7 @@ c======================================================================c
 
 
 
-c-----Allocates arrays used in QFAM submodule
+c-----Allocates memory used in QFAM submodule
       call allocqfam();
 
 c-----Constructs the simplex-y basis quantum numbers
@@ -80,13 +80,13 @@ c-----Consistency check of transformation to simplex-y basis
           enddo
       endif
 
-c-----Initializes QFAM submodule
+c-----Initializes the QFAM submodule
       call init_fam( .false. );
 
-c-----Executes QFAM submodule
+c-----Executes the QFAM submodule
       call start_fam( .false. );
 
-c-----Deallocates arrays used in QFAM submodule
+c-----Deallocates memory used in QFAM submodule
       call deallocqfam();
 
 
