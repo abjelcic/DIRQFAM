@@ -1,0 +1,20 @@
+dB/dw(f,omega) = -1/pi * Im[S(f,omega)].
+
+Nucleus: Ne 20.
+Parametrization of the Lagrangian: DD-ME2.
+Ground state deformation beta = +0.547.
+Isoscalar J = 2, K = 0 excitation.
+Gamma smearing = 0.250 [MeV].
+Fully self-consistent response.
+
+n0f = 6(7) oscillator shells for large(small) spinor component.
+n0b = 50 oscillator shells for meson fields.
+Gaussian quadrature mesh: NGH = 25, NGL = 50.
+Oscillator basis deformation beta0 = +0.547.
+Coulomb included in calculation.  
+Pairing included in calculation.  
+
+
+ omega [MeV]           dB/dw(f,omega) [fm^4/MeV]      S(f,omega) [fm^4/MeV]                     rel. residual error
+
+ 0.250000000E+02       0.266900390E+01               -0.487490454E+01 + -0.838492306E+01 i      0.844E-09                         

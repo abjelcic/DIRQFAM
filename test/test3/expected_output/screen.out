@@ -1,0 +1,99 @@
+
+  ******************************************  
+  *           Fortran 77 Code              *  
+  *     Axially symmetric H.O. basis       *  
+  * Dirac-Hartree-Bogoliubov calculation   *  
+  *        with density-dependent          *  
+  * meson-exchange or point coupling force *  
+  *          and separable pairing         *  
+  * -------------------------------------- *  
+  *      Niksic, Paar, Vretenar, Ring      *  
+  *          30/ 8/2022/14:39:26           *
+  *       Ne  20  N =  10  Z =  10
+  *                DD-ME2    
+  ******************************************  
+  1.It. si =   0.000000  E/A =   0.000 R =   0.000 b =   0.000  mix = 0.50
+  2.It. si =  73.369157  E/A =  -6.977 R =   2.958 b =   0.715  mix = 0.50
+  3.It. si =  51.701011  E/A =  -7.138 R =   2.932 b =   0.673  mix = 0.50
+  4.It. si =  30.850966  E/A =  -7.234 R =   2.900 b =   0.626  mix = 0.50
+  5.It. si =  12.338044  E/A =  -7.273 R =   2.865 b =   0.580  mix = 0.50
+  6.It. si =   2.691924  E/A =  -7.278 R =   2.842 b =   0.547  mix = 0.50
+  7.It. si =   0.670352  E/A =  -7.278 R =   2.845 b =   0.547  mix = 0.50
+  8.It. si =   0.191832  E/A =  -7.278 R =   2.843 b =   0.544  mix = 0.50
+  9.It. si =   0.182444  E/A =  -7.278 R =   2.843 b =   0.544  mix = 0.50
+ 10.It. si =   0.222420  E/A =  -7.278 R =   2.842 b =   0.546  mix = 0.50
+ 11.It. si =   0.112338  E/A =  -7.278 R =   2.843 b =   0.546  mix = 0.50
+ 12.It. si =   0.110079  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 13.It. si =   0.127836  E/A =  -7.278 R =   2.844 b =   0.548  mix = 0.50
+ 14.It. si =   0.045004  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 15.It. si =   0.038462  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 16.It. si =   0.028558  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 17.It. si =   0.020884  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 18.It. si =   0.004243  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 19.It. si =   0.008193  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 20.It. si =   0.000865  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 21.It. si =   0.000362  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 22.It. si =   0.000274  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 23.It. si =   0.000201  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 24.It. si =   0.000173  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 25.It. si =   0.000120  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 26.It. si =   0.000084  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 27.It. si =   0.000043  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 28.It. si =   0.000004  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ 29.It. si =   0.000002  E/A =  -7.278 R =   2.843 b =   0.547  mix = 0.50
+ Ne  20: Iteration converged after  29 steps   si =      0.0000004915
+ ****** END ITER ************************************
+                                                
+                                                
+                                                
+  ********************************************  
+  *              DIRQFAM v2.0.0              *  
+  *                                          *  
+  *      Relativistic Quasiparticle RPA      *  
+  *             Simplex-y Basis              *  
+  *                                          *  
+  *   Finite Amplitude Method Calculation    *  
+  *          with Density-Dependent          *  
+  *  Meson-Exchange or Point-Coupling Force  *  
+  *          and Separable Pairing           *  
+  * ---------------------------------------- *  
+  *                                          *  
+  *            A.Bjelcic, T.Niksic           *  
+  *                                          *  
+  ********************************************  
+                                                
+ Initializing QFAM submodule.
+ Initialization complete.
+
+Start QFAM solver for omega = 25.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.648844879.
+  3.Iteration, rel. residual error =  0.414967551.
+  4.Iteration, rel. residual error =  0.255205909.
+  5.Iteration, rel. residual error =  0.128283633.
+  6.Iteration, rel. residual error =  0.059592015.
+  7.Iteration, rel. residual error =  0.034850360.
+  8.Iteration, rel. residual error =  0.019284869.
+  9.Iteration, rel. residual error =  0.014994328.
+ 10.Iteration, rel. residual error =  0.014685767.
+ 11.Iteration, rel. residual error =  0.014675194.
+ 12.Iteration, rel. residual error =  0.011229539.
+ 13.Iteration, rel. residual error =  0.003320040.
+ 14.Iteration, rel. residual error =  0.002559551.
+ 15.Iteration, rel. residual error =  0.001536082.
+ 16.Iteration, rel. residual error =  0.000941404.
+ 17.Iteration, rel. residual error =  0.000479126.
+ 18.Iteration, rel. residual error =  0.000159493.
+ 19.Iteration, rel. residual error =  0.000061423.
+ 20.Iteration, rel. residual error =  0.000045855.
+ 21.Iteration, rel. residual error =  0.000012989.
+ 22.Iteration, rel. residual error =  0.000003409.
+ 23.Iteration, rel. residual error =  0.000000781.
+ 24.Iteration, rel. residual error =  0.000000754.
+ 25.Iteration, rel. residual error =  0.000000211.
+ 26.Iteration, rel. residual error =  0.000000145.
+ 27.Iteration, rel. residual error =  0.000000097.
+ 28.Iteration, rel. residual error =  0.000000022.
+ 29.Iteration, rel. residual error =  0.000000007.
+ 30.Iteration, rel. residual error =  0.000000001.
+QFAM solver converged after 32 QFAM iterations.

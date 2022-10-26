@@ -1,8 +1,8 @@
 n0f, n0b =  14  50             ! Number of osc. shells (even numbers)
-beta0    =   +0.485            ! Deformation of the h.o. basis
-betai    =   +0.485            ! Deformation of the initial W.S. pot
+beta0    =   +0.288            ! Deformation of the h.o. basis
+betai    =   +0.288            ! Deformation of the initial W.S. pot
 inin     =    1    1           ! Initialization from previous run
-Zr 100                         ! Even-even nucleus under consideration
+Sm 152                         ! Even-even nucleus under consideration
 c---------------------------------------------------------------------
 Init.Gap =    1.000     1.000  ! Initial values of the pairing gaps
 c---------------------------------------------------------------------
@@ -28,9 +28,9 @@ Smearing gamma    =      0.250 | [MeV] Imaginary part of the frequency.  |
 Solver tolerance  =      1.e-6 | GMRES relative residual error tolerance.|
 Arnoldi vectors   =     70     | Max. no. of Arnoldi vectors in GMRES.   |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-J multipolarity   =      1     | 0 <= J <= 5.                            |
-K multipolarity   =      0     | 0 <= K <= J.                            |
-Isospin           =      1     | 0 == Isoscalar, 1 == Isovector.         |
+J multipolarity   =      2     | 0 <= J <= 5.                            |
+K multipolarity   =      2     | 0 <= K <= J.                            |
+Isospin           =      0     | 0 == Isoscalar, 1 == Isovector.         |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 Omega start       =      0.000 | [MeV] Energy sweep parameters,          |
 Omega end         =     50.000 | [MeV] relevant only if calculation      |

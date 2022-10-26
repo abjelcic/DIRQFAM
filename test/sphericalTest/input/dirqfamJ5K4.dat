@@ -1,15 +1,15 @@
-n0f, n0b =  14  50             ! Number of osc. shells (even numbers)
-beta0    =   +0.485            ! Deformation of the h.o. basis
-betai    =   +0.485            ! Deformation of the initial W.S. pot
+n0f, n0b =  12  50             ! Number of osc. shells (even numbers)
+beta0    =   +0.000            ! Deformation of the h.o. basis
+betai    =   +0.000            ! Deformation of the initial W.S. pot
 inin     =    1    1           ! Initialization from previous run
-Zr 100                         ! Even-even nucleus under consideration
+_O 16                          ! Even-even nucleus under consideration
 c---------------------------------------------------------------------
 Init.Gap =    1.000     1.000  ! Initial values of the pairing gaps
 c---------------------------------------------------------------------
 Force    =  DD-ME2             ! Parametrization of the Lagrangian
 c---------------------------------------------------------------------
 icstr    =  0                  ! Constraint calculation (no=0, yes=1)
-betac    = +0.850              ! Constrained expected beta valuec
+betac    = +0.000              ! Constrained expected beta valuec
 cquad    =  0.010              ! Constraint stiffness constant
 
 
@@ -22,14 +22,14 @@ Calculation type  =      1     | 0 = Free response.                      |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 Include Coulomb   =      1     | 0 = no, 1 = yes.                        |
 Include pairing   =      1     | 0 = no, 1 = yes.                        |
-NGH               =     25     | Gauss-Hermite  nodes in z>0 direction.  |
-NGL               =     50     | Gauss-Laguerre nodes in r>0 direction.  |
+NGH               =     60     | Gauss-Hermite  nodes in z>0 direction.  |
+NGL               =     60     | Gauss-Laguerre nodes in r>0 direction.  |
 Smearing gamma    =      0.250 | [MeV] Imaginary part of the frequency.  |
-Solver tolerance  =      1.e-6 | GMRES relative residual error tolerance.|
+Solver tolerance  =      1.e-9 | GMRES relative residual error tolerance.|
 Arnoldi vectors   =     70     | Max. no. of Arnoldi vectors in GMRES.   |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-J multipolarity   =      1     | 0 <= J <= 5.                            |
-K multipolarity   =      0     | 0 <= K <= J.                            |
+J multipolarity   =      5     | 0 <= J <= 5.                            |
+K multipolarity   =      4     | 0 <= K <= J.                            |
 Isospin           =      1     | 0 == Isoscalar, 1 == Isovector.         |
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 Omega start       =      0.000 | [MeV] Energy sweep parameters,          |

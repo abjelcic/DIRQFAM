@@ -1,0 +1,232 @@
+Define a QHO 2D spinor: |nz,nr,ml,ms>(z,r,phi) = phi_{nz}(z,bz) * phi_{nr}^{|ml|}(r,br) * exp(i*ml*phi)/sqrt(2*pi) * X_{ms}(1/2)   ,
+where phi_{nz}(z,bz)        = 1/sqrt(bz) * 1/sqrt(2^nz*nz!*sqrt(pi)) *                   H_nz(z/bz)          * exp(-0.5*(z/bz)^2)  ,
+      phi_{nr}^{|ml|}(r,br) = 1/br       * sqrt(2*nr!/(nr+|ml|)!)    * (r/br)^{|ml|}   * L_{nr}^{|ml|}(r/br) * exp(-0.5*(r/br)^2)  ,
+      X_{ms=+1/2}(1/2) = [ 1 ; 0 ]                                                                                                 ,
+      X_{ms=-1/2}(1/2) = [ 0 ; 1 ]                                                                                                 .
+                                                                                                                                    
+Define simplex-y vectors: |nz,nr,ml,s=+i> = i/sqrt(2)*|nz,nr,+ml,ms=+1/2> + 1/sqrt(2)*|nz,nr,-ml,ms=-1/2>                          ,
+                          |nz,nr,ml,s=-i> = 1/sqrt(2)*|nz,nr,+ml,ms=+1/2> + i/sqrt(2)*|nz,nr,-ml,ms=-1/2>                          .
+                                                                                                                                    
+We define the basis B=[B1,B2] used in DIRQFAM code:                                          
+ B1 = [ all vectors |fg,nz,nr,ml,s=+i> such that fg={f,g}, and nz+2*nr+|ml|<=n0f if fg=f, and nz+2*nr+|ml|<=n0f+1 if fg=g ]        ,
+ B2 = [ all vectors |fg,nz,nr,ml,s=-i> such that fg={f,g}, and nz+2*nr+|ml|<=n0f if fg=f, and nz+2*nr+|ml|<=n0f+1 if fg=g ]        ,
+where the order in B1 and B2 are the same.                                                                                          
+                                                                                                                                    
+4-dimensional spinors |fg,nz,nr,ml,s> are given by:                                                                                 
+   |fg=f,nz,nr,ml,s=+i> = [ |nz,nr,ml,+i> ; [0;0]          ]                                                                       ,
+   |fg=g,nz,nr,ml,s=+i> = [ [0;0]         ; i|nz,nr,ml,-i> ]                                                                       ,
+   |fg=f,nz,nr,ml,s=-i> = [ |nz,nr,ml,-i> ; [0;0]          ]                                                                       ,
+   |fg=g,nz,nr,ml,s=-i> = [ [0;0]         ; i|nz,nr,ml,+i> ]                                                                       .
+                                                                                                                                    
+Below we print the order of vectors (fg,nz,nr,ml) in block B1. Order is the same in block B2.                                       
+If fg=f, then we include only nz+2*nr+|ml|<=n0f, while if fg=g we include only nz+2*nr+|ml|<=n0f+1.                                 
+                                                                                                                                    
+Total of 204 basis vectors are in B1 for number of shells n0f = 6.
+bz =   1.96892 [fm^3], br =   1.51999 [fm^3].
+
+     k     fg    nz    nr    ml
+
+     1     f     0     0     0
+     2     f     0     1     0
+     3     f     2     0     0
+     4     f     0     2     0
+     5     f     2     1     0
+     6     f     4     0     0
+     7     f     0     3     0
+     8     f     2     2     0
+     9     f     4     1     0
+    10     f     6     0     0
+    11     f     1     2    -1
+    12     f     3     0    -1
+    13     f     3     1    -1
+    14     f     1     1    -1
+    15     f     5     0    -1
+    16     f     1     0    -1
+    17     g     0     0    -1
+    18     g     0     1    -1
+    19     g     2     0    -1
+    20     g     0     2    -1
+    21     g     2     1    -1
+    22     g     4     0    -1
+    23     g     0     3    -1
+    24     g     2     2    -1
+    25     g     4     1    -1
+    26     g     6     0    -1
+    27     g     3     0     0
+    28     g     5     0     0
+    29     g     1     1     0
+    30     g     1     3     0
+    31     g     1     2     0
+    32     g     3     2     0
+    33     g     1     0     0
+    34     g     5     1     0
+    35     g     3     1     0
+    36     g     7     0     0
+    37     f     0     0    -1
+    38     f     0     1    -1
+    39     f     2     0    -1
+    40     f     0     2    -1
+    41     f     2     1    -1
+    42     f     4     0    -1
+    43     f     1     1     0
+    44     f     1     2     0
+    45     f     1     0     0
+    46     f     3     1     0
+    47     f     3     0     0
+    48     f     5     0     0
+    49     g     0     0     0
+    50     g     0     1     0
+    51     g     2     0     0
+    52     g     0     2     0
+    53     g     2     1     0
+    54     g     4     0     0
+    55     g     0     3     0
+    56     g     2     2     0
+    57     g     4     1     0
+    58     g     6     0     0
+    59     g     1     2    -1
+    60     g     3     0    -1
+    61     g     3     1    -1
+    62     g     1     1    -1
+    63     g     5     0    -1
+    64     g     1     0    -1
+    65     f     0     0    -2
+    66     f     0     1    -2
+    67     f     2     0    -2
+    68     f     0     2    -2
+    69     f     2     1    -2
+    70     f     4     0    -2
+    71     f     1     1     1
+    72     f     1     2     1
+    73     f     1     0     1
+    74     f     3     1     1
+    75     f     3     0     1
+    76     f     5     0     1
+    77     g     0     0     1
+    78     g     0     1     1
+    79     g     2     0     1
+    80     g     0     2     1
+    81     g     2     1     1
+    82     g     4     0     1
+    83     g     0     3     1
+    84     g     2     2     1
+    85     g     4     1     1
+    86     g     6     0     1
+    87     g     1     2    -2
+    88     g     3     0    -2
+    89     g     3     1    -2
+    90     g     1     1    -2
+    91     g     5     0    -2
+    92     g     1     0    -2
+    93     f     0     0     1
+    94     f     0     1     1
+    95     f     2     0     1
+    96     f     0     2     1
+    97     f     2     1     1
+    98     f     4     0     1
+    99     f     1     0    -2
+   100     f     3     0    -2
+   101     f     1     1    -2
+   102     g     0     0    -2
+   103     g     0     1    -2
+   104     g     2     0    -2
+   105     g     0     2    -2
+   106     g     2     1    -2
+   107     g     4     0    -2
+   108     g     1     1     1
+   109     g     1     2     1
+   110     g     1     0     1
+   111     g     3     1     1
+   112     g     3     0     1
+   113     g     5     0     1
+   114     f     0     0     2
+   115     f     0     1     2
+   116     f     2     0     2
+   117     f     0     2     2
+   118     f     2     1     2
+   119     f     4     0     2
+   120     f     1     0    -3
+   121     f     3     0    -3
+   122     f     1     1    -3
+   123     g     0     0    -3
+   124     g     0     1    -3
+   125     g     2     0    -3
+   126     g     0     2    -3
+   127     g     2     1    -3
+   128     g     4     0    -3
+   129     g     1     1     2
+   130     g     1     2     2
+   131     g     1     0     2
+   132     g     3     1     2
+   133     g     3     0     2
+   134     g     5     0     2
+   135     f     0     0    -3
+   136     f     0     1    -3
+   137     f     2     0    -3
+   138     f     1     1     2
+   139     f     1     0     2
+   140     f     3     0     2
+   141     g     0     0     2
+   142     g     0     1     2
+   143     g     2     0     2
+   144     g     0     2     2
+   145     g     2     1     2
+   146     g     4     0     2
+   147     g     1     0    -3
+   148     g     3     0    -3
+   149     g     1     1    -3
+   150     f     0     0    -4
+   151     f     0     1    -4
+   152     f     2     0    -4
+   153     f     1     1     3
+   154     f     1     0     3
+   155     f     3     0     3
+   156     g     0     0     3
+   157     g     0     1     3
+   158     g     2     0     3
+   159     g     0     2     3
+   160     g     2     1     3
+   161     g     4     0     3
+   162     g     1     0    -4
+   163     g     3     0    -4
+   164     g     1     1    -4
+   165     f     0     0     3
+   166     f     0     1     3
+   167     f     2     0     3
+   168     f     1     0    -4
+   169     g     0     0    -4
+   170     g     0     1    -4
+   171     g     2     0    -4
+   172     g     1     1     3
+   173     g     1     0     3
+   174     g     3     0     3
+   175     f     0     0     4
+   176     f     0     1     4
+   177     f     2     0     4
+   178     f     1     0    -5
+   179     g     0     0    -5
+   180     g     0     1    -5
+   181     g     2     0    -5
+   182     g     1     1     4
+   183     g     1     0     4
+   184     g     3     0     4
+   185     f     0     0    -5
+   186     f     1     0     4
+   187     g     0     0     4
+   188     g     0     1     4
+   189     g     2     0     4
+   190     g     1     0    -5
+   191     f     0     0    -6
+   192     f     1     0     5
+   193     g     0     0     5
+   194     g     0     1     5
+   195     g     2     0     5
+   196     g     1     0    -6
+   197     f     0     0     5
+   198     g     0     0    -6
+   199     g     1     0     5
+   200     f     0     0     6
+   201     g     0     0    -7
+   202     g     1     0     6
+   203     g     0     0     6
+   204     g     0     0     7

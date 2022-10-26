@@ -1,0 +1,474 @@
+
+  ******************************************  
+  *           Fortran 77 Code              *  
+  *     Axially symmetric H.O. basis       *  
+  * Dirac-Hartree-Bogoliubov calculation   *  
+  *        with density-dependent          *  
+  * meson-exchange or point coupling force *  
+  *          and separable pairing         *  
+  * -------------------------------------- *  
+  *      Niksic, Paar, Vretenar, Ring      *  
+  *           5/ 9/2022/02:07:21           *
+  *       Si  28  N =  14  Z =  14
+  *                DD-PC1    
+  ******************************************  
+  1.It. si =   0.000000  E/A =   0.000 R =   0.000 b =   0.000  mix = 0.50
+  2.It. si =  82.657162  E/A =  -7.752 R =   3.195 b =  -0.401  mix = 0.50
+  3.It. si =  62.588447  E/A =  -7.913 R =   3.157 b =  -0.402  mix = 0.50
+  4.It. si =  38.071301  E/A =  -7.948 R =   3.119 b =  -0.399  mix = 0.50
+  5.It. si =   9.816303  E/A =  -7.953 R =   3.089 b =  -0.390  mix = 0.50
+  6.It. si =   2.677028  E/A =  -7.953 R =   3.083 b =  -0.385  mix = 0.50
+  7.It. si =   1.379527  E/A =  -7.953 R =   3.081 b =  -0.381  mix = 0.50
+  8.It. si =   0.584948  E/A =  -7.953 R =   3.079 b =  -0.378  mix = 0.50
+  9.It. si =   0.360205  E/A =  -7.953 R =   3.077 b =  -0.377  mix = 0.50
+ 10.It. si =   0.153160  E/A =  -7.953 R =   3.077 b =  -0.376  mix = 0.50
+ 11.It. si =   0.037655  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 12.It. si =   0.030824  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 13.It. si =   0.024823  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 14.It. si =   0.010688  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 15.It. si =   0.005144  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 16.It. si =   0.002910  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 17.It. si =   0.000668  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 18.It. si =   0.000177  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 19.It. si =   0.000142  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 20.It. si =   0.000119  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 21.It. si =   0.000086  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 22.It. si =   0.000030  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 23.It. si =   0.000018  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 24.It. si =   0.000004  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ 25.It. si =   0.000001  E/A =  -7.953 R =   3.076 b =  -0.376  mix = 0.50
+ Si  28: Iteration converged after  25 steps   si =      0.0000008521
+ ****** END ITER ************************************
+                                                
+                                                
+                                                
+  ********************************************  
+  *              DIRQFAM v2.0.0              *  
+  *                                          *  
+  *      Relativistic Quasiparticle RPA      *  
+  *             Simplex-y Basis              *  
+  *                                          *  
+  *   Finite Amplitude Method Calculation    *  
+  *          with Density-Dependent          *  
+  *  Meson-Exchange or Point-Coupling Force  *  
+  *          and Separable Pairing           *  
+  * ---------------------------------------- *  
+  *                                          *  
+  *            A.Bjelcic, T.Niksic           *  
+  *                                          *  
+  ********************************************  
+                                                
+ Initializing QFAM submodule.
+ Initialization complete.
+
+Start QFAM solver for omega =  0.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.832354192.
+  3.Iteration, rel. residual error =  0.812856640.
+  4.Iteration, rel. residual error =  0.739886453.
+  5.Iteration, rel. residual error =  0.671817580.
+  6.Iteration, rel. residual error =  0.571716676.
+  7.Iteration, rel. residual error =  0.329190101.
+  8.Iteration, rel. residual error =  0.087715383.
+  9.Iteration, rel. residual error =  0.015665741.
+ 10.Iteration, rel. residual error =  0.002934565.
+ 11.Iteration, rel. residual error =  0.000449680.
+ 12.Iteration, rel. residual error =  0.000211019.
+ 13.Iteration, rel. residual error =  0.000062886.
+ 14.Iteration, rel. residual error =  0.000026883.
+ 15.Iteration, rel. residual error =  0.000003877.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega =  2.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.852610777.
+  3.Iteration, rel. residual error =  0.847297347.
+  4.Iteration, rel. residual error =  0.838600454.
+  5.Iteration, rel. residual error =  0.355324121.
+  6.Iteration, rel. residual error =  0.102498630.
+  7.Iteration, rel. residual error =  0.020635090.
+  8.Iteration, rel. residual error =  0.005585095.
+  9.Iteration, rel. residual error =  0.001110533.
+ 10.Iteration, rel. residual error =  0.000294041.
+ 11.Iteration, rel. residual error =  0.000129475.
+ 12.Iteration, rel. residual error =  0.000040634.
+ 13.Iteration, rel. residual error =  0.000014212.
+ 14.Iteration, rel. residual error =  0.000002714.
+QFAM solver converged after 16 QFAM iterations.
+
+
+Start QFAM solver for omega =  5.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.909984508.
+  3.Iteration, rel. residual error =  0.887516335.
+  4.Iteration, rel. residual error =  0.678805276.
+  5.Iteration, rel. residual error =  0.092756904.
+  6.Iteration, rel. residual error =  0.028003676.
+  7.Iteration, rel. residual error =  0.006289881.
+  8.Iteration, rel. residual error =  0.001559235.
+  9.Iteration, rel. residual error =  0.000391714.
+ 10.Iteration, rel. residual error =  0.000102500.
+ 11.Iteration, rel. residual error =  0.000044511.
+ 12.Iteration, rel. residual error =  0.000016442.
+ 13.Iteration, rel. residual error =  0.000006824.
+QFAM solver converged after 15 QFAM iterations.
+
+
+Start QFAM solver for omega =  7.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.980728307.
+  3.Iteration, rel. residual error =  0.788534766.
+  4.Iteration, rel. residual error =  0.378470181.
+  5.Iteration, rel. residual error =  0.049499217.
+  6.Iteration, rel. residual error =  0.016159323.
+  7.Iteration, rel. residual error =  0.004701725.
+  8.Iteration, rel. residual error =  0.000887547.
+  9.Iteration, rel. residual error =  0.000293970.
+ 10.Iteration, rel. residual error =  0.000116677.
+ 11.Iteration, rel. residual error =  0.000053353.
+ 12.Iteration, rel. residual error =  0.000021999.
+ 13.Iteration, rel. residual error =  0.000008129.
+QFAM solver converged after 15 QFAM iterations.
+
+
+Start QFAM solver for omega = 10.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.987253373.
+  3.Iteration, rel. residual error =  0.641033870.
+  4.Iteration, rel. residual error =  0.275586313.
+  5.Iteration, rel. residual error =  0.044301084.
+  6.Iteration, rel. residual error =  0.015465827.
+  7.Iteration, rel. residual error =  0.006506778.
+  8.Iteration, rel. residual error =  0.002039223.
+  9.Iteration, rel. residual error =  0.001286927.
+ 10.Iteration, rel. residual error =  0.000709156.
+ 11.Iteration, rel. residual error =  0.000166953.
+ 12.Iteration, rel. residual error =  0.000068307.
+ 13.Iteration, rel. residual error =  0.000017659.
+ 14.Iteration, rel. residual error =  0.000001273.
+QFAM solver converged after 16 QFAM iterations.
+
+
+Start QFAM solver for omega = 12.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.857676264.
+  3.Iteration, rel. residual error =  0.631577974.
+  4.Iteration, rel. residual error =  0.349505280.
+  5.Iteration, rel. residual error =  0.128463942.
+  6.Iteration, rel. residual error =  0.074860478.
+  7.Iteration, rel. residual error =  0.064167500.
+  8.Iteration, rel. residual error =  0.060882403.
+  9.Iteration, rel. residual error =  0.046661928.
+ 10.Iteration, rel. residual error =  0.032088865.
+ 11.Iteration, rel. residual error =  0.009798254.
+ 12.Iteration, rel. residual error =  0.003524645.
+ 13.Iteration, rel. residual error =  0.001504439.
+ 14.Iteration, rel. residual error =  0.001378539.
+ 15.Iteration, rel. residual error =  0.000742135.
+ 16.Iteration, rel. residual error =  0.000640798.
+ 17.Iteration, rel. residual error =  0.000173111.
+ 18.Iteration, rel. residual error =  0.000034232.
+ 19.Iteration, rel. residual error =  0.000015040.
+ 20.Iteration, rel. residual error =  0.000002024.
+QFAM solver converged after 22 QFAM iterations.
+
+
+Start QFAM solver for omega = 15.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.688801466.
+  3.Iteration, rel. residual error =  0.435487799.
+  4.Iteration, rel. residual error =  0.372171186.
+  5.Iteration, rel. residual error =  0.270681116.
+  6.Iteration, rel. residual error =  0.248659575.
+  7.Iteration, rel. residual error =  0.174727806.
+  8.Iteration, rel. residual error =  0.072029380.
+  9.Iteration, rel. residual error =  0.024397585.
+ 10.Iteration, rel. residual error =  0.020480065.
+ 11.Iteration, rel. residual error =  0.012971466.
+ 12.Iteration, rel. residual error =  0.008880855.
+ 13.Iteration, rel. residual error =  0.003485570.
+ 14.Iteration, rel. residual error =  0.000993209.
+ 15.Iteration, rel. residual error =  0.000359298.
+ 16.Iteration, rel. residual error =  0.000100063.
+ 17.Iteration, rel. residual error =  0.000021905.
+ 18.Iteration, rel. residual error =  0.000006272.
+QFAM solver converged after 20 QFAM iterations.
+
+
+Start QFAM solver for omega = 17.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.428851353.
+  3.Iteration, rel. residual error =  0.384622637.
+  4.Iteration, rel. residual error =  0.139578882.
+  5.Iteration, rel. residual error =  0.055610908.
+  6.Iteration, rel. residual error =  0.037163778.
+  7.Iteration, rel. residual error =  0.018315085.
+  8.Iteration, rel. residual error =  0.009932811.
+  9.Iteration, rel. residual error =  0.005367734.
+ 10.Iteration, rel. residual error =  0.001886344.
+ 11.Iteration, rel. residual error =  0.000597373.
+ 12.Iteration, rel. residual error =  0.000175529.
+ 13.Iteration, rel. residual error =  0.000041939.
+ 14.Iteration, rel. residual error =  0.000007365.
+ 15.Iteration, rel. residual error =  0.000002188.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega = 20.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.549059382.
+  3.Iteration, rel. residual error =  0.416418970.
+  4.Iteration, rel. residual error =  0.133932662.
+  5.Iteration, rel. residual error =  0.098705335.
+  6.Iteration, rel. residual error =  0.056532642.
+  7.Iteration, rel. residual error =  0.029224336.
+  8.Iteration, rel. residual error =  0.015411458.
+  9.Iteration, rel. residual error =  0.006532675.
+ 10.Iteration, rel. residual error =  0.002111603.
+ 11.Iteration, rel. residual error =  0.000695481.
+ 12.Iteration, rel. residual error =  0.000204538.
+ 13.Iteration, rel. residual error =  0.000050282.
+ 14.Iteration, rel. residual error =  0.000012022.
+ 15.Iteration, rel. residual error =  0.000002738.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega = 22.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.371952365.
+  3.Iteration, rel. residual error =  0.258858393.
+  4.Iteration, rel. residual error =  0.090804242.
+  5.Iteration, rel. residual error =  0.044615093.
+  6.Iteration, rel. residual error =  0.020960972.
+  7.Iteration, rel. residual error =  0.007770420.
+  8.Iteration, rel. residual error =  0.004572094.
+  9.Iteration, rel. residual error =  0.002272574.
+ 10.Iteration, rel. residual error =  0.001189808.
+ 11.Iteration, rel. residual error =  0.000603384.
+ 12.Iteration, rel. residual error =  0.000259348.
+ 13.Iteration, rel. residual error =  0.000069772.
+ 14.Iteration, rel. residual error =  0.000020126.
+ 15.Iteration, rel. residual error =  0.000003734.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega = 25.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.181063138.
+  3.Iteration, rel. residual error =  0.051900889.
+  4.Iteration, rel. residual error =  0.040410141.
+  5.Iteration, rel. residual error =  0.037888073.
+  6.Iteration, rel. residual error =  0.033170911.
+  7.Iteration, rel. residual error =  0.013740646.
+  8.Iteration, rel. residual error =  0.003548770.
+  9.Iteration, rel. residual error =  0.001529732.
+ 10.Iteration, rel. residual error =  0.000493044.
+ 11.Iteration, rel. residual error =  0.000117538.
+ 12.Iteration, rel. residual error =  0.000030485.
+ 13.Iteration, rel. residual error =  0.000010888.
+ 14.Iteration, rel. residual error =  0.000003975.
+QFAM solver converged after 16 QFAM iterations.
+
+
+Start QFAM solver for omega = 27.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.164951943.
+  3.Iteration, rel. residual error =  0.146927561.
+  4.Iteration, rel. residual error =  0.121265826.
+  5.Iteration, rel. residual error =  0.070268595.
+  6.Iteration, rel. residual error =  0.040986079.
+  7.Iteration, rel. residual error =  0.022337405.
+  8.Iteration, rel. residual error =  0.009566536.
+  9.Iteration, rel. residual error =  0.004024625.
+ 10.Iteration, rel. residual error =  0.001499660.
+ 11.Iteration, rel. residual error =  0.000442549.
+ 12.Iteration, rel. residual error =  0.000122510.
+ 13.Iteration, rel. residual error =  0.000030035.
+ 14.Iteration, rel. residual error =  0.000016543.
+ 15.Iteration, rel. residual error =  0.000004442.
+ 16.Iteration, rel. residual error =  0.000001520.
+QFAM solver converged after 18 QFAM iterations.
+
+
+Start QFAM solver for omega = 30.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.611082796.
+  3.Iteration, rel. residual error =  0.328354569.
+  4.Iteration, rel. residual error =  0.081776849.
+  5.Iteration, rel. residual error =  0.057576179.
+  6.Iteration, rel. residual error =  0.044379723.
+  7.Iteration, rel. residual error =  0.039959893.
+  8.Iteration, rel. residual error =  0.017379695.
+  9.Iteration, rel. residual error =  0.003971511.
+ 10.Iteration, rel. residual error =  0.002223548.
+ 11.Iteration, rel. residual error =  0.000445587.
+ 12.Iteration, rel. residual error =  0.000152136.
+ 13.Iteration, rel. residual error =  0.000059211.
+ 14.Iteration, rel. residual error =  0.000019071.
+ 15.Iteration, rel. residual error =  0.000003999.
+ 16.Iteration, rel. residual error =  0.000001313.
+QFAM solver converged after 18 QFAM iterations.
+
+
+Start QFAM solver for omega = 32.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.528334909.
+  3.Iteration, rel. residual error =  0.226591901.
+  4.Iteration, rel. residual error =  0.111271688.
+  5.Iteration, rel. residual error =  0.086907143.
+  6.Iteration, rel. residual error =  0.051151816.
+  7.Iteration, rel. residual error =  0.011427437.
+  8.Iteration, rel. residual error =  0.004073506.
+  9.Iteration, rel. residual error =  0.001317208.
+ 10.Iteration, rel. residual error =  0.000387645.
+ 11.Iteration, rel. residual error =  0.000252423.
+ 12.Iteration, rel. residual error =  0.000053757.
+ 13.Iteration, rel. residual error =  0.000017563.
+ 14.Iteration, rel. residual error =  0.000004969.
+ 15.Iteration, rel. residual error =  0.000001937.
+ 16.Iteration, rel. residual error =  0.000001242.
+QFAM solver converged after 18 QFAM iterations.
+
+
+Start QFAM solver for omega = 35.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.398651427.
+  3.Iteration, rel. residual error =  0.075530321.
+  4.Iteration, rel. residual error =  0.023450363.
+  5.Iteration, rel. residual error =  0.011781381.
+  6.Iteration, rel. residual error =  0.006801544.
+  7.Iteration, rel. residual error =  0.004607916.
+  8.Iteration, rel. residual error =  0.001555525.
+  9.Iteration, rel. residual error =  0.000571388.
+ 10.Iteration, rel. residual error =  0.000160060.
+ 11.Iteration, rel. residual error =  0.000045894.
+ 12.Iteration, rel. residual error =  0.000015655.
+ 13.Iteration, rel. residual error =  0.000004737.
+ 14.Iteration, rel. residual error =  0.000001066.
+QFAM solver converged after 16 QFAM iterations.
+
+
+Start QFAM solver for omega = 37.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.404565059.
+  3.Iteration, rel. residual error =  0.052838834.
+  4.Iteration, rel. residual error =  0.031243573.
+  5.Iteration, rel. residual error =  0.007342482.
+  6.Iteration, rel. residual error =  0.003599827.
+  7.Iteration, rel. residual error =  0.001015241.
+  8.Iteration, rel. residual error =  0.000579294.
+  9.Iteration, rel. residual error =  0.000204527.
+ 10.Iteration, rel. residual error =  0.000092770.
+ 11.Iteration, rel. residual error =  0.000034878.
+ 12.Iteration, rel. residual error =  0.000009347.
+ 13.Iteration, rel. residual error =  0.000003345.
+ 14.Iteration, rel. residual error =  0.000001465.
+ 15.Iteration, rel. residual error =  0.000001316.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega = 40.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.550505796.
+  3.Iteration, rel. residual error =  0.257575119.
+  4.Iteration, rel. residual error =  0.070833793.
+  5.Iteration, rel. residual error =  0.025557112.
+  6.Iteration, rel. residual error =  0.010285057.
+  7.Iteration, rel. residual error =  0.004675703.
+  8.Iteration, rel. residual error =  0.001433418.
+  9.Iteration, rel. residual error =  0.000472068.
+ 10.Iteration, rel. residual error =  0.000113396.
+ 11.Iteration, rel. residual error =  0.000031192.
+ 12.Iteration, rel. residual error =  0.000007939.
+ 13.Iteration, rel. residual error =  0.000003070.
+ 14.Iteration, rel. residual error =  0.000002078.
+ 15.Iteration, rel. residual error =  0.000001183.
+QFAM solver converged after 17 QFAM iterations.
+
+
+Start QFAM solver for omega = 42.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.376951595.
+  3.Iteration, rel. residual error =  0.194604712.
+  4.Iteration, rel. residual error =  0.089442813.
+  5.Iteration, rel. residual error =  0.026726167.
+  6.Iteration, rel. residual error =  0.009907143.
+  7.Iteration, rel. residual error =  0.002942196.
+  8.Iteration, rel. residual error =  0.001066829.
+  9.Iteration, rel. residual error =  0.000511700.
+ 10.Iteration, rel. residual error =  0.000211751.
+ 11.Iteration, rel. residual error =  0.000101700.
+ 12.Iteration, rel. residual error =  0.000021203.
+ 13.Iteration, rel. residual error =  0.000005206.
+ 14.Iteration, rel. residual error =  0.000001818.
+ 15.Iteration, rel. residual error =  0.000001556.
+ 16.Iteration, rel. residual error =  0.000001105.
+QFAM solver converged after 18 QFAM iterations.
+
+
+Start QFAM solver for omega = 45.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.276093561.
+  3.Iteration, rel. residual error =  0.235217646.
+  4.Iteration, rel. residual error =  0.134481454.
+  5.Iteration, rel. residual error =  0.064188811.
+  6.Iteration, rel. residual error =  0.028847270.
+  7.Iteration, rel. residual error =  0.014748380.
+  8.Iteration, rel. residual error =  0.004973521.
+  9.Iteration, rel. residual error =  0.001207735.
+ 10.Iteration, rel. residual error =  0.000462654.
+ 11.Iteration, rel. residual error =  0.000144628.
+ 12.Iteration, rel. residual error =  0.000041679.
+ 13.Iteration, rel. residual error =  0.000015543.
+ 14.Iteration, rel. residual error =  0.000004149.
+ 15.Iteration, rel. residual error =  0.000002552.
+ 16.Iteration, rel. residual error =  0.000001280.
+QFAM solver converged after 18 QFAM iterations.
+
+
+Start QFAM solver for omega = 47.5000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.518791949.
+  3.Iteration, rel. residual error =  0.257832277.
+  4.Iteration, rel. residual error =  0.158337255.
+  5.Iteration, rel. residual error =  0.119430150.
+  6.Iteration, rel. residual error =  0.054039489.
+  7.Iteration, rel. residual error =  0.022844684.
+  8.Iteration, rel. residual error =  0.019886397.
+  9.Iteration, rel. residual error =  0.008520471.
+ 10.Iteration, rel. residual error =  0.004730417.
+ 11.Iteration, rel. residual error =  0.002059362.
+ 12.Iteration, rel. residual error =  0.000789275.
+ 13.Iteration, rel. residual error =  0.000233588.
+ 14.Iteration, rel. residual error =  0.000069239.
+ 15.Iteration, rel. residual error =  0.000035001.
+ 16.Iteration, rel. residual error =  0.000023509.
+ 17.Iteration, rel. residual error =  0.000017469.
+ 18.Iteration, rel. residual error =  0.000006821.
+ 19.Iteration, rel. residual error =  0.000001930.
+ 20.Iteration, rel. residual error =  0.000001796.
+ 21.Iteration, rel. residual error =  0.000001176.
+QFAM solver converged after 23 QFAM iterations.
+
+
+Start QFAM solver for omega = 50.0000 +  0.2500i.
+  1.Iteration, rel. residual error =  1.000000000.
+  2.Iteration, rel. residual error =  0.565294160.
+  3.Iteration, rel. residual error =  0.212511769.
+  4.Iteration, rel. residual error =  0.077518327.
+  5.Iteration, rel. residual error =  0.035620370.
+  6.Iteration, rel. residual error =  0.022029139.
+  7.Iteration, rel. residual error =  0.013640908.
+  8.Iteration, rel. residual error =  0.007999561.
+  9.Iteration, rel. residual error =  0.004823601.
+ 10.Iteration, rel. residual error =  0.002158604.
+ 11.Iteration, rel. residual error =  0.000646222.
+ 12.Iteration, rel. residual error =  0.000330169.
+ 13.Iteration, rel. residual error =  0.000170767.
+ 14.Iteration, rel. residual error =  0.000158195.
+ 15.Iteration, rel. residual error =  0.000067562.
+ 16.Iteration, rel. residual error =  0.000022534.
+ 17.Iteration, rel. residual error =  0.000006667.
+ 18.Iteration, rel. residual error =  0.000001994.
+QFAM solver converged after 20 QFAM iterations.
