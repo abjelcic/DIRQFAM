@@ -4,10 +4,12 @@ The corresponding <code>DIRQFAM v1.0.0</code>
 <a href="https://www.sciencedirect.com/science/article/pii/S0010465520300345">paper</a> [1]
 is located in <code>doc</code> directory.
 
-The corresponding <code>DIRQFAM v2.0.0</code> paper [?] will be (is) located in <code>doc</code> directory.
+The corresponding <code>DIRQFAM v2.0.0</code>
+<a href="https://www.sciencedirect.com/science/article/abs/pii/S0010465523000346">paper</a> [2]
+is located in <code>doc</code> directory.
 
 The corresponding <code>DIRHB</code>
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0010465514000836">paper</a> [2]
+<a href="https://www.sciencedirect.com/science/article/abs/pii/S0010465514000836">paper</a> [3]
 is located in <code>doc</code> directory.
 
 Tested versions of the <code>DIRQFAM</code> code are located at
@@ -19,7 +21,7 @@ Tested versions of the <code>DIRQFAM</code> code are located at
 
 
 # How to use
-The <code>DIRQFAM</code> code is built upon the <code>DIRHB</code> program package [2] for
+The <code>DIRQFAM</code> code is built upon the <code>DIRHB</code> program package [3] for
 the solution of the stationary relativistic Hartree-Bogoliubov equations for even-even open-shell
 nuclei with axially symmetric quadrupole deformation. <code>DIRQFAM</code> complements
 <code>DIRHBZ</code> code with the QFAM solver to calculate the multipole response for systems with 
@@ -32,11 +34,11 @@ axially symmetric quadrupole deformation.
 
 ## Input
 The input data are provided via the <code>dirqfam.dat</code> file, and are separated
-into two parts: first part is the same as in Ref. [2] and determines the input parameters
+into two parts: first part is the same as in Ref. [3] and determines the input parameters
 for the ground state calculation, while the second part serves as an interface for QFAM parameters.
 
 
-<strong>Ground state parameters</strong> (same as in Ref. [2])
+<strong>Ground state parameters</strong> (same as in Ref. [3])
 
 * <code>n0f</code>, <code>n0b</code>:<br>
 Number of oscillator shells used in expanding the large component of Dirac spinor
@@ -157,7 +159,7 @@ the equality sign <code>=</code> and the sentinel <code>|</code>.
 The output of the calculation is divided into two parts. The first output file
 <code>dirhb.out</code>, located in the <code>GS\_output</code> directory, contains
 the information on the ground state calculation. Detailed description of
-this file can be found in [2]. 
+this file can be found in [3]. 
 
 The second part of the output relevant for the QFAM calculation is located
 in the <code>QFAM\_output</code> directory.
@@ -246,4 +248,6 @@ energy, depending on the self-consistency tolerance.
 # References
 [1] A. Bjelčić, T.Nikšić, Comp. Phys. Comm. 253, 107184 (2020).
 
-[2] T. Nikšić, N. Paar, D. Vretenar, P. Ring, Comp. Phys. Comm. 185, 1808 (2014).
+[2] A. Bjelčić, T. Nikšić, Comp. Phys. Comm. 287, 108689 (2023).
+
+[3] T. Nikšić, N. Paar, D. Vretenar, P. Ring, Comp. Phys. Comm. 185, 1808 (2014).
