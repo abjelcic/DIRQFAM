@@ -643,7 +643,7 @@
       module pairparams
          implicit none;
 
-          double precision :: G_pairing = + 728.000000000d0; ![MeV/fm^3]
+          double precision :: G_pairing = + 728.000000000d0; ![MeV*fm^3]
           double precision :: a_pairing = +   0.644204936d0; ![   fm   ]
 
       end module pairparams
