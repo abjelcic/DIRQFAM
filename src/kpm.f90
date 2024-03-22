@@ -8,12 +8,12 @@
       use KPMdata;
       implicit none;
 
-      double precision , intent(in) :: Omega_b;
-      integer          , intent(in) :: N_it;
-      integer                       :: tape_mu;
-      double precision              :: mu(0:2*N_it);
-      integer                       :: it;
-      integer                       :: n;
+      double precision , intent(in)                 :: Omega_b;
+      integer          , intent(in)                 :: N_it;
+      integer                                       :: tape_mu;
+      double precision , dimension(:) , allocatable :: mu;
+      integer                                       :: it;
+      integer                                       :: n;
 
 
       ! We have X = [ 0 , x ; -x^T , 0 ] and Y = [ 0 , y ; -y^T , 0 ], see Eq. (B.7).
@@ -30,7 +30,8 @@
       ! in sums over (mu,nu) indices, we have mu<nu. That is why instead of (X,Y,F20,F02,dH20,dH02),
       ! we can use (x,y,f20,f02,dh20,dh02).
 
-
+      allocate( mu(0:2*N_it) );
+      
       open( newunit=tape_mu , file='./output/QFAM_output/mu.out' , status='unknown' );
       write(tape_mu,  '(a)'  ) 'Kernel Polynomial Method.';
       write(      6,'(/,a,/)') 'Kernel Polynomial Method.';
